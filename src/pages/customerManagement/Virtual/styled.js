@@ -1,13 +1,12 @@
 import styled from "styled-components";
 
 export const Main = styled.div`
-  padding: 0 24px;
   height: 100%;
   display: flex;
   flex-direction: column;
   .search {
     display: flex;
-    margin: 20px 0 32px;
+    margin-bottom: 32px;
     align-items: center;
     &__left {
       display: flex;

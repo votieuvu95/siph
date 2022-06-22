@@ -4,17 +4,17 @@ import React, { useEffect, useRef, useState } from "react";
 import { Search } from "@mui/icons-material";
 import { Main } from "./styled";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import { useDispatch, useSelector } from "react-redux";
 import { STATUS } from "constants/index";
 import CellACtion from "components/CellAction";
-import ModalTrunk from "./ModalTrunk";
 import Pagination from "components/Pagination";
-
+import cacheUtils from "utils/cache-utils";
+import ModalTrunkHotlineGroup from "./ModalTrunkHotlineGroup";
+import { useSelector } from "react-redux";
+import ModalHotline from "pages/customerManagement/Hotline/ModalHotline";
 const HotlineRouting = () => {
-  const { listTrunkManagement } = useSelector((state) => state.trunkManagement);
-  const { getTrunkManagement, searchGroup } = useDispatch().trunkManagement;
-  const modalTrunkRef = useRef(null);
-
+  const modalTrunkHotlineRef = useRef(null);
+  const modalHotlineRef = useRef(null);
+  const { listHotlines } = useSelector((state) => state.hotline);
   const [state, _setState] = useState({ page: 0, size: 10 });
   const setState = (data = {}) => {
     _setState((_state) => ({
@@ -22,13 +22,17 @@ const HotlineRouting = () => {
       ...data,
     }));
   };
-  useEffect(() => {
-    getTrunkManagement();
-    searchGroup();
-  }, []);
 
+  useEffect(() => {
+    cacheUtils.read("", "DATA_ALL_HOTLINE", [], false).then((s) => {
+      console.log("asdasd", s);
+      setState({
+        listHotlines: (s || []).filter((item) => item.trunkName),
+      });
+    });
+  }, [listHotlines]);
   const handleEdit = (data) => {
-    modalTrunkRef.current && modalTrunkRef.current.show(data);
+    modalTrunkHotlineRef.current && modalTrunkHotlineRef.current.show(data);
   };
   const columns = [
     {
@@ -41,27 +45,36 @@ const HotlineRouting = () => {
       },
     },
     {
-      title: "Tên Trunk",
+      title: "Tên khách hàng",
+      dataIndex: "customerName",
+      key: "customerName",
+      width: 400,
+    },
+    {
+      title: "Tên nhóm hotline",
+      dataIndex: "hotlineGroupName",
+      key: "hotlineGroupName",
+      width: 400,
+      render: (item, data) => (
+        <a
+          onClick={() =>
+            modalHotlineRef.current && modalHotlineRef.current.show(data)
+          }
+        >
+          {item}
+        </a>
+      ),
+    },
+    {
+      title: "Tên trunk",
       dataIndex: "trunkName",
       key: "trunkName",
       width: 400,
     },
     {
-      title: "Nhà mạng",
-      dataIndex: "groupName",
-      key: "groupName",
-      width: 400,
-    },
-    {
-      title: "IP:PORT",
-      dataIndex: "ip",
-      key: "ip",
-      width: 400,
-    },
-    {
       title: "Trạng thái",
-      dataIndex: "status",
-      key: "status",
+      dataIndex: "groupStatus",
+      key: "groupStatus",
       width: 100,
       render: (item) => STATUS.find((x) => x.id === item)?.ten,
     },
@@ -83,28 +96,28 @@ const HotlineRouting = () => {
   ];
 
   useEffect(() => {
-    if (listTrunkManagement.length)
+    if (state?.listHotlines?.length) {
       setState({
-        listData: listTrunkManagement
-          .concat(listTrunkManagement)
-          .slice(state.page * state?.size, (state.page + 1) * state?.size),
+        listData: state?.listHotlines.slice(
+          state.page * state?.size,
+          (state.page + 1) * state?.size
+        ),
       });
-  }, [listTrunkManagement, state?.page, state?.size]);
+    }
+    console.log("s", state?.listHotlines);
+  }, [state?.listHotlines, state?.page, state?.size]);
   const onPageChange = (page) => {
     setState({ page: page - 1 });
   };
   const onSizeChange = (size) => {
     setState({ size: size });
   };
-
   const onKeyDown = (e) => {
     let value = e?.target?.value;
     if (e.nativeEvent.code === "Enter") {
-      let data = listTrunkManagement
-        .concat(listTrunkManagement)
-        .filter((item) =>
-          item.trunkName.toLowerCase().includes(value.trim().toLowerCase())
-        );
+      let data = state?.listHotlines.filter((item) =>
+        item.trunkName.toLowerCase().includes(value.trim().toLowerCase())
+      );
       setState({
         listData: data.slice(
           state.page * state?.size,
@@ -134,7 +147,8 @@ const HotlineRouting = () => {
             className="admin-button"
             icon={<AddCircleIcon />}
             onClick={() =>
-              modalTrunkRef.current && modalTrunkRef.current.show()
+              modalTrunkHotlineRef.current &&
+              modalTrunkHotlineRef.current.show()
             }
           >
             Tạo mới
@@ -142,20 +156,27 @@ const HotlineRouting = () => {
         </div>
       </div>
       <div className="table">
-        <div className="main-table"><TableWrapper columns={columns} dataSource={state?.listData} /></div>
+        <div className="main-table">
+          <TableWrapper
+            columns={columns}
+            dataSource={state?.listData}
+            rowKey={(row) => row.hotlineGroupId}
+          />
+        </div>
         {!!state?.listData?.length && (
           <Pagination
             onChange={onPageChange}
             current={state?.page + 1}
             pageSize={state?.size}
-            total={listTrunkManagement.concat(listTrunkManagement).length}
+            total={state?.listHotlines.length}
             listData={state?.listData}
             onShowSizeChange={onSizeChange}
             style={{ flex: 1, justifyContent: "flex-end" }}
           />
         )}
       </div>
-      <ModalTrunk ref={modalTrunkRef} />
+      <ModalTrunkHotlineGroup ref={modalTrunkHotlineRef} />
+      <ModalHotline ref={modalHotlineRef} />
     </Main>
   );
 };

@@ -7,7 +7,7 @@ export const Main = styled.div`
   flex-direction: column;
   .search {
     display: flex;
-    margin: 81px 0 32px;
+    margin: 20px 0 32px;
     align-items: center;
     &__left {
       display: flex;

@@ -4,16 +4,17 @@ import React, { useEffect, useRef, useState } from "react";
 import { Search } from "@mui/icons-material";
 import { Main } from "./styled";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { STATUS } from "constants/index";
 import CellACtion from "components/CellAction";
-import ModalTrunk from "./ModalTrunk";
 import Pagination from "components/Pagination";
-import cacheUtils from "utils/cache-utils";
+import ModalKhachHang from "./ModalKhachHang";
 
-const TrunkManagement = () => {
-  const modalTrunkRef = useRef(null);
-  const { listTrunkManagement } = useSelector((state) => state.trunkManagement);
+const KhachHang = () => {
+  const { listCustomer } = useSelector((state) => state.customer);
+  const { getCustomer } = useDispatch().customer;
+  const modalKhachHangRef = useRef(null);
+
   const [state, _setState] = useState({ page: 0, size: 10 });
   const setState = (data = {}) => {
     _setState((_state) => ({
@@ -22,22 +23,11 @@ const TrunkManagement = () => {
     }));
   };
   useEffect(() => {
-    async function fetchData() {
-      let listTrunkManagement = await cacheUtils.read(
-        "",
-        "DATA_ALL_TRUNK_MANAGEMENT",
-        [],
-        false
-      );
-      setState({
-        listTrunkManagement,
-      });
-    }
-    fetchData();
-  }, [listTrunkManagement]);
+    getCustomer();
+  }, []);
 
   const handleEdit = (data) => {
-    modalTrunkRef.current && modalTrunkRef.current.show(data);
+    modalKhachHangRef.current && modalKhachHangRef.current.show(data);
   };
   const columns = [
     {
@@ -50,21 +40,29 @@ const TrunkManagement = () => {
       },
     },
     {
-      title: "Tên Trunk",
-      dataIndex: "trunkName",
-      key: "trunkName",
+      title: "Tên khách hàng",
+      dataIndex: "customerName",
+      key: "customerName",
       width: 400,
     },
     {
-      title: "Nhà mạng",
-      dataIndex: "groupName",
-      key: "groupName",
+      title: "IP",
+      dataIndex: "wlIps",
+      key: "wlIps",
       width: 400,
+      render: (item) => {
+        return (item || [])
+          .filter((x) => x.status === 1)
+          .map((x1) => {
+            return x1.ip;
+          })
+          .join(", ");
+      },
     },
     {
-      title: "IP:PORT",
-      dataIndex: "ip",
-      key: "ip",
+      title: "Mô tả",
+      dataIndex: "description",
+      key: "description",
       width: 400,
     },
     {
@@ -92,14 +90,14 @@ const TrunkManagement = () => {
   ];
 
   useEffect(() => {
-    if (state?.listTrunkManagement?.length)
+    if (listCustomer.length)
       setState({
-        listData: state?.listTrunkManagement.slice(
+        listData: listCustomer.slice(
           state.page * state?.size,
           (state.page + 1) * state?.size
         ),
       });
-  }, [state?.listTrunkManagement, state?.page, state?.size]);
+  }, [listCustomer, state?.page, state?.size]);
   const onPageChange = (page) => {
     setState({ page: page - 1 });
   };
@@ -107,19 +105,17 @@ const TrunkManagement = () => {
     setState({ size: size });
   };
 
-  const onKeyDown = (e) => {
+  const onChange = () => (e) => {
     let value = e?.target?.value;
-    if (e.nativeEvent.code === "Enter") {
-      let data = state?.listTrunkManagement.filter((item) =>
-        item.trunkName.toLowerCase().includes(value.trim().toLowerCase())
-      );
-      setState({
-        listData: data.slice(
-          state.page * state?.size,
-          (state.page + 1) * state?.size
-        ),
-      });
-    }
+    let data = listCustomer.filter((item) =>
+      item.customerName.toLowerCase().includes(value.trim().toLowerCase())
+    );
+    setState({
+      listData: data.slice(
+        state.page * state?.size,
+        (state.page + 1) * state?.size
+      ),
+    });
   };
   return (
     <Main>
@@ -128,8 +124,8 @@ const TrunkManagement = () => {
           <Input
             className="searchField"
             prefix={<Search />}
-            placeholder="Nhập tên Trunk"
-            onKeyDown={onKeyDown}
+            placeholder="Nhập tên khách hàng"
+            onChange={onChange()}
           />
 
           <Button type="primary" className="button-search">
@@ -142,7 +138,7 @@ const TrunkManagement = () => {
             className="admin-button"
             icon={<AddCircleIcon />}
             onClick={() =>
-              modalTrunkRef.current && modalTrunkRef.current.show()
+              modalKhachHangRef.current && modalKhachHangRef.current.show()
             }
           >
             Tạo mới
@@ -158,16 +154,16 @@ const TrunkManagement = () => {
             onChange={onPageChange}
             current={state?.page + 1}
             pageSize={state?.size}
-            total={state?.listTrunkManagement?.length}
+            total={listCustomer.length}
             listData={state?.listData}
             onShowSizeChange={onSizeChange}
             style={{ flex: 1, justifyContent: "flex-end" }}
           />
         )}
       </div>
-      <ModalTrunk ref={modalTrunkRef} />
+      <ModalKhachHang ref={modalKhachHangRef} />
     </Main>
   );
 };
 
-export default TrunkManagement;
+export default KhachHang;

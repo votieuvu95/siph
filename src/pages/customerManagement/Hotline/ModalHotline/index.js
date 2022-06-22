@@ -1,4 +1,4 @@
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, Select as SelectAntd } from "antd";
 import ModalTemplate from "components/ModalTemplate";
 import Select from "components/Select";
 import { Main } from "./styled";
@@ -7,16 +7,17 @@ import React, {
   useImperativeHandle,
   useRef,
   forwardRef,
-  useMemo,
+  useEffect,
 } from "react";
 import { STATUS } from "constants/index";
-import { useDispatch, useSelector } from "react-redux";
-const ModalTrunk = (props, ref) => {
-  const { listGroup } = useSelector((state) => state.trunkManagement);
-  const { createOrEdit, getTrunkManagement } = useDispatch().trunkManagement;
+import { useDispatch } from "react-redux";
+import cacheUtils from "utils/cache-utils";
+
+const ModalHotline = (props, ref) => {
+  const { createOrEdit, getHotline } = useDispatch().hotline;
 
   const [form] = Form.useForm();
-  const modalTrunkRef = useRef(null);
+  const refModal = useRef(null);
   const [state, _setState] = useState({});
   const setState = (data = {}) => {
     _setState((_state) => ({
@@ -27,37 +28,51 @@ const ModalTrunk = (props, ref) => {
 
   useImperativeHandle(ref, () => ({
     show: (data = {}) => {
-      setState({ data: data, id: data.id });
-      if (data?.id) {
-        form.setFieldsValue(data);
+      setState({ data: data });
+      debugger
+      if (data?.hotlineGroupId) {
+        form.setFieldsValue({
+          ...data,
+          groupHotlineName : data?.hotlineGroupName,
+          status: data?.groupStatus,
+          isdns: (data?.hotlines || [])
+            .filter((x) => x.status === 1)
+            .map((x1) => {
+              return x1.isdn;
+            }),
+        });
       }
-      modalTrunkRef.current && modalTrunkRef.current.show();
+      refModal.current && refModal.current.show();
     },
   }));
-
+  useEffect(() => {
+    async function fetchData() {
+      let listDataCustomer = await cacheUtils.read(
+        "",
+        "DATA_ALL_CUSTOMER",
+        [],
+        false
+      );
+      setState({
+        listDataCustomer: (listDataCustomer || []).map((item) => {
+          return { id: Number(item.id), ten: item.customerName };
+        }),
+      });
+    }
+    fetchData();
+  }, []);
   const onCancel = () => {
-    modalTrunkRef.current && modalTrunkRef.current.hide();
+    refModal.current && refModal.current.hide();
     form.resetFields();
   };
 
-  const dataGroup = useMemo(() => {
-    return (listGroup || []).map((item) => {
-      return { id: item.id, ten: item.groupName };
-    });
-  }, [listGroup]);
-
   const onHandleSubmit = (values) => {
-    const { trunkName, port, ip, groupName } = values;
     const payload = {
-      trunkName: trunkName,
-      port: port,
-      ip: ip,
-      id: state?.data?.id,
-      groupCode: (listGroup || []).find((x) => x.id === groupName)
-        ?.groupCode,
+      ...values,
+      hotlineGroupId: state?.data?.hotlineGroupId,
     };
     createOrEdit(payload).then(() => {
-      getTrunkManagement();
+      getHotline();
       onCancel();
     });
   };
@@ -65,12 +80,11 @@ const ModalTrunk = (props, ref) => {
   const onSave = () => {
     form.submit();
   };
-
   return (
     <ModalTemplate
-      ref={modalTrunkRef}
+      ref={refModal}
       onCancel={onCancel}
-      title={state?.data?.id ? "Cập nhật Trunk" : "Tạo mới Trunk"}
+      title={state?.data?.hotlineGroupId ? "Cập nhập nhóm Hotline" : "Tạo mới nhóm Hotline"}
       width={600}
     >
       <Main>
@@ -81,8 +95,8 @@ const ModalTrunk = (props, ref) => {
           onFinish={onHandleSubmit}
         >
           <Form.Item
-            label="Tên Trunk"
-            name="trunkName"
+            label="Tên Khách hàng"
+            name="customerId"
             rules={[
               {
                 required: true,
@@ -90,11 +104,11 @@ const ModalTrunk = (props, ref) => {
               },
             ]}
           >
-            <Input></Input>
+            <Select disabled={state?.data?.hotlineGroupId} data={state?.listDataCustomer} />
           </Form.Item>
           <Form.Item
-            label="Nhà mạng"
-            name="groupName"
+            label="Tên nhóm Hotline"
+            name="groupHotlineName"
             rules={[
               {
                 required: true,
@@ -102,11 +116,11 @@ const ModalTrunk = (props, ref) => {
               },
             ]}
           >
-            <Select disabled={state?.data?.id} data={dataGroup} />
+            <Input></Input>
           </Form.Item>
           <Form.Item
-            label="Địa chỉ IP"
-            name="ip"
+            label="Số Hotline"
+            name="isdns"
             rules={[
               {
                 required: true,
@@ -114,21 +128,9 @@ const ModalTrunk = (props, ref) => {
               },
             ]}
           >
-            <Input></Input>
+            <SelectAntd mode="tags" />
           </Form.Item>
-          <Form.Item
-            label="Port"
-            name="port"
-            rules={[
-              {
-                required: true,
-                message: "Vui lòng nhập port!",
-              },
-            ]}
-          >
-            <Input></Input>
-          </Form.Item>
-          {state?.data?.id && (
+          {state?.data?.hotlineGroupId && (
             <Form.Item
               label="Trạng thái"
               name="status"
@@ -144,14 +146,14 @@ const ModalTrunk = (props, ref) => {
           )}
         </Form>
         <Button
-          className={`${!state?.data?.id ? "button-create" : "button-update"}`}
+          className={`${!state?.data?.hotlineGroupId ? "button-create" : "button-update"}`}
           onClick={() => onSave()}
         >
-          {!state?.data?.id ? "Tạo trunk" : "Cập nhật"}
+          {!state?.data?.hotlineGroupId ? "Tạo trunk" : "Cập nhật"}
         </Button>
       </Main>
     </ModalTemplate>
   );
 };
 
-export default forwardRef(ModalTrunk);
+export default forwardRef(ModalHotline);

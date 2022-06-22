@@ -1,4 +1,4 @@
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, Select as SelectAntd } from "antd";
 import ModalTemplate from "components/ModalTemplate";
 import Select from "components/Select";
 import { Main } from "./styled";
@@ -7,16 +7,16 @@ import React, {
   useImperativeHandle,
   useRef,
   forwardRef,
-  useMemo,
+  useEffect,
 } from "react";
 import { STATUS } from "constants/index";
-import { useDispatch, useSelector } from "react-redux";
-const ModalTrunk = (props, ref) => {
-  const { listGroup } = useSelector((state) => state.trunkManagement);
-  const { createOrEdit, getTrunkManagement } = useDispatch().trunkManagement;
+import { useDispatch } from "react-redux";
+import cacheUtils from "utils/cache-utils";
+const ModalVirtual = (props, ref) => {
+  const { createOrEdit, getVirtualNumber } = useDispatch().virtualNumber;
 
   const [form] = Form.useForm();
-  const modalTrunkRef = useRef(null);
+  const refModal = useRef(null);
   const [state, _setState] = useState({});
   const setState = (data = {}) => {
     _setState((_state) => ({
@@ -27,37 +27,50 @@ const ModalTrunk = (props, ref) => {
 
   useImperativeHandle(ref, () => ({
     show: (data = {}) => {
-      setState({ data: data, id: data.id });
-      if (data?.id) {
-        form.setFieldsValue(data);
+      setState({ data: data});
+      if (data?.vngId) {
+        form.setFieldsValue({
+          ...data,
+          isdns: (data?.virtualNumbers || [])
+            .filter((x) => x.status === 1)
+            .map((x1) => {
+              return x1.isdn;
+            }),
+        });
       }
-      modalTrunkRef.current && modalTrunkRef.current.show();
+      refModal.current && refModal.current.show();
     },
   }));
 
   const onCancel = () => {
-    modalTrunkRef.current && modalTrunkRef.current.hide();
+    refModal.current && refModal.current.hide();
     form.resetFields();
   };
 
-  const dataGroup = useMemo(() => {
-    return (listGroup || []).map((item) => {
-      return { id: item.id, ten: item.groupName };
-    });
-  }, [listGroup]);
+  useEffect(() => {
+    async function fetchData() {
+      let listDataCustomer = await cacheUtils.read(
+        "",
+        "DATA_ALL_CUSTOMER",
+        [],
+        false
+      );
+      setState({
+        listDataCustomer: (listDataCustomer || []).map((item) => {
+          return { id: Number(item.id), ten: item.customerName };
+        }),
+      });
+    }
+    fetchData();
+  }, []);
 
   const onHandleSubmit = (values) => {
-    const { trunkName, port, ip, groupName } = values;
     const payload = {
-      trunkName: trunkName,
-      port: port,
-      ip: ip,
-      id: state?.data?.id,
-      groupCode: (listGroup || []).find((x) => x.id === groupName)
-        ?.groupCode,
+      ...values,
+      vngId: state?.data?.vngId,
     };
     createOrEdit(payload).then(() => {
-      getTrunkManagement();
+      getVirtualNumber();
       onCancel();
     });
   };
@@ -68,9 +81,9 @@ const ModalTrunk = (props, ref) => {
 
   return (
     <ModalTemplate
-      ref={modalTrunkRef}
+      ref={refModal}
       onCancel={onCancel}
-      title={state?.data?.id ? "Cập nhật Trunk" : "Tạo mới Trunk"}
+      title={state?.data?.vngId ? "Cập nhập nhóm Virtual" : "Tạo mới nhóm Virtual"}
       width={600}
     >
       <Main>
@@ -81,8 +94,8 @@ const ModalTrunk = (props, ref) => {
           onFinish={onHandleSubmit}
         >
           <Form.Item
-            label="Tên Trunk"
-            name="trunkName"
+            label="Tên Khách hàng"
+            name="customerId"
             rules={[
               {
                 required: true,
@@ -90,11 +103,14 @@ const ModalTrunk = (props, ref) => {
               },
             ]}
           >
-            <Input></Input>
+            <Select
+              disabled={state?.data?.vngId}
+              data={state?.listDataCustomer}
+            />
           </Form.Item>
           <Form.Item
-            label="Nhà mạng"
-            name="groupName"
+            label="Tên nhóm Virtual"
+            name="vngName"
             rules={[
               {
                 required: true,
@@ -102,11 +118,11 @@ const ModalTrunk = (props, ref) => {
               },
             ]}
           >
-            <Select disabled={state?.data?.id} data={dataGroup} />
+            <Input />
           </Form.Item>
           <Form.Item
-            label="Địa chỉ IP"
-            name="ip"
+            label="Số Virtual"
+            name="isdns"
             rules={[
               {
                 required: true,
@@ -114,21 +130,9 @@ const ModalTrunk = (props, ref) => {
               },
             ]}
           >
-            <Input></Input>
+            <SelectAntd mode="tags"></SelectAntd>
           </Form.Item>
-          <Form.Item
-            label="Port"
-            name="port"
-            rules={[
-              {
-                required: true,
-                message: "Vui lòng nhập port!",
-              },
-            ]}
-          >
-            <Input></Input>
-          </Form.Item>
-          {state?.data?.id && (
+          {state?.data?.vngId && (
             <Form.Item
               label="Trạng thái"
               name="status"
@@ -144,14 +148,14 @@ const ModalTrunk = (props, ref) => {
           )}
         </Form>
         <Button
-          className={`${!state?.data?.id ? "button-create" : "button-update"}`}
+          className={`${!state?.data?.vngId ? "button-create" : "button-update"}`}
           onClick={() => onSave()}
         >
-          {!state?.data?.id ? "Tạo trunk" : "Cập nhật"}
+          {!state?.data?.vngId ? "Tạo trunk" : "Cập nhật"}
         </Button>
       </Main>
     </ModalTemplate>
   );
 };
 
-export default forwardRef(ModalTrunk);
+export default forwardRef(ModalVirtual);

@@ -4,16 +4,16 @@ import React, { useEffect, useRef, useState } from "react";
 import { Search } from "@mui/icons-material";
 import { Main } from "./styled";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { STATUS } from "constants/index";
 import CellACtion from "components/CellAction";
-import ModalTrunk from "./ModalTrunk";
 import Pagination from "components/Pagination";
-import cacheUtils from "utils/cache-utils";
+import ModalHotline from "./ModalHotline";
+const Hotline = () => {
+  const { listHotlines } = useSelector((state) => state.hotline);
+  const { getHotline } = useDispatch().hotline;
+  const modalHotlineRef = useRef(null);
 
-const TrunkManagement = () => {
-  const modalTrunkRef = useRef(null);
-  const { listTrunkManagement } = useSelector((state) => state.trunkManagement);
   const [state, _setState] = useState({ page: 0, size: 10 });
   const setState = (data = {}) => {
     _setState((_state) => ({
@@ -22,22 +22,11 @@ const TrunkManagement = () => {
     }));
   };
   useEffect(() => {
-    async function fetchData() {
-      let listTrunkManagement = await cacheUtils.read(
-        "",
-        "DATA_ALL_TRUNK_MANAGEMENT",
-        [],
-        false
-      );
-      setState({
-        listTrunkManagement,
-      });
-    }
-    fetchData();
-  }, [listTrunkManagement]);
+    getHotline();
+  }, []);
 
   const handleEdit = (data) => {
-    modalTrunkRef.current && modalTrunkRef.current.show(data);
+    modalHotlineRef.current && modalHotlineRef.current.show(data);
   };
   const columns = [
     {
@@ -50,27 +39,35 @@ const TrunkManagement = () => {
       },
     },
     {
-      title: "Tên Trunk",
-      dataIndex: "trunkName",
-      key: "trunkName",
+      title: "Tên khách hàng",
+      dataIndex: "customerName",
+      key: "customerName",
       width: 400,
     },
     {
-      title: "Nhà mạng",
-      dataIndex: "groupName",
-      key: "groupName",
+      title: "Tên nhóm Hotline",
+      dataIndex: "hotlineGroupName",
+      key: "hotlineGroupName",
       width: 400,
     },
     {
-      title: "IP:PORT",
-      dataIndex: "ip",
-      key: "ip",
+      title: "Số Hotline",
+      dataIndex: "hotlines",
+      key: "hotlines",
       width: 400,
+      render: (item) => {
+        return (item || [])
+          .filter((x) => x.status === 1)
+          .map((x1) => {
+            return x1.isdn;
+          })
+          .join(", ");
+      },
     },
     {
       title: "Trạng thái",
-      dataIndex: "status",
-      key: "status",
+      dataIndex: "groupStatus",
+      key: "groupStatus",
       width: 100,
       render: (item) => STATUS.find((x) => x.id === item)?.ten,
     },
@@ -92,14 +89,14 @@ const TrunkManagement = () => {
   ];
 
   useEffect(() => {
-    if (state?.listTrunkManagement?.length)
+    if (listHotlines.length)
       setState({
-        listData: state?.listTrunkManagement.slice(
+        listData: listHotlines.slice(
           state.page * state?.size,
           (state.page + 1) * state?.size
         ),
       });
-  }, [state?.listTrunkManagement, state?.page, state?.size]);
+  }, [listHotlines, state?.page, state?.size]);
   const onPageChange = (page) => {
     setState({ page: page - 1 });
   };
@@ -107,19 +104,17 @@ const TrunkManagement = () => {
     setState({ size: size });
   };
 
-  const onKeyDown = (e) => {
+  const onChange = () => (e) => {
     let value = e?.target?.value;
-    if (e.nativeEvent.code === "Enter") {
-      let data = state?.listTrunkManagement.filter((item) =>
-        item.trunkName.toLowerCase().includes(value.trim().toLowerCase())
-      );
-      setState({
-        listData: data.slice(
-          state.page * state?.size,
-          (state.page + 1) * state?.size
-        ),
-      });
-    }
+    let data = listHotlines.filter((item) =>
+      item.customerName.toLowerCase().includes(value.trim().toLowerCase())
+    );
+    setState({
+      listData: data.slice(
+        state.page * state?.size,
+        (state.page + 1) * state?.size
+      ),
+    });
   };
   return (
     <Main>
@@ -128,8 +123,8 @@ const TrunkManagement = () => {
           <Input
             className="searchField"
             prefix={<Search />}
-            placeholder="Nhập tên Trunk"
-            onKeyDown={onKeyDown}
+            placeholder="Nhập tên Khách hàng, số Hotline"
+            onKeyDown={onChange()}
           />
 
           <Button type="primary" className="button-search">
@@ -142,7 +137,7 @@ const TrunkManagement = () => {
             className="admin-button"
             icon={<AddCircleIcon />}
             onClick={() =>
-              modalTrunkRef.current && modalTrunkRef.current.show()
+              modalHotlineRef.current && modalHotlineRef.current.show()
             }
           >
             Tạo mới
@@ -158,16 +153,16 @@ const TrunkManagement = () => {
             onChange={onPageChange}
             current={state?.page + 1}
             pageSize={state?.size}
-            total={state?.listTrunkManagement?.length}
+            total={listHotlines.length}
             listData={state?.listData}
             onShowSizeChange={onSizeChange}
             style={{ flex: 1, justifyContent: "flex-end" }}
           />
         )}
       </div>
-      <ModalTrunk ref={modalTrunkRef} />
+      <ModalHotline ref={modalHotlineRef} />
     </Main>
   );
 };
 
-export default TrunkManagement;
+export default Hotline;

@@ -4,17 +4,17 @@ import React, { useEffect, useRef, useState } from "react";
 import { Search } from "@mui/icons-material";
 import { Main } from "./styled";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import { useDispatch, useSelector } from "react-redux";
 import { STATUS } from "constants/index";
 import CellACtion from "components/CellAction";
-import ModalTrunk from "./ModalTrunk";
+import ModalTrunk from "../trunkManagement/ModalTrunk";
 import Pagination from "components/Pagination";
-
+import cacheUtils from "utils/cache-utils";
+import ModalVirtual from "pages/customerManagement/Virtual/ModalVirtual";
+import ModalTrunkGroupVirtual from "./ModalTrunkGroupVirtual";
 const VirtualRouting = () => {
-  const { listTrunkManagement } = useSelector((state) => state.trunkManagement);
-  const { getTrunkManagement, searchGroup } = useDispatch().trunkManagement;
   const modalTrunkRef = useRef(null);
-
+  const modalVirtualRef = useRef(null);
+  const modalTrunkGroupVirtualRef = useRef(null);
   const [state, _setState] = useState({ page: 0, size: 10 });
   const setState = (data = {}) => {
     _setState((_state) => ({
@@ -23,11 +23,39 @@ const VirtualRouting = () => {
     }));
   };
   useEffect(() => {
-    getTrunkManagement();
-    searchGroup();
+    async function fetchData() {
+      let listVirtualNumber = await cacheUtils.read(
+        "",
+        "DATA_ALL_VITURALNUMBER",
+        [],
+        false
+      );
+
+      let listTrunkManagement = await cacheUtils.read(
+        "",
+        "DATA_ALL_TRUNK_MANAGEMENT",
+        [],
+        false
+      );
+
+      setState({
+        listVirtualNumber: (listVirtualNumber || []).filter(
+          (item) => item.vngTrunks.length
+        ),
+        listTrunkManagement,
+      });
+    }
+    fetchData();
   }, []);
 
   const handleEdit = (data) => {
+    modalTrunkGroupVirtualRef.current && modalTrunkGroupVirtualRef.current.show(data);
+  };
+
+  const onShowModal = (item) => {
+    let data = (state?.listTrunkManagement || []).find(
+      (x) => x.id == item?.trunkId
+    );
     modalTrunkRef.current && modalTrunkRef.current.show(data);
   };
   const columns = [
@@ -41,28 +69,71 @@ const VirtualRouting = () => {
       },
     },
     {
-      title: "Tên Trunk",
-      dataIndex: "trunkName",
-      key: "trunkName",
-      width: 400,
+      title: "Tên khách hàng",
+      dataIndex: "customerName",
+      key: "customerName",
+      width: 300,
     },
     {
-      title: "Nhà mạng",
-      dataIndex: "groupName",
-      key: "groupName",
-      width: 400,
+      title: "Tên nhóm Virtual",
+      dataIndex: "vngName",
+      key: "vngName",
+      width: 200,
+      render: (item, data) => (
+        <a
+          onClick={() =>
+            modalVirtualRef.current && modalVirtualRef.current.show(data)
+          }
+        >
+          {item}
+        </a>
+      ),
     },
     {
-      title: "IP:PORT",
-      dataIndex: "ip",
-      key: "ip",
-      width: 400,
+      title: "Viettel Trunk",
+      dataIndex: "vngTrunks",
+      key: "vngTrunks",
+      width: 100,
+      render: (item) => {
+        let data = (item || []).find((x) => x.groupCode === "11");
+        return <a onClick={() => onShowModal(data)}>{data?.trunkName} </a>;
+      },
+    },
+    {
+      title: "Mobiphone Trunk",
+      dataIndex: "vngTrunks",
+      key: "vngTrunks",
+      width: 120,
+      render: (item) => {
+        let data = (item || []).find((x) => x.groupCode === "22");
+        return <a onClick={() => onShowModal(data)}>{data?.trunkName} </a>;
+      },
+    },
+    {
+      title: "Vinaphone Trunk",
+      dataIndex: "vngTrunks",
+      key: "vngTrunks",
+      width: 120,
+      render: (item) => {
+        let data = (item || []).find((x) => x.groupCode === "33");
+        return <a onClick={() => onShowModal(data)}>{data?.trunkName} </a>;
+      },
+    },
+    {
+      title: "Default Trunk",
+      dataIndex: "vngTrunks",
+      key: "vngTrunks",
+      width: 120,
+      render: (item) => {
+        let data = (item || []).find((x) => x.groupCode === "44");
+        return <a onClick={() => onShowModal(data)}>{data?.trunkName} </a>;
+      },
     },
     {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
-      width: 100,
+      width: 120,
       render: (item) => STATUS.find((x) => x.id === item)?.ten,
     },
     {
@@ -83,13 +154,14 @@ const VirtualRouting = () => {
   ];
 
   useEffect(() => {
-    if (listTrunkManagement.length)
+    if (state?.listVirtualNumber?.length)
       setState({
-        listData: listTrunkManagement
-          .concat(listTrunkManagement)
-          .slice(state.page * state?.size, (state.page + 1) * state?.size),
+        listData: state?.listVirtualNumber.slice(
+          state.page * state?.size,
+          (state.page + 1) * state?.size
+        ),
       });
-  }, [listTrunkManagement, state?.page, state?.size]);
+  }, [state?.listVirtualNumber, state?.page, state?.size]);
   const onPageChange = (page) => {
     setState({ page: page - 1 });
   };
@@ -100,11 +172,9 @@ const VirtualRouting = () => {
   const onKeyDown = (e) => {
     let value = e?.target?.value;
     if (e.nativeEvent.code === "Enter") {
-      let data = listTrunkManagement
-        .concat(listTrunkManagement)
-        .filter((item) =>
-          item.trunkName.toLowerCase().includes(value.trim().toLowerCase())
-        );
+      let data = state?.listVirtualNumber.filter((item) =>
+        item.trunkName.toLowerCase().includes(value.trim().toLowerCase())
+      );
       setState({
         listData: data.slice(
           state.page * state?.size,
@@ -134,7 +204,7 @@ const VirtualRouting = () => {
             className="admin-button"
             icon={<AddCircleIcon />}
             onClick={() =>
-              modalTrunkRef.current && modalTrunkRef.current.show()
+              modalTrunkGroupVirtualRef.current && modalTrunkGroupVirtualRef.current.show()
             }
           >
             Tạo mới
@@ -142,13 +212,15 @@ const VirtualRouting = () => {
         </div>
       </div>
       <div className="table">
-        <div className="main-table"><TableWrapper columns={columns} dataSource={state?.listData} /></div>
+        <div className="main-table">
+          <TableWrapper columns={columns} dataSource={state?.listData} />
+        </div>
         {!!state?.listData?.length && (
           <Pagination
             onChange={onPageChange}
             current={state?.page + 1}
             pageSize={state?.size}
-            total={listTrunkManagement.concat(listTrunkManagement).length}
+            total={state?.listVirtualNumber.length}
             listData={state?.listData}
             onShowSizeChange={onSizeChange}
             style={{ flex: 1, justifyContent: "flex-end" }}
@@ -156,6 +228,8 @@ const VirtualRouting = () => {
         )}
       </div>
       <ModalTrunk ref={modalTrunkRef} />
+      <ModalVirtual ref={modalVirtualRef} />
+      <ModalTrunkGroupVirtual ref={modalTrunkGroupVirtualRef} />
     </Main>
   );
 };

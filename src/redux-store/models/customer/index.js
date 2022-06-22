@@ -1,10 +1,10 @@
 import { message } from "antd";
-import trunkManagementProvider from "data-access/trunk-management-provider";
+import customerProvider from "data-access/customer-provider";
 import cacheUtils from "utils/cache-utils";
 
 export default {
   state: {
-    listTrunkManagement: [],
+    listCustomer: [],
     listGroup: []
   },
   reducers: {
@@ -13,27 +13,14 @@ export default {
     },
   },
   effects: (dispatch) => ({
-    getTrunkManagement: () => {
-      trunkManagementProvider
+    getCustomer: () => {
+      customerProvider
         .search()
-        .then((s) => {
-          dispatch.trunkManagement.updateData({
-            listTrunkManagement: s?.groupIps,
+        .then(async (s) => {
+          await cacheUtils.save("", "DATA_ALL_CUSTOMER", s?.customers, false);
+          dispatch.customer.updateData({
+            listCustomer: s?.customers,
           });
-          cacheUtils.save("", "DATA_ALL_TRUNK_MANAGEMENT", s?.groupIps, false);
-        })
-        .catch((e) => {
-          message.error(e?.message || "Đăng nhập không thành công");
-        });
-    },
-    searchGroup: () => {
-      trunkManagementProvider
-        .searchGroup()
-        .then((s) => {
-          dispatch.trunkManagement.updateData({
-            listGroup: s?.groups,
-          });
-          cacheUtils.save("", "DATA_ALL_GROUPS", s?.groupIps, false);
         })
         .catch((e) => {
           message.error(e?.message || "Đăng nhập không thành công");
@@ -43,7 +30,7 @@ export default {
       return new Promise((resolve, reject) => {
         try {
           if (payload.id) {
-            trunkManagementProvider
+            customerProvider
               .put(payload)
               .then((s) => {
                 message.success("Cập nhật thành công dữ liệu");
@@ -54,7 +41,7 @@ export default {
                 reject(e);
               });
           } else {
-            trunkManagementProvider
+            customerProvider
               .post(payload)
               .then((s) => {
                 message.success("Thêm mới thành công dữ liệu");

@@ -32,6 +32,11 @@ export const Main = styled.div`
     }
     .ant-select-selector {
       height: 48px;
+      line-height: 50px;
+      & .ant-select-selection-item {
+        font-size: 16px;
+        line-height: 50px;
+      }
       .ant-select-selection-search {
         input {
           height: 48px;
@@ -39,9 +44,12 @@ export const Main = styled.div`
           line-height: 40px;
         }
       }
-      .ant-select-selection-item {
-        font-size: 16px;
-          line-height: 40px;
+      & .ant-select-selection-overflow {
+        & .ant-select-selection-overflow-item {
+          & .ant-select-selection-item {
+            line-height: 24px !important;
+          }
+        }
       }
     }
   }
