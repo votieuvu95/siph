@@ -8,10 +8,11 @@ import React, {
   useRef,
   forwardRef,
   useEffect,
+  useMemo,
 } from "react";
 import { STATUS } from "constants/index";
 import { useDispatch } from "react-redux";
-import cacheUtils from "utils/cache-utils";
+const { Option } = SelectAntd;
 
 const ModalHotline = (props, ref) => {
   const { createOrEdit, getHotline } = useDispatch().hotline;
@@ -29,11 +30,10 @@ const ModalHotline = (props, ref) => {
   useImperativeHandle(ref, () => ({
     show: (data = {}) => {
       setState({ data: data });
-      debugger
       if (data?.hotlineGroupId) {
         form.setFieldsValue({
           ...data,
-          groupHotlineName : data?.hotlineGroupName,
+          groupHotlineName: data?.hotlineGroupName,
           status: data?.groupStatus,
           isdns: (data?.hotlines || [])
             .filter((x) => x.status === 1)
@@ -45,31 +45,30 @@ const ModalHotline = (props, ref) => {
       refModal.current && refModal.current.show();
     },
   }));
+
   useEffect(() => {
-    async function fetchData() {
-      let listDataCustomer = await cacheUtils.read(
-        "",
-        "DATA_ALL_CUSTOMER",
-        [],
-        false
-      );
-      setState({
-        listDataCustomer: (listDataCustomer || []).map((item) => {
-          return { id: Number(item.id), ten: item.customerName };
-        }),
-      });
-    }
-    fetchData();
+    let listDataCustomer = localStorage.getItem("DATA_ALL_CUSTOMER");
+    setState({
+      listDataCustomer: (JSON.parse(listDataCustomer) || []).map((item) => {
+        return { id: Number(item.id), ten: item.customerName };
+      }),
+    });
   }, []);
+  
   const onCancel = () => {
     refModal.current && refModal.current.hide();
     form.resetFields();
   };
-
+  const dataHotlines = useMemo(() => {
+    return (state?.data?.hotlines || []).map((item) => {
+      return { value: item?.hotlineId, label: item.isdn };
+    });
+  }, [state?.data?.hotlines]);
   const onHandleSubmit = (values) => {
     const payload = {
       ...values,
       hotlineGroupId: state?.data?.hotlineGroupId,
+      dataHotlines: dataHotlines,
     };
     createOrEdit(payload).then(() => {
       getHotline();
@@ -84,7 +83,11 @@ const ModalHotline = (props, ref) => {
     <ModalTemplate
       ref={refModal}
       onCancel={onCancel}
-      title={state?.data?.hotlineGroupId ? "Cập nhập nhóm Hotline" : "Tạo mới nhóm Hotline"}
+      title={
+        state?.data?.hotlineGroupId
+          ? "Cập nhập nhóm Hotline"
+          : "Tạo mới nhóm Hotline"
+      }
       width={600}
     >
       <Main>
@@ -100,11 +103,14 @@ const ModalHotline = (props, ref) => {
             rules={[
               {
                 required: true,
-                message: "Vui lòng nhập tên Trunk!",
+                message: "Tên Khách hàng không được để trống",
               },
             ]}
           >
-            <Select disabled={state?.data?.hotlineGroupId} data={state?.listDataCustomer} />
+            <Select
+              disabled={state?.data?.hotlineGroupId}
+              data={state?.listDataCustomer}
+            />
           </Form.Item>
           <Form.Item
             label="Tên nhóm Hotline"
@@ -112,7 +118,7 @@ const ModalHotline = (props, ref) => {
             rules={[
               {
                 required: true,
-                message: "Vui lòng chọn nhà mạng!",
+                message: "Tên nhóm Hotline không được để trống",
               },
             ]}
           >
@@ -124,11 +130,15 @@ const ModalHotline = (props, ref) => {
             rules={[
               {
                 required: true,
-                message: "Vui lòng nhập địa chỉ!",
+                message: "Số Hotlineg không được để trống",
               },
             ]}
           >
-            <SelectAntd mode="tags" />
+            <SelectAntd mode="tags">
+              {(dataHotlines || []).map((item) => {
+                return <Option value={item.label} key={item.value}></Option>;
+              })}
+            </SelectAntd>
           </Form.Item>
           {state?.data?.hotlineGroupId && (
             <Form.Item
@@ -137,7 +147,7 @@ const ModalHotline = (props, ref) => {
               rules={[
                 {
                   required: true,
-                  message: "Vui lòng chọn trạng thái!",
+                  message: "Trạng thái không được để trống",
                 },
               ]}
             >
@@ -146,10 +156,12 @@ const ModalHotline = (props, ref) => {
           )}
         </Form>
         <Button
-          className={`${!state?.data?.hotlineGroupId ? "button-create" : "button-update"}`}
+          className={`${
+            !state?.data?.hotlineGroupId ? "button-create" : "button-update"
+          }`}
           onClick={() => onSave()}
         >
-          {!state?.data?.hotlineGroupId ? "Tạo trunk" : "Cập nhật"}
+          {!state?.data?.hotlineGroupId ? "Tạo mới" : "Cập nhật"}
         </Button>
       </Main>
     </ModalTemplate>

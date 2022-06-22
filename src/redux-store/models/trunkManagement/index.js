@@ -1,6 +1,5 @@
 import { message } from "antd";
 import trunkManagementProvider from "data-access/trunk-management-provider";
-import cacheUtils from "utils/cache-utils";
 
 export default {
   state: {
@@ -20,7 +19,7 @@ export default {
           dispatch.trunkManagement.updateData({
             listTrunkManagement: s?.groupIps,
           });
-          cacheUtils.save("", "DATA_ALL_TRUNK_MANAGEMENT", s?.groupIps, false);
+          localStorage.setItem("DATA_ALL_TRUNK_MANAGEMENT", JSON.stringify(s?.groupIps));
         })
         .catch((e) => {
           message.error(e?.message || "Đăng nhập không thành công");
@@ -33,7 +32,8 @@ export default {
           dispatch.trunkManagement.updateData({
             listGroup: s?.groups,
           });
-          cacheUtils.save("", "DATA_ALL_GROUPS", s?.groupIps, false);
+          localStorage.setItem("DATA_ALL_GROUPS", JSON.stringify(s?.groups));
+
         })
         .catch((e) => {
           message.error(e?.message || "Đăng nhập không thành công");

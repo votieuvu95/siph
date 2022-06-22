@@ -1,8 +1,7 @@
 import axios from "axios";
 import { getState } from "redux-store/stores";
 export const originUrl = window.location.origin;
-const HOST = "https://api-siphcm.leeon.vn";
-
+const HOST = process.env.REACT_APP_BASE_API_URL;
 const client = axios.create({
   baseURL: `${HOST}`,
   headers: {

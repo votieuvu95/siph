@@ -36,44 +36,25 @@ const ModalTrunkHotlineGroup = (props, ref) => {
   }));
 
   useEffect(() => {
-    async function fetchData() {
-      let listCustomer = await cacheUtils.read(
-        "",
-        "DATA_ALL_CUSTOMER",
-        [],
-        false
-      );
-
-      let listTrunkManagement = await cacheUtils.read(
-        "",
-        "DATA_ALL_TRUNK_MANAGEMENT",
-        [],
-        false
-      );
-
-      let listHotlines = await cacheUtils.read(
-        "",
-        "DATA_ALL_HOTLINE",
-        [],
-        false
-      );
-
-      setState({
-        listCustomer: (listCustomer || []).map((item) => {
-          return { id: Number(item.id), ten: item.customerName };
-        }),
-        listTrunkManagement: (listTrunkManagement || []).map((item) => {
+    let listCustomer = localStorage.getItem("DATA_ALL_CUSTOMER");
+    let listTrunkManagement = localStorage.getItem("DATA_ALL_TRUNK_MANAGEMENT");
+    let listHotlines = localStorage.getItem("DATA_ALL_HOTLINE");
+    setState({
+      listCustomer: (JSON.parse(listCustomer) || []).map((item) => {
+        return { id: Number(item.id), ten: item.customerName };
+      }),
+      listTrunkManagement: (JSON.parse(listTrunkManagement) || []).map(
+        (item) => {
           return { id: Number(item.id), ten: item.trunkName };
-        }),
-        listHotlines: (listHotlines || []).map((item) => {
-          return {
-            id: item.hotlineGroupId,
-            ten: item.hotlineGroupName,
-          };
-        }),
-      });
-    }
-    fetchData();
+        }
+      ),
+      listHotlines: (JSON.parse(listHotlines) || []).map((item) => {
+        return {
+          id: item.hotlineGroupId,
+          ten: item.hotlineGroupName,
+        };
+      }),
+    });
   }, []);
   const onCancel = () => {
     modalTrunkRef.current && modalTrunkRef.current.hide();
@@ -142,7 +123,7 @@ const ModalTrunkHotlineGroup = (props, ref) => {
             rules={[
               {
                 required: true,
-                message: "Vui lòng nhập tên Trunk!",
+                message: "Tên Khách hàng không được để trông",
               },
             ]}
           >
@@ -158,7 +139,7 @@ const ModalTrunkHotlineGroup = (props, ref) => {
             rules={[
               {
                 required: true,
-                message: "Vui lòng chọn nhà mạng!",
+                message: "Tên nhóm Hotline không được để trống",
               },
             ]}
           >
@@ -173,7 +154,7 @@ const ModalTrunkHotlineGroup = (props, ref) => {
             rules={[
               {
                 required: true,
-                message: "Vui lòng nhập địa chỉ!",
+                message: "Tên trunk không được để trống",
               },
             ]}
           >

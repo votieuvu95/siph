@@ -1,5 +1,5 @@
 import { client } from "client/request";
-import {  VIRTUALNUMBER, CUSTOMER } from "client/api";
+import { VIRTUALNUMBER, CUSTOMER } from "client/api";
 
 export default {
   search: () => {
@@ -47,7 +47,10 @@ export default {
   postTrunk: ({ customerId, vngId, ...rest }) => {
     return new Promise((resolve, reject) => {
       client
-        .post(`${CUSTOMER}/${customerId}/virtual-number-group/${vngId}/trunk`, rest)
+        .post(
+          `${CUSTOMER}/${customerId}/virtual-number-group/${vngId}/trunk`,
+          rest
+        )
         .then((s) => {
           if (s) {
             resolve(s?.data);
@@ -61,7 +64,38 @@ export default {
   putTrunk: ({ customerId, vngtId, ...rest }) => {
     return new Promise((resolve, reject) => {
       client
-        .put(`${CUSTOMER}/${customerId}/virtual-number-group-trunk/${vngtId}`, rest)
+        .put(
+          `${CUSTOMER}/${customerId}/virtual-number-group-trunk/${vngtId}`,
+          rest
+        )
+        .then((s) => {
+          if (s) {
+            resolve(s?.data);
+          } else reject(s?.data);
+        })
+        .catch((e) => {
+          reject(e);
+        });
+    });
+  },
+  postVirtual: ({ customerId, vngId, ...rest }) => {
+    return new Promise((resolve, reject) => {
+      client
+        .post(`${CUSTOMER}/${customerId}/virtual-number-group/${vngId}`, rest)
+        .then((s) => {
+          if (s) {
+            resolve(s?.data);
+          } else reject(s?.data);
+        })
+        .catch((e) => {
+          reject(e);
+        });
+    });
+  },
+  putVirtual: ({ id, ...rest }) => {
+    return new Promise((resolve, reject) => {
+      client
+        .put(`${VIRTUALNUMBER}/${id}`, rest)
         .then((s) => {
           if (s) {
             resolve(s?.data);

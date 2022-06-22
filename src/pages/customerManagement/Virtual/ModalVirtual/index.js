@@ -8,10 +8,12 @@ import React, {
   useRef,
   forwardRef,
   useEffect,
+  useMemo,
 } from "react";
 import { STATUS } from "constants/index";
 import { useDispatch } from "react-redux";
-import cacheUtils from "utils/cache-utils";
+const { Option } = SelectAntd;
+
 const ModalVirtual = (props, ref) => {
   const { createOrEdit, getVirtualNumber } = useDispatch().virtualNumber;
 
@@ -27,7 +29,7 @@ const ModalVirtual = (props, ref) => {
 
   useImperativeHandle(ref, () => ({
     show: (data = {}) => {
-      setState({ data: data});
+      setState({ data: data });
       if (data?.vngId) {
         form.setFieldsValue({
           ...data,
@@ -48,26 +50,19 @@ const ModalVirtual = (props, ref) => {
   };
 
   useEffect(() => {
-    async function fetchData() {
-      let listDataCustomer = await cacheUtils.read(
-        "",
-        "DATA_ALL_CUSTOMER",
-        [],
-        false
-      );
-      setState({
-        listDataCustomer: (listDataCustomer || []).map((item) => {
-          return { id: Number(item.id), ten: item.customerName };
-        }),
-      });
-    }
-    fetchData();
+    let listDataCustomer = localStorage.getItem("DATA_ALL_CUSTOMER");
+    setState({
+      listDataCustomer: (JSON.parse(listDataCustomer) || []).map((item) => {
+        return { id: Number(item.id), ten: item.customerName };
+      }),
+    });
   }, []);
 
   const onHandleSubmit = (values) => {
     const payload = {
       ...values,
       vngId: state?.data?.vngId,
+      dataVirtualNumbers,
     };
     createOrEdit(payload).then(() => {
       getVirtualNumber();
@@ -79,11 +74,19 @@ const ModalVirtual = (props, ref) => {
     form.submit();
   };
 
+  const dataVirtualNumbers = useMemo(() => {
+    return (state?.data?.virtualNumbers || []).map((item) => {
+      return { value: item?.vnId, label: item.isdn };
+    });
+  }, [state?.data?.virtualNumbers]);
+
   return (
     <ModalTemplate
       ref={refModal}
       onCancel={onCancel}
-      title={state?.data?.vngId ? "Cập nhập nhóm Virtual" : "Tạo mới nhóm Virtual"}
+      title={
+        state?.data?.vngId ? "Cập nhập nhóm Virtual" : "Tạo mới nhóm Virtual"
+      }
       width={600}
     >
       <Main>
@@ -99,7 +102,7 @@ const ModalVirtual = (props, ref) => {
             rules={[
               {
                 required: true,
-                message: "Vui lòng nhập tên Trunk!",
+                message: "Tên Khách hàngi không được để trống",
               },
             ]}
           >
@@ -114,7 +117,7 @@ const ModalVirtual = (props, ref) => {
             rules={[
               {
                 required: true,
-                message: "Vui lòng chọn nhà mạng!",
+                message: "Tên nhóm Virtual không được để trống",
               },
             ]}
           >
@@ -126,11 +129,15 @@ const ModalVirtual = (props, ref) => {
             rules={[
               {
                 required: true,
-                message: "Vui lòng nhập địa chỉ!",
+                message: "Số Virtual không được để trống",
               },
             ]}
           >
-            <SelectAntd mode="tags"></SelectAntd>
+            <SelectAntd mode="tags">
+              {(dataVirtualNumbers || []).map((item) => {
+                return <Option value={item.label} key={item.value}></Option>;
+              })}
+            </SelectAntd>
           </Form.Item>
           {state?.data?.vngId && (
             <Form.Item
@@ -139,7 +146,7 @@ const ModalVirtual = (props, ref) => {
               rules={[
                 {
                   required: true,
-                  message: "Vui lòng chọn trạng thái!",
+                  message: "Trạng thái không được để trống",
                 },
               ]}
             >
@@ -148,10 +155,12 @@ const ModalVirtual = (props, ref) => {
           )}
         </Form>
         <Button
-          className={`${!state?.data?.vngId ? "button-create" : "button-update"}`}
+          className={`${
+            !state?.data?.vngId ? "button-create" : "button-update"
+          }`}
           onClick={() => onSave()}
         >
-          {!state?.data?.vngId ? "Tạo trunk" : "Cập nhật"}
+          {!state?.data?.vngId ? "Tạo mới" : "Cập nhật"}
         </Button>
       </Main>
     </ModalTemplate>

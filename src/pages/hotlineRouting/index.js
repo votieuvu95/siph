@@ -7,13 +7,14 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { STATUS } from "constants/index";
 import CellACtion from "components/CellAction";
 import Pagination from "components/Pagination";
-import cacheUtils from "utils/cache-utils";
 import ModalTrunkHotlineGroup from "./ModalTrunkHotlineGroup";
 import { useSelector } from "react-redux";
 import ModalHotline from "pages/customerManagement/Hotline/ModalHotline";
+import ModalTrunk from "pages/trunkManagement/ModalTrunk";
 const HotlineRouting = () => {
   const modalTrunkHotlineRef = useRef(null);
   const modalHotlineRef = useRef(null);
+  const modalTrunkRef = useRef(null);
   const { listHotlines } = useSelector((state) => state.hotline);
   const [state, _setState] = useState({ page: 0, size: 10 });
   const setState = (data = {}) => {
@@ -24,11 +25,14 @@ const HotlineRouting = () => {
   };
 
   useEffect(() => {
-    cacheUtils.read("", "DATA_ALL_HOTLINE", [], false).then((s) => {
-      console.log("asdasd", s);
-      setState({
-        listHotlines: (s || []).filter((item) => item.trunkName),
-      });
+    let listHotlines = localStorage.getItem("DATA_ALL_HOTLINE");
+    let listTrunkManagement = localStorage.getItem("DATA_ALL_TRUNK_MANAGEMENT");
+
+    setState({
+      listHotlines: (JSON.parse(listHotlines) || []).filter(
+        (item) => item.trunkName
+      ),
+      listTrunkManagement: JSON.parse(listTrunkManagement),
     });
   }, [listHotlines]);
   const handleEdit = (data) => {
@@ -70,6 +74,21 @@ const HotlineRouting = () => {
       dataIndex: "trunkName",
       key: "trunkName",
       width: 400,
+      render: (item, data) => {
+        let payload = (state?.listTrunkManagement || []).find(
+          (x) => x.id == data?.trunkId
+        );
+        debugger;
+        return (
+          <a
+            onClick={() =>
+              modalTrunkRef.current && modalTrunkRef.current.show(payload)
+            }
+          >
+            {item}
+          </a>
+        );
+      },
     },
     {
       title: "Trạng thái",
@@ -177,6 +196,7 @@ const HotlineRouting = () => {
       </div>
       <ModalTrunkHotlineGroup ref={modalTrunkHotlineRef} />
       <ModalHotline ref={modalHotlineRef} />
+      <ModalTrunk ref={modalTrunkRef} />
     </Main>
   );
 };

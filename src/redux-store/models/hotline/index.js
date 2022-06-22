@@ -1,6 +1,5 @@
 import { message } from "antd";
 import hotlineProvider from "data-access/hotline-routing-provider ";
-import cacheUtils from "utils/cache-utils";
 
 export default {
   state: {
@@ -14,21 +13,21 @@ export default {
     },
   },
   effects: (dispatch) => ({
-    getHotline:  () => {
+    getHotline: () => {
       return new Promise((resolve, reject) => {
         hotlineProvider
-        .search()
-        .then( (s) => {
-          dispatch.hotline.updateData({
-            listHotlines: s?.hotlineGroups,
+          .search()
+          .then((s) => {
+            dispatch.hotline.updateData({
+              listHotlines: s?.hotlineGroups,
+            });
+            resolve(s?.hotlineGroups);
+            localStorage.setItem("DATA_ALL_HOTLINE", JSON.stringify(s?.hotlineGroups));
+          })
+          .catch((e) => {
+            message.error(e?.message || "Đăng nhập không thành công");
           });
-           cacheUtils.save("", "DATA_ALL_HOTLINE", s?.hotlineGroups, false);
-           resolve(s?.hotlineGroups)
-        })
-        .catch((e) => {
-          message.error(e?.message || "Đăng nhập không thành công");
-        });
-      })
+      });
     },
     createOrEdit: (payload = {}, state) => {
       return new Promise((resolve, reject) => {
@@ -37,9 +36,9 @@ export default {
             hotlineProvider
               .put(payload)
               .then((s) => {
+                dispatch.hotline.updateHotline(payload);
                 message.success("Cập nhật thành công dữ liệu");
                 resolve(s?.data);
-                dispatch.hotline.getHotline();
               })
               .catch((e) => {
                 message.error(e?.message || "Xảy ra lỗi, vui lòng thử lại sau");
@@ -94,6 +93,68 @@ export default {
           return Promise.reject(err);
         }
       });
+    },
+
+    createHotlineGroup: (payload = {}, state) => {
+      return new Promise((resolve, reject) => {
+        hotlineProvider
+          .postHotlineGroup(payload)
+          .then((s) => {
+            resolve(s?.data);
+          })
+          .catch((e) => {
+            message.error(e?.message || "Xảy ra lỗi, vui lòng thử lại sau");
+            reject(e);
+          });
+      });
+    },
+    putHotline: (payload = {}, state) => {
+      return new Promise((resolve, reject) => {
+        hotlineProvider
+          .putHotline(payload)
+          .then((s) => {
+            resolve(s?.data);
+          })
+          .catch((e) => {
+            message.error(e?.message || "Xảy ra lỗi, vui lòng thử lại sau");
+            reject(e);
+          });
+      });
+    },
+
+    updateHotline: (payload = {}, state) => {
+      const body = (payload?.dataHotlines || []).map((item) => {
+        return new Promise((resolve, reject) => {
+          let data = {
+            id: item?.value,
+            status: payload?.isdns?.includes(item.label) ? 1 : 0,
+          };
+          hotlineProvider
+            .putHotline(data)
+            .then((s) => {
+              resolve(s?.data);
+            })
+            .catch((e) => {
+              reject(e);
+            });
+        });
+      });
+      let dataHotline = (payload.isdns || []).filter((x) =>
+        !payload?.dataHotlines
+          .map((item) => {
+            return item.label;
+          })
+          .includes(x)
+      );
+      const dataIp = new Promise(() => {
+        let data = {
+          customerId: payload.customerId,
+          isdns: Array.isArray(dataHotline) ? dataHotline : [dataHotline],
+          hotlineGroupId: payload.hotlineGroupId,
+        };
+        dispatch.hotline.createHotlineGroup(data);
+      });
+      Promise.all([body, dataIp]).then(() => {});
     },
   }),
 };

@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 
 // import Layout from "app/Layout";
 import LayoutLogin from "./LayoutLogin";
-import { Main } from "./styled";
 import { ConfigProvider } from "antd";
 import { Switch, Route } from "react-router-dom";
 import { pink } from "themes";
@@ -13,7 +12,6 @@ import { useSelector } from "react-redux";
 const App = ({ ...props }) => {
   const { auth } = useSelector((state) => state.auth);
   useEffect(() => {
-
     if (
       window.location.pathname !== "/login" &&
       window.location.pathname !== "/logout" &&

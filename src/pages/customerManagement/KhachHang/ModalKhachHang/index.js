@@ -6,10 +6,14 @@ import React, {
   useImperativeHandle,
   useRef,
   forwardRef,
+  useMemo,
 } from "react";
 import { useDispatch } from "react-redux";
+
+const { Option } = SelectAntd;
 const ModalKhachHang = (props, ref) => {
-  const { createOrEdit, getCustomer } = useDispatch().customer;
+  const { createOrEdit, getCustomer } =
+    useDispatch().customer;
 
   const [form] = Form.useForm();
   const refModal = useRef(null);
@@ -31,7 +35,7 @@ const ModalKhachHang = (props, ref) => {
             .filter((x) => x.status === 1)
             .map((x1) => {
               return x1.ip;
-            })
+            }),
         });
       }
       refModal.current && refModal.current.show();
@@ -47,17 +51,23 @@ const ModalKhachHang = (props, ref) => {
     const payload = {
       ...values,
       id: state?.data?.id,
+      dataIp: dataIp,
     };
-    createOrEdit(payload).then(() => {
+    createOrEdit(payload).then((s) => {
       getCustomer();
       onCancel();
     });
   };
 
+  const dataIp = useMemo(() => {
+    return (state?.data?.wlIps || []).map((item) => {
+      return { value: item?.wlIpId, label: item.ip };
+    });
+  }, [state?.data?.wlIps]);
+
   const onSave = () => {
     form.submit();
   };
-
   return (
     <ModalTemplate
       ref={refModal}
@@ -78,7 +88,7 @@ const ModalKhachHang = (props, ref) => {
             rules={[
               {
                 required: true,
-                message: "Vui lòng nhập tên Trunk!",
+                message: "Tên khách hàng không được để trống",
               },
             ]}
           >
@@ -102,18 +112,22 @@ const ModalKhachHang = (props, ref) => {
             rules={[
               {
                 required: true,
-                message: "Vui lòng nhập địa chỉ!",
+                message: "Địa chỉ IP không được để trống",
               },
             ]}
           >
-            <SelectAntd mode="tags"></SelectAntd>
+            <SelectAntd mode="tags">
+              {(dataIp || []).map((item) => {
+                return <Option value={item.label} key={item.value}></Option>;
+              })}
+            </SelectAntd>
           </Form.Item>
         </Form>
         <Button
           className={`${!state?.data?.id ? "button-create" : "button-update"}`}
           onClick={() => onSave()}
         >
-          {!state?.data?.id ? "Tạo trunk" : "Cập nhật"}
+          {!state?.data?.id ? "Tạo mới" : "Cập nhật"}
         </Button>
       </Main>
     </ModalTemplate>

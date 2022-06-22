@@ -78,4 +78,35 @@ export default {
         });
     });
   },
+  putHotline: ({ id, ...rest }) => {
+    return new Promise((resolve, reject) => {
+      client
+        .put(`${HOTLINE}/${id}`, rest)
+        .then((s) => {
+          if (s) {
+            resolve(s?.data);
+          } else reject(s?.data);
+        })
+        .catch((e) => {
+          reject(e);
+        });
+    });
+  },
+  postHotlineGroup: ({ customerId, hotlineGroupId, ...rest }) => {
+    return new Promise((resolve, reject) => {
+      client
+        .post(
+          `${CUSTOMER}/${customerId}/hotline-group/${hotlineGroupId}`,
+          rest
+        )
+        .then((s) => {
+          if (s) {
+            resolve(s?.data);
+          } else reject(s?.data);
+        })
+        .catch((e) => {
+          reject(e);
+        });
+    });
+  },
 };

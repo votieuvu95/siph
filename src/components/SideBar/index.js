@@ -10,6 +10,7 @@ import {
   Route,
 } from "@mui/icons-material";
 import miniLogo from "assets/images/mini-logo.png";
+import { PageName } from "constants/index";
 
 const { Sider } = Layout;
 
@@ -58,6 +59,31 @@ const SideBar = (props) => {
   const onPageHome = () => {
     history.push("/admin/home");
   };
+ 
+  const getTitlePage = () => {
+    const url = window.location.pathname;
+    switch (true) {
+      case url.includes("home"):
+        return PageName.HOME;
+      case url.includes("trunk-management/detail"):
+        return PageName.TRUNK_DETAIL;
+      case url.includes("trunk-management"):
+        return PageName.TRUNK_MANAGEMENT;
+      case url.includes("customer-management/hotline-detail"):
+        return PageName.HOTLINE_DETAIL;
+      case url.includes("customer-management/virtual-detail"):
+        return PageName.VIRTUAL_DETAIL;
+      case url.includes("customer-management"):
+        return PageName.CUSTOMER_MANAGEMENT;
+      case url.includes("hotline-routing"):
+        return PageName.HOTLINE_ROUTING;
+      case url.includes("virtual-routing"):
+        return PageName.VIRTUAL_ROUTING;
+      default:
+        return "";
+    }
+  };
+
   return (
     <Main style={{ width: `${collapsed ? "250px" : "80px"}` }}>
       <Sider trigger={null} collapsible collapsed={!collapsed}>
@@ -79,14 +105,22 @@ const SideBar = (props) => {
               >
                 {(item.menu || []).map((item2) => {
                   return (
-                    <Menu.Item
-                      key={item2.key}
-                      title={""}
-                    >
+                    <Menu.Item key={item2.key} title={""}>
                       <Link to={`${item2.link}`}>
-                        <div className="item">
-                          <label>{item2.icon} </label>
-                          <span style={{ opacity: `${collapsed ? 1 : 0}` }}>
+                        <div
+                          className={`item ${
+                            getTitlePage() === item2.title ? "color" : ""
+                          }`}
+                        >
+                          <label style={{ lineHeight: "15px" }}>
+                            {item2.icon}{" "}
+                          </label>
+                          <span
+                            style={{
+                              opacity: `${collapsed ? 1 : 0}`,
+                              paddingLeft: "10px",
+                            }}
+                          >
                             {item2.title}
                           </span>
                         </div>

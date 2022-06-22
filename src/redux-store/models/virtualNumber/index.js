@@ -1,6 +1,5 @@
 import { message } from "antd";
 import virtualNumberProvider from "data-access/virtual-number-provider";
-import cacheUtils from "utils/cache-utils";
 
 export default {
   state: {
@@ -20,11 +19,9 @@ export default {
           dispatch.virtualNumber.updateData({
             listVirtualNumber: s?.virtualNumberGroups,
           });
-          cacheUtils.save(
-            "",
+          localStorage.setItem(
             "DATA_ALL_VITURALNUMBER",
-            s?.virtualNumberGroups,
-            false
+            JSON.stringify(s?.virtualNumberGroups)
           );
         })
         .catch((e) => {
@@ -38,6 +35,7 @@ export default {
             virtualNumberProvider
               .put(payload)
               .then((s) => {
+                dispatch.virtualNumber.updatevirtualNumber(payload);
                 message.success("Cập nhật thành công dữ liệu");
                 resolve(s?.data);
               })
@@ -73,7 +71,6 @@ export default {
               mobiTrunkId,
               vinaTrunkId,
               defaultTrunkId,
-              virtualGroupId,
               vngTrunks,
             } = payload;
 
@@ -158,9 +155,10 @@ export default {
             });
 
             Promise.all([dataViettel, dataMobi, dataVina, dataDefault]).then(
-              (response) => { resolve({
-                response,
-              });
+              (response) => {
+                resolve({
+                  response,
+                });
                 message.success("Cập nhật thành công dữ liệu");
               }
             );
@@ -200,6 +198,56 @@ export default {
           return Promise.reject(err);
         }
       });
+    },
+
+    createVirtualToGroup: (payload = {}, state) => {
+      return new Promise((resolve, reject) => {
+        virtualNumberProvider
+          .postVirtual(payload)
+          .then((s) => {
+            resolve(s?.data);
+          })
+          .catch((e) => {
+            message.error(e?.message || "Xảy ra lỗi, vui lòng thử lại sau");
+            reject(e);
+          });
+      });
+    },
+
+    updatevirtualNumber: (payload = {}, state) => {
+      const body = (payload?.dataVirtualNumbers || []).map((item) => {
+        return new Promise((resolve, reject) => {
+          let data = {
+            id: item?.value,
+            status: payload?.isdns?.includes(item.label) ? 1 : 0,
+          };
+          virtualNumberProvider
+            .putVirtual(data)
+            .then((s) => {
+              resolve(s?.data);
+            })
+            .catch((e) => {
+              reject(e);
+            });
+        });
+      });
+      let dataHotline = (payload.isdns || []).filter(
+        (x) =>
+          !payload?.dataVirtualNumbers
+            .map((item) => {
+              return item.label;
+            })
+            .includes(x)
+      );
+      const dataIp = new Promise(() => {
+        let data = {
+          vngId: payload.vngId,
+          isdns: Array.isArray(dataHotline) ? dataHotline : [dataHotline],
+          customerId: payload.customerId,
+        };
+        dispatch.virtualNumber.createVirtualToGroup(data);
+      });
+      Promise.all([body, dataIp]).then(() => {});
     },
   }),
 };

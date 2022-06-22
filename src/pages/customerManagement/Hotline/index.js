@@ -4,14 +4,13 @@ import React, { useEffect, useRef, useState } from "react";
 import { Search } from "@mui/icons-material";
 import { Main } from "./styled";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 import { STATUS } from "constants/index";
 import CellACtion from "components/CellAction";
 import Pagination from "components/Pagination";
 import ModalHotline from "./ModalHotline";
 const Hotline = () => {
   const { listHotlines } = useSelector((state) => state.hotline);
-  const { getHotline } = useDispatch().hotline;
   const modalHotlineRef = useRef(null);
 
   const [state, _setState] = useState({ page: 0, size: 10 });
@@ -22,9 +21,11 @@ const Hotline = () => {
     }));
   };
   useEffect(() => {
-    getHotline();
-  }, []);
-
+    let listHotlines = localStorage.getItem("DATA_ALL_HOTLINE");
+    setState({
+      listHotlines : JSON.parse(listHotlines),
+    });
+  }, [listHotlines]);
   const handleEdit = (data) => {
     modalHotlineRef.current && modalHotlineRef.current.show(data);
   };
@@ -89,14 +90,14 @@ const Hotline = () => {
   ];
 
   useEffect(() => {
-    if (listHotlines.length)
+    if (state?.listHotlines?.length)
       setState({
-        listData: listHotlines.slice(
+        listData: state?.listHotlines.slice(
           state.page * state?.size,
           (state.page + 1) * state?.size
         ),
       });
-  }, [listHotlines, state?.page, state?.size]);
+  }, [state?.listHotlines, state?.page, state?.size]);
   const onPageChange = (page) => {
     setState({ page: page - 1 });
   };
@@ -106,7 +107,7 @@ const Hotline = () => {
 
   const onChange = () => (e) => {
     let value = e?.target?.value;
-    let data = listHotlines.filter((item) =>
+    let data = state?.listHotlines.filter((item) =>
       item.customerName.toLowerCase().includes(value.trim().toLowerCase())
     );
     setState({
@@ -153,7 +154,7 @@ const Hotline = () => {
             onChange={onPageChange}
             current={state?.page + 1}
             pageSize={state?.size}
-            total={listHotlines.length}
+            total={state?.listHotlines?.length}
             listData={state?.listData}
             onShowSizeChange={onSizeChange}
             style={{ flex: 1, justifyContent: "flex-end" }}

@@ -9,7 +9,6 @@ import { STATUS } from "constants/index";
 import CellACtion from "components/CellAction";
 import ModalTrunk from "./ModalTrunk";
 import Pagination from "components/Pagination";
-import cacheUtils from "utils/cache-utils";
 
 const TrunkManagement = () => {
   const modalTrunkRef = useRef(null);
@@ -22,18 +21,10 @@ const TrunkManagement = () => {
     }));
   };
   useEffect(() => {
-    async function fetchData() {
-      let listTrunkManagement = await cacheUtils.read(
-        "",
-        "DATA_ALL_TRUNK_MANAGEMENT",
-        [],
-        false
-      );
-      setState({
-        listTrunkManagement,
-      });
-    }
-    fetchData();
+    let listTrunkManagement = localStorage.getItem("DATA_ALL_TRUNK_MANAGEMENT");
+    setState({
+      listTrunkManagement : JSON.parse(listTrunkManagement),
+    });
   }, [listTrunkManagement]);
 
   const handleEdit = (data) => {

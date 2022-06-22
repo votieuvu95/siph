@@ -4,14 +4,13 @@ import React, { useEffect, useRef, useState } from "react";
 import { Search } from "@mui/icons-material";
 import { Main } from "./styled";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 import { STATUS } from "constants/index";
 import CellACtion from "components/CellAction";
 import Pagination from "components/Pagination";
 import ModalVirtual from "./ModalVirtual";
 const Virtual = () => {
   const { listVirtualNumber } = useSelector((state) => state.virtualNumber);
-  const { getVirtualNumber } = useDispatch().virtualNumber;
   const modalVirtualkRef = useRef(null);
   const [state, _setState] = useState({ page: 0, size: 10 });
   const setState = (data = {}) => {
@@ -21,8 +20,11 @@ const Virtual = () => {
     }));
   };
   useEffect(() => {
-    getVirtualNumber();
-  }, []);
+    let listVirtualNumber = localStorage.getItem("DATA_ALL_VITURALNUMBER");
+    setState({
+      listVirtualNumber : JSON.parse(listVirtualNumber),
+    });
+  }, [listVirtualNumber]);
 
   const handleEdit = (data) => {
     modalVirtualkRef.current && modalVirtualkRef.current.show(data);
@@ -88,13 +90,13 @@ const Virtual = () => {
   ];
 
   useEffect(() => {
-    if (listVirtualNumber.length)
+    if (state?.listVirtualNumber?.length)
       setState({
-        listData: listVirtualNumber
+        listData: state?.listVirtualNumber
           
           .slice(state.page * state?.size, (state.page + 1) * state?.size),
       });
-  }, [listVirtualNumber, state?.page, state?.size]);
+  }, [state?.listVirtualNumber, state?.page, state?.size]);
   const onPageChange = (page) => {
     setState({ page: page - 1 });
   };
@@ -105,7 +107,7 @@ const Virtual = () => {
   const onKeyDown = (e) => {
     let value = e?.target?.value;
     if (e.nativeEvent.code === "Enter") {
-      let data = listVirtualNumber
+      let data = state?.listVirtualNumber
         
         .filter((item) =>
           item.trunkName.toLowerCase().includes(value.trim().toLowerCase())
@@ -153,7 +155,7 @@ const Virtual = () => {
             onChange={onPageChange}
             current={state?.page + 1}
             pageSize={state?.size}
-            total={listVirtualNumber.length}
+            total={state?.listVirtualNumber?.length}
             listData={state?.listData}
             onShowSizeChange={onSizeChange}
             style={{ flex: 1, justifyContent: "flex-end" }}

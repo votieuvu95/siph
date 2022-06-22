@@ -8,6 +8,7 @@ import React, {
   useRef,
   forwardRef,
   useMemo,
+  useEffect,
 } from "react";
 import { STATUS } from "constants/index";
 import { useDispatch, useSelector } from "react-redux";
@@ -34,17 +35,20 @@ const ModalTrunk = (props, ref) => {
       modalTrunkRef.current && modalTrunkRef.current.show();
     },
   }));
-
+  useEffect(() => {
+    let listGroup = localStorage.getItem("DATA_ALL_GROUPS");
+    setState({ listGroup: JSON.parse(listGroup) });
+  }, [listGroup]);
   const onCancel = () => {
     modalTrunkRef.current && modalTrunkRef.current.hide();
     form.resetFields();
   };
 
   const dataGroup = useMemo(() => {
-    return (listGroup || []).map((item) => {
+    return (state?.listGroup || []).map((item) => {
       return { id: item.id, ten: item.groupName };
     });
-  }, [listGroup]);
+  }, [state?.listGroup]);
 
   const onHandleSubmit = (values) => {
     const { trunkName, port, ip, groupName } = values;
@@ -53,7 +57,8 @@ const ModalTrunk = (props, ref) => {
       port: port,
       ip: ip,
       id: state?.data?.id,
-      groupCode: (listGroup || []).find((x) => x.id === groupName)?.groupCode,
+      groupCode: (state?.listGroup || []).find((x) => x.groupName === groupName)
+        ?.groupCode,
     };
     createOrEdit(payload).then(() => {
       getTrunkManagement();
@@ -85,7 +90,7 @@ const ModalTrunk = (props, ref) => {
             rules={[
               {
                 required: true,
-                message: "Vui lòng nhập tên Trunk!",
+                message: "Tên Trunk không được để trống",
               },
             ]}
           >
@@ -97,7 +102,7 @@ const ModalTrunk = (props, ref) => {
             rules={[
               {
                 required: true,
-                message: "Vui lòng chọn nhà mạng!",
+                message: "Nhà mạng không được để trống",
               },
             ]}
           >
@@ -109,7 +114,7 @@ const ModalTrunk = (props, ref) => {
             rules={[
               {
                 required: true,
-                message: "Vui lòng nhập địa chỉ!",
+                message: "Địa chỉ IP không được để trống",
               },
             ]}
           >
@@ -121,7 +126,7 @@ const ModalTrunk = (props, ref) => {
             rules={[
               {
                 required: true,
-                message: "Vui lòng nhập port!",
+                message: "Port không được để trống",
               },
             ]}
           >
@@ -134,7 +139,7 @@ const ModalTrunk = (props, ref) => {
               rules={[
                 {
                   required: true,
-                  message: "Vui lòng chọn trạng thái!",
+                  message: "Trạng thái không được để trống",
                 },
               ]}
             >

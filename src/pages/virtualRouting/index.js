@@ -8,14 +8,18 @@ import { STATUS } from "constants/index";
 import CellACtion from "components/CellAction";
 import ModalTrunk from "../trunkManagement/ModalTrunk";
 import Pagination from "components/Pagination";
-import cacheUtils from "utils/cache-utils";
 import ModalVirtual from "pages/customerManagement/Virtual/ModalVirtual";
 import ModalTrunkGroupVirtual from "./ModalTrunkGroupVirtual";
+import { useSelector } from "react-redux";
 const VirtualRouting = () => {
   const modalTrunkRef = useRef(null);
   const modalVirtualRef = useRef(null);
   const modalTrunkGroupVirtualRef = useRef(null);
   const [state, _setState] = useState({ page: 0, size: 10 });
+
+  const { listTrunkManagement } = useSelector((state) => state.trunkManagement);
+  const { listVirtualNumber } = useSelector((state) => state.virtualNumber);
+
   const setState = (data = {}) => {
     _setState((_state) => ({
       ..._state,
@@ -23,33 +27,19 @@ const VirtualRouting = () => {
     }));
   };
   useEffect(() => {
-    async function fetchData() {
-      let listVirtualNumber = await cacheUtils.read(
-        "",
-        "DATA_ALL_VITURALNUMBER",
-        [],
-        false
-      );
-
-      let listTrunkManagement = await cacheUtils.read(
-        "",
-        "DATA_ALL_TRUNK_MANAGEMENT",
-        [],
-        false
-      );
-
-      setState({
-        listVirtualNumber: (listVirtualNumber || []).filter(
-          (item) => item.vngTrunks.length
-        ),
-        listTrunkManagement,
-      });
-    }
-    fetchData();
-  }, []);
+    let listVirtualNumber = localStorage.getItem("DATA_ALL_VITURALNUMBER");
+    let listTrunkManagement = localStorage.getItem("DATA_ALL_TRUNK_MANAGEMENT");
+    setState({
+      listVirtualNumber: (JSON.parse(listVirtualNumber) || []).filter(
+        (item) => item.vngTrunks.length
+      ),
+      listTrunkManagement: JSON.parse(listTrunkManagement),
+    });
+  }, [listTrunkManagement, listVirtualNumber]);
 
   const handleEdit = (data) => {
-    modalTrunkGroupVirtualRef.current && modalTrunkGroupVirtualRef.current.show(data);
+    modalTrunkGroupVirtualRef.current &&
+      modalTrunkGroupVirtualRef.current.show(data);
   };
 
   const onShowModal = (item) => {
@@ -204,7 +194,8 @@ const VirtualRouting = () => {
             className="admin-button"
             icon={<AddCircleIcon />}
             onClick={() =>
-              modalTrunkGroupVirtualRef.current && modalTrunkGroupVirtualRef.current.show()
+              modalTrunkGroupVirtualRef.current &&
+              modalTrunkGroupVirtualRef.current.show()
             }
           >
             Tạo mới

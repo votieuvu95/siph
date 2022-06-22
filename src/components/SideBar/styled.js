@@ -42,6 +42,12 @@ export const Main = styled.div`
       .item {
         display: flex;
         align-items: center;
+        &.color{
+          color: #fff;
+        }
+      }
+      .ant-menu-title-content {
+        width: 100%;
       }
     }
     .ant-tooltip {

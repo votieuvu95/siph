@@ -10,8 +10,7 @@ import React, {
   useEffect,
 } from "react";
 import { STATUS } from "constants/index";
-import { useDispatch, useSelector } from "react-redux";
-import cacheUtils from "utils/cache-utils";
+import { useDispatch } from "react-redux";
 const ModalTrunk = (props, ref) => {
   const { createOrEditToTrunk, getVirtualNumber } = useDispatch().virtualNumber;
 
@@ -29,7 +28,6 @@ const ModalTrunk = (props, ref) => {
     show: (data = {}) => {
       setState({ data: data });
       if (data?.vngId) {
-        console.log("data.vngTrunks", data.vngTrunks);
         form.setFieldsValue({
           ...data,
           viettelTrunkId: (data.vngTrunks || []).find(
@@ -50,60 +48,36 @@ const ModalTrunk = (props, ref) => {
   }));
 
   useEffect(() => {
-    async function fetchData() {
-      let listCustomer = await cacheUtils.read(
-        "",
-        "DATA_ALL_CUSTOMER",
-        [],
-        false
-      );
-
-      let listTrunkManagement = await cacheUtils.read(
-        "",
-        "DATA_ALL_TRUNK_MANAGEMENT",
-        [],
-        false
-      );
-
-      let listHotlines = await cacheUtils.read(
-        "",
-        "DATA_ALL_HOTLINE",
-        [],
-        false
-      );
-
-      let listVirtualNumber = await cacheUtils.read(
-        "",
-        "DATA_ALL_VITURALNUMBER",
-        [],
-        false
-      );
-      setState({
-        listCustomer: (listCustomer || []).map((item) => {
-          return { id: Number(item.id), ten: item.customerName };
-        }),
-        listTrunkManagement: (listTrunkManagement || []).map((item) => {
+    let listCustomer = localStorage.getItem("DATA_ALL_CUSTOMER");
+    let listTrunkManagement = localStorage.getItem("DATA_ALL_TRUNK_MANAGEMENT");
+    let listHotlines = localStorage.getItem("DATA_ALL_HOTLINE");
+    let listVirtualNumber = localStorage.getItem("DATA_ALL_VITURALNUMBER");
+    setState({
+      listCustomer: (JSON.parse(listCustomer) || []).map((item) => {
+        return { id: Number(item.id), ten: item.customerName };
+      }),
+      listTrunkManagement: (JSON.parse(listTrunkManagement) || []).map(
+        (item) => {
           return {
             id: Number(item.id),
             ten: item.trunkName,
             groupCode: item.groupCode,
           };
-        }),
-        listHotlines: (listHotlines || []).map((item) => {
-          return {
-            id: item.hotlineGroupId,
-            ten: item.hotlineGroupName,
-          };
-        }),
-        listVirtualNumber: (listVirtualNumber || []).map((item) => {
-          return {
-            id: item.vngId,
-            ten: item.vngName,
-          };
-        }),
-      });
-    }
-    fetchData();
+        }
+      ),
+      listHotlines: (JSON.parse(listHotlines) || []).map((item) => {
+        return {
+          id: item.hotlineGroupId,
+          ten: item.hotlineGroupName,
+        };
+      }),
+      listVirtualNumber: (JSON.parse(listVirtualNumber) || []).map((item) => {
+        return {
+          id: item.vngId,
+          ten: item.vngName,
+        };
+      }),
+    });
   }, []);
   const onCancel = () => {
     modalTrunkRef.current && modalTrunkRef.current.hide();
@@ -164,7 +138,7 @@ const ModalTrunk = (props, ref) => {
             rules={[
               {
                 required: true,
-                message: "Vui lòng nhập tên Trunk!",
+                message: "Tên Khách hàng không được để trống",
               },
             ]}
           >
@@ -176,7 +150,7 @@ const ModalTrunk = (props, ref) => {
             rules={[
               {
                 required: true,
-                message: "Vui lòng chọn nhà mạng!",
+                message: "Tên nhóm Virtual không được để trống",
               },
             ]}
           >
@@ -191,7 +165,7 @@ const ModalTrunk = (props, ref) => {
             rules={[
               {
                 required: true,
-                message: "Vui lòng nhập địa chỉ!",
+                message: "Viettel Trunk không được để trống",
               },
             ]}
           >
@@ -207,7 +181,7 @@ const ModalTrunk = (props, ref) => {
             rules={[
               {
                 required: true,
-                message: "Vui lòng nhập port!",
+                message: "Mobiphone Trunk không được để trống",
               },
             ]}
           >
@@ -223,7 +197,7 @@ const ModalTrunk = (props, ref) => {
             rules={[
               {
                 required: true,
-                message: "Vui lòng nhập port!",
+                message: "Vinaphone Trunk không được để trống",
               },
             ]}
           >
@@ -239,7 +213,7 @@ const ModalTrunk = (props, ref) => {
             rules={[
               {
                 required: true,
-                message: "Vui lòng nhập port!",
+                message: "Default Trunk không được để trống",
               },
             ]}
           >
@@ -256,7 +230,7 @@ const ModalTrunk = (props, ref) => {
               rules={[
                 {
                   required: true,
-                  message: "Vui lòng chọn trạng thái!",
+                  message: "Trạng thái không được để trống",
                 },
               ]}
             >
@@ -270,7 +244,7 @@ const ModalTrunk = (props, ref) => {
           }`}
           onClick={() => onSave()}
         >
-          {!state?.data?.vngId ? "Tạo trunk" : "Cập nhật"}
+          {!state?.data?.vngId ? "Tạo mới" : "Cập nhật"}
         </Button>
       </Main>
     </ModalTemplate>

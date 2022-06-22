@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Search } from "@mui/icons-material";
 import { Main } from "./styled";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 import { STATUS } from "constants/index";
 import CellACtion from "components/CellAction";
 import Pagination from "components/Pagination";
@@ -12,7 +12,6 @@ import ModalKhachHang from "./ModalKhachHang";
 
 const KhachHang = () => {
   const { listCustomer } = useSelector((state) => state.customer);
-  const { getCustomer } = useDispatch().customer;
   const modalKhachHangRef = useRef(null);
 
   const [state, _setState] = useState({ page: 0, size: 10 });
@@ -22,9 +21,13 @@ const KhachHang = () => {
       ...data,
     }));
   };
+
   useEffect(() => {
-    getCustomer();
-  }, []);
+    let listCustomer = localStorage.getItem("DATA_ALL_CUSTOMER");
+    setState({
+      listCustomer: JSON.parse(listCustomer),
+    });
+  }, [listCustomer]);
 
   const handleEdit = (data) => {
     modalKhachHangRef.current && modalKhachHangRef.current.show(data);
@@ -90,14 +93,14 @@ const KhachHang = () => {
   ];
 
   useEffect(() => {
-    if (listCustomer.length)
+    if (state?.listCustomer?.length)
       setState({
-        listData: listCustomer.slice(
+        listData: state?.listCustomer.slice(
           state.page * state?.size,
           (state.page + 1) * state?.size
         ),
       });
-  }, [listCustomer, state?.page, state?.size]);
+  }, [state?.listCustomer, state?.page, state?.size]);
   const onPageChange = (page) => {
     setState({ page: page - 1 });
   };
@@ -107,7 +110,7 @@ const KhachHang = () => {
 
   const onChange = () => (e) => {
     let value = e?.target?.value;
-    let data = listCustomer.filter((item) =>
+    let data = state?.listCustomer.filter((item) =>
       item.customerName.toLowerCase().includes(value.trim().toLowerCase())
     );
     setState({
@@ -154,7 +157,7 @@ const KhachHang = () => {
             onChange={onPageChange}
             current={state?.page + 1}
             pageSize={state?.size}
-            total={listCustomer.length}
+            total={state?.listCustomer?.length}
             listData={state?.listData}
             onShowSizeChange={onSizeChange}
             style={{ flex: 1, justifyContent: "flex-end" }}

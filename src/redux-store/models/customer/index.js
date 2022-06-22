@@ -1,11 +1,10 @@
 import { message } from "antd";
 import customerProvider from "data-access/customer-provider";
-import cacheUtils from "utils/cache-utils";
 
 export default {
   state: {
     listCustomer: [],
-    listGroup: []
+    listGroup: [],
   },
   reducers: {
     updateData(state, payload = {}) {
@@ -16,11 +15,8 @@ export default {
     getCustomer: () => {
       customerProvider
         .search()
-        .then(async (s) => {
-          await cacheUtils.save("", "DATA_ALL_CUSTOMER", s?.customers, false);
-          dispatch.customer.updateData({
-            listCustomer: s?.customers,
-          });
+        .then( (s) => {
+          localStorage.setItem("DATA_ALL_CUSTOMER", JSON.stringify(s?.customers));
         })
         .catch((e) => {
           message.error(e?.message || "Đăng nhập không thành công");
@@ -33,6 +29,7 @@ export default {
             customerProvider
               .put(payload)
               .then((s) => {
+                dispatch.customer.updateWhitelist(payload);
                 message.success("Cập nhật thành công dữ liệu");
                 resolve(s?.data);
               })
@@ -44,6 +41,11 @@ export default {
             customerProvider
               .post(payload)
               .then((s) => {
+                let data = {
+                  customerId: s?.customerId,
+                  ips: payload.ips,
+                };
+                dispatch.customer.createWhitelist(data);
                 message.success("Thêm mới thành công dữ liệu");
                 resolve(s?.data);
               })
@@ -57,6 +59,54 @@ export default {
           return Promise.reject(err);
         }
       });
+    },
+    createWhitelist: (payload = {}, state) => {
+      return new Promise((resolve, reject) => {
+        customerProvider
+          .postWhitelist(payload)
+          .then((s) => {
+            resolve(s?.data);
+          })
+          .catch((e) => {
+            message.error(e?.message || "Xảy ra lỗi, vui lòng thử lại sau");
+            reject(e);
+          });
+      });
+    },
+    updateWhitelist: (payload = {}, state) => {
+      const body = (payload?.dataIp || []).map((item) => {
+        return new Promise((resolve, reject) => {
+          let data = {
+            whitelistId: item?.value,
+            customerId: payload.id,
+            status: payload?.ips?.includes(item.label) ? 1 : 0,
+          };
+          customerProvider
+            .putWhitelist(data)
+            .then((s) => {
+              resolve(s?.data);
+            })
+            .catch((e) => {
+              reject(e);
+            });
+        });
+      });
+      let ips = (payload?.ips || []).filter(
+        (x) =>
+          !payload.dataIp
+            .map((item) => {
+              return item.label;
+            })
+            .includes(x)
+      );
+      const bodyIp = new Promise(() => {
+        let data = {
+          customerId: payload.id,
+          ips: Array.isArray(ips) ? ips : [ips],
+        };
+        dispatch.customer.createWhitelist(data);
+      });
+      Promise.all([body, bodyIp]).then(() => {});
     },
   }),
 };
