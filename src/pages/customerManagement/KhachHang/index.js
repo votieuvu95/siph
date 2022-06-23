@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Search } from "@mui/icons-material";
 import { Main } from "./styled";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { STATUS } from "constants/index";
 import CellACtion from "components/CellAction";
 import Pagination from "components/Pagination";
@@ -12,15 +12,28 @@ import ModalKhachHang from "./ModalKhachHang";
 
 const KhachHang = () => {
   const { listCustomer } = useSelector((state) => state.customer);
+  const { getCustomer } = useDispatch().customer;
   const modalKhachHangRef = useRef(null);
 
-  const [state, _setState] = useState({ page: 0, size: 10 });
+  const [state, _setState] = useState({ page: 0, size: 10, totalElements: 0 });
   const setState = (data = {}) => {
     _setState((_state) => ({
       ..._state,
       ...data,
     }));
   };
+
+  useEffect(() => {
+    let listCustomer = localStorage.getItem("DATA_ALL_CUSTOMER");
+    if (!listCustomer) {
+      getCustomer();
+    }else  {
+      setState({
+        listCustomer: JSON.parse(listCustomer),
+      });
+    }
+   
+  }, []);
 
   useEffect(() => {
     let listCustomer = localStorage.getItem("DATA_ALL_CUSTOMER");
@@ -52,7 +65,7 @@ const KhachHang = () => {
       title: "IP",
       dataIndex: "wlIps",
       key: "wlIps",
-      width: 400,
+      width: 200,
       render: (item) => {
         return (item || [])
           .filter((x) => x.status === 1)
@@ -66,7 +79,7 @@ const KhachHang = () => {
       title: "Mô tả",
       dataIndex: "description",
       key: "description",
-      width: 400,
+      width: 300,
     },
     {
       title: "Trạng thái",
@@ -99,6 +112,7 @@ const KhachHang = () => {
           state.page * state?.size,
           (state.page + 1) * state?.size
         ),
+        totalElements: state?.listCustomer?.length,
       });
   }, [state?.listCustomer, state?.page, state?.size]);
   const onPageChange = (page) => {
@@ -108,7 +122,7 @@ const KhachHang = () => {
     setState({ size: size });
   };
 
-  const onChange = () => (e) => {
+  const onChange = (e) => {
     let value = e?.target?.value;
     let data = state?.listCustomer.filter((item) =>
       item.customerName.toLowerCase().includes(value.trim().toLowerCase())
@@ -118,9 +132,9 @@ const KhachHang = () => {
         state.page * state?.size,
         (state.page + 1) * state?.size
       ),
+      totalElements: data.length,
     });
   };
-  console.log("first", state?.listData);
   return (
     <Main>
       <div className="search">
@@ -149,24 +163,22 @@ const KhachHang = () => {
           </Button>
         </div>
       </div>
-        <div className="main-table">
-          <TableWrapper
-            columns={columns}
-            dataSource={state?.listData}
-            rowKey={(row) => row.id}
-          />
-        </div>
-        {!!state?.listData?.length && (
-          <Pagination
-            onChange={onPageChange}
-            current={state?.page + 1}
-            pageSize={state?.size}
-            total={state?.listCustomer?.length}
-            listData={state?.listData}
-            onShowSizeChange={onSizeChange}
-            style={{ flex: 1, justifyContent: "flex-end" }}
-          />
-        )}
+      <div className="main-table">
+        <TableWrapper
+          columns={columns}
+          dataSource={state?.listData}
+          rowKey={(row) => row.id}
+        />
+      </div>
+      <Pagination
+        onChange={onPageChange}
+        current={state?.page + 1}
+        pageSize={state?.size}
+        total={state?.totalElements}
+        listData={state?.listData}
+        onShowSizeChange={onSizeChange}
+        style={{ flex: 1, justifyContent: "flex-end" }}
+      />
       <ModalKhachHang ref={modalKhachHangRef} />
     </Main>
   );

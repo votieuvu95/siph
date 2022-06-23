@@ -8,7 +8,7 @@ import { STATUS } from "constants/index";
 import CellACtion from "components/CellAction";
 import Pagination from "components/Pagination";
 import ModalTrunkHotlineGroup from "./ModalTrunkHotlineGroup";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ModalHotline from "pages/customerManagement/Hotline/ModalHotline";
 import ModalTrunk from "pages/trunkManagement/ModalTrunk";
 const HotlineRouting = () => {
@@ -16,13 +16,33 @@ const HotlineRouting = () => {
   const modalHotlineRef = useRef(null);
   const modalTrunkRef = useRef(null);
   const { listHotlines } = useSelector((state) => state.hotline);
-  const [state, _setState] = useState({ page: 0, size: 10 });
+  const { getHotline } = useDispatch().hotline;
+  const { listTrunkManagement } = useSelector((state) => state.trunkManagement);
+  const { getTrunkManagement } = useDispatch().trunkManagement;
+  const [state, _setState] = useState({ page: 0, size: 10, totalElements: 0 });
   const setState = (data = {}) => {
     _setState((_state) => ({
       ..._state,
       ...data,
     }));
   };
+
+  useEffect(() => {
+    let listHotlines = localStorage.getItem("DATA_ALL_HOTLINE");
+    let listTrunkManagement = localStorage.getItem("DATA_ALL_TRUNK_MANAGEMENT");
+    if (!listHotlines) {
+      getHotline();
+    }
+    if (!listTrunkManagement) {
+      getTrunkManagement();
+    }
+    setState({
+      listHotlines: (JSON.parse(listHotlines) || []).filter(
+        (item) => item.trunkName
+      ),
+      listTrunkManagement: JSON.parse(listTrunkManagement),
+    });
+  }, []);
 
   useEffect(() => {
     let listHotlines = localStorage.getItem("DATA_ALL_HOTLINE");
@@ -34,7 +54,8 @@ const HotlineRouting = () => {
       ),
       listTrunkManagement: JSON.parse(listTrunkManagement),
     });
-  }, [listHotlines]);
+  }, [listHotlines, listTrunkManagement]);
+
   const handleEdit = (data) => {
     modalTrunkHotlineRef.current && modalTrunkHotlineRef.current.show(data);
   };
@@ -52,13 +73,13 @@ const HotlineRouting = () => {
       title: "Tên khách hàng",
       dataIndex: "customerName",
       key: "customerName",
-      width: 400,
+      width: 300,
     },
     {
       title: "Tên nhóm hotline",
       dataIndex: "hotlineGroupName",
       key: "hotlineGroupName",
-      width: 400,
+      width: 300,
       render: (item, data) => (
         <a
           onClick={() =>
@@ -73,7 +94,7 @@ const HotlineRouting = () => {
       title: "Tên trunk",
       dataIndex: "trunkName",
       key: "trunkName",
-      width: 400,
+      width: 300,
       render: (item, data) => {
         let payload = (state?.listTrunkManagement || []).find(
           (x) => x.id == data?.trunkId
@@ -120,6 +141,7 @@ const HotlineRouting = () => {
           state.page * state?.size,
           (state.page + 1) * state?.size
         ),
+        totalElements: state?.listHotlines?.length,
       });
     }
   }, [state?.listHotlines, state?.page, state?.size]);
@@ -144,6 +166,7 @@ const HotlineRouting = () => {
         state.page * state?.size,
         (state.page + 1) * state?.size
       ),
+      totalElements: data.length,
     });
   };
   return (
@@ -175,24 +198,22 @@ const HotlineRouting = () => {
           </Button>
         </div>
       </div>
-        <div className="main-table">
-          <TableWrapper
-            columns={columns}
-            dataSource={state?.listData}
-            rowKey={(row) => row.hotlineGroupId}
-          />
-        </div>
-        {!!state?.listData?.length && (
-          <Pagination
-            onChange={onPageChange}
-            current={state?.page + 1}
-            pageSize={state?.size}
-            total={state?.listHotlines.length}
-            listData={state?.listData}
-            onShowSizeChange={onSizeChange}
-            style={{ flex: 1, justifyContent: "flex-end" }}
-          />
-        )}
+      <div className="main-table">
+        <TableWrapper
+          columns={columns}
+          dataSource={state?.listData}
+          rowKey={(row) => row.hotlineGroupId}
+        />
+      </div>
+      <Pagination
+        onChange={onPageChange}
+        current={state?.page + 1}
+        pageSize={state?.size}
+        total={state?.totalElements}
+        listData={state?.listData}
+        onShowSizeChange={onSizeChange}
+        style={{ flex: 1, justifyContent: "flex-end" }}
+      />
       <ModalTrunkHotlineGroup ref={modalTrunkHotlineRef} />
       <ModalHotline ref={modalHotlineRef} />
       <ModalTrunk ref={modalTrunkRef} />

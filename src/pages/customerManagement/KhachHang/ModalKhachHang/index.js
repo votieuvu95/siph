@@ -12,8 +12,7 @@ import { useDispatch } from "react-redux";
 
 const { Option } = SelectAntd;
 const ModalKhachHang = (props, ref) => {
-  const { createOrEdit, getCustomer } =
-    useDispatch().customer;
+  const { createOrEdit, getCustomer } = useDispatch().customer;
 
   const [form] = Form.useForm();
   const refModal = useRef(null);
@@ -92,7 +91,7 @@ const ModalKhachHang = (props, ref) => {
               },
             ]}
           >
-            <Input></Input>
+            <Input placeholder="Nhập tên khách hàng"></Input>
           </Form.Item>
           <Form.Item
             label="Mô tả"
@@ -104,7 +103,7 @@ const ModalKhachHang = (props, ref) => {
               },
             ]}
           >
-            <Input />
+            <Input placeholder="Nhập mô tả" />
           </Form.Item>
           <Form.Item
             label="Địa chỉ IP"
@@ -116,7 +115,7 @@ const ModalKhachHang = (props, ref) => {
               },
             ]}
           >
-            <SelectAntd mode="tags">
+            <SelectAntd mode="tags" placeholder="Nhập địa chỉ IP">
               {(dataIp || []).map((item) => {
                 return <Option value={item.label} key={item.value}></Option>;
               })}

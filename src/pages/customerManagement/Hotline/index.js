@@ -4,16 +4,17 @@ import React, { useEffect, useRef, useState } from "react";
 import { Search } from "@mui/icons-material";
 import { Main } from "./styled";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import { useSelector } from "react-redux";
-import { STATUS } from "constants/index";
+import { useDispatch, useSelector } from "react-redux";
+import { STATUS, STATUS_ID } from "constants/index";
 import CellACtion from "components/CellAction";
 import Pagination from "components/Pagination";
 import ModalHotline from "./ModalHotline";
 const Hotline = () => {
   const { listHotlines } = useSelector((state) => state.hotline);
+  const { getHotline } = useDispatch().hotline;
   const modalHotlineRef = useRef(null);
 
-  const [state, _setState] = useState({ page: 0, size: 10 });
+  const [state, _setState] = useState({ page: 0, size: 10, totalElements: 0 });
   const setState = (data = {}) => {
     _setState((_state) => ({
       ..._state,
@@ -22,10 +23,22 @@ const Hotline = () => {
   };
   useEffect(() => {
     let listHotlines = localStorage.getItem("DATA_ALL_HOTLINE");
+    if (!listHotlines) {
+      getHotline();
+    } else {
+      setState({
+        listHotlines: JSON.parse(listHotlines),
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    let listHotlines = localStorage.getItem("DATA_ALL_HOTLINE");
     setState({
       listHotlines: JSON.parse(listHotlines),
     });
   }, [listHotlines]);
+
   const handleEdit = (data) => {
     modalHotlineRef.current && modalHotlineRef.current.show(data);
   };
@@ -43,19 +56,19 @@ const Hotline = () => {
       title: "Tên khách hàng",
       dataIndex: "customerName",
       key: "customerName",
-      width: 400,
+      width: 300,
     },
     {
       title: "Tên nhóm Hotline",
       dataIndex: "hotlineGroupName",
       key: "hotlineGroupName",
-      width: 400,
+      width: 300,
     },
     {
       title: "Số Hotline",
       dataIndex: "hotlines",
       key: "hotlines",
-      width: 400,
+      width: 300,
       render: (item) => {
         return (item || [])
           .filter((x) => x.status === 1)
@@ -96,6 +109,7 @@ const Hotline = () => {
           state.page * state?.size,
           (state.page + 1) * state?.size
         ),
+        totalElements: state?.listHotlines?.length,
       });
   }, [state?.listHotlines, state?.page, state?.size]);
   const onPageChange = (page) => {
@@ -105,20 +119,26 @@ const Hotline = () => {
     setState({ size: size });
   };
 
-  const onChange = () => (e) => {
+  const onChange = (e) => {
     let value = e?.target?.value;
     let data = state?.listHotlines.filter(
       (item) =>
         item.customerName.toLowerCase().includes(value.trim().toLowerCase()) ||
-        item.hotlineGroupName.toLowerCase().includes(value.trim().toLowerCase())
+        (item?.hotlines || [])
+          .filter((x) => x.status === STATUS_ID.HOAT_DONG)
+          .map((x1) => x1.isdn)
+          .join(", ")
+          .includes(value.trim())
     );
     setState({
       listData: data.slice(
         state.page * state?.size,
         (state.page + 1) * state?.size
       ),
+      totalElements: data.length,
     });
   };
+
   return (
     <Main>
       <div className="search">
@@ -127,7 +147,7 @@ const Hotline = () => {
             className="searchField"
             prefix={<Search />}
             placeholder="Nhập tên Khách hàng, số Hotline"
-            onKeyDown={onChange()}
+            onChange={onChange}
           />
 
           <Button type="primary" className="button-search">
@@ -147,24 +167,22 @@ const Hotline = () => {
           </Button>
         </div>
       </div>
-        <div className="main-table">
-          <TableWrapper
-            columns={columns}
-            dataSource={state?.listData}
-            rowKey={(row) => row.hotlineGroupId}
-          />
-        </div>
-        {!!state?.listData?.length && (
-          <Pagination
-            onChange={onPageChange}
-            current={state?.page + 1}
-            pageSize={state?.size}
-            total={state?.listHotlines?.length}
-            listData={state?.listData}
-            onShowSizeChange={onSizeChange}
-            style={{ flex: 1, justifyContent: "flex-end" }}
-          />
-        )}
+      <div className="main-table">
+        <TableWrapper
+          columns={columns}
+          dataSource={state?.listData}
+          rowKey={(row) => row.hotlineGroupId}
+        />
+      </div>
+      <Pagination
+        onChange={onPageChange}
+        current={state?.page + 1}
+        pageSize={state?.size}
+        total={state?.totalElements}
+        listData={state?.listData}
+        onShowSizeChange={onSizeChange}
+        style={{ flex: 1, justifyContent: "flex-end" }}
+      />
       <ModalHotline ref={modalHotlineRef} />
     </Main>
   );

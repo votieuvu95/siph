@@ -30,7 +30,6 @@ export const Main = styled.div`
     .ant-menu-item-group-title {
       color: #6d7080;
       font-size: 13px;
-      color: #fff;
     }
     .ant-menu-item {
       font-size: 16px;
@@ -41,13 +40,15 @@ export const Main = styled.div`
       a:hover {
         color: #fff;
       }
+
       .item {
         display: flex;
         align-items: center;
-        &.color{
+        &.color {
           color: #fff;
         }
       }
+
       .ant-menu-title-content {
         width: 100%;
       }
@@ -65,5 +66,13 @@ export const Main = styled.div`
   }
   .ant-menu-vertical {
     border: none;
+  }
+  .group-item {
+    color: #fff;
+    .ant-menu-item-group-title {
+      color: #6d7080;
+      font-size: 13px;
+      color: #fff;
+    }
   }
 `;

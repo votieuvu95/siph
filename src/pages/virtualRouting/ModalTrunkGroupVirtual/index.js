@@ -133,16 +133,20 @@ const ModalTrunk = (props, ref) => {
           onFinish={onHandleSubmit}
         >
           <Form.Item
-            label="Tên Khách hàng"
+            label="Tên khách hàng"
             name="customerId"
             rules={[
               {
                 required: true,
-                message: "Tên Khách hàng không được để trống",
+                message: "Tên khách hàng không được để trống",
               },
             ]}
           >
-            <Select data={state?.listCustomer} onChange={onChange}></Select>
+            <Select
+              data={state?.listCustomer}
+              onChange={onChange}
+              placeholder="Chọn khách hàng"
+            ></Select>
           </Form.Item>
           <Form.Item
             label="Tên nhóm Virtual"
@@ -157,6 +161,7 @@ const ModalTrunk = (props, ref) => {
             <Select
               disabled={state?.data?.id}
               data={state?.listVirtualNumber}
+              placeholder="Chọn nhóm virtuali"
             />
           </Form.Item>
           <Form.Item
@@ -173,6 +178,7 @@ const ModalTrunk = (props, ref) => {
               data={(state?.listTrunkManagement || []).filter(
                 (x) => x.groupCode === "11"
               )}
+              placeholder="Chọn viettel trunk"
             ></Select>
           </Form.Item>
           <Form.Item
@@ -189,6 +195,7 @@ const ModalTrunk = (props, ref) => {
               data={(state?.listTrunkManagement || []).filter(
                 (x) => x.groupCode === "22"
               )}
+              placeholder="Chọn mobiphone trunk"
             ></Select>
           </Form.Item>
           <Form.Item
@@ -205,6 +212,7 @@ const ModalTrunk = (props, ref) => {
               data={(state?.listTrunkManagement || []).filter(
                 (x) => x.groupCode === "33"
               )}
+              placeholder="Chọn vinaphone trunk"
             ></Select>
           </Form.Item>
           <Form.Item
@@ -221,6 +229,7 @@ const ModalTrunk = (props, ref) => {
               data={(state?.listTrunkManagement || []).filter(
                 (x) => x.groupCode === "44"
               )}
+              placeholder="Chọn default trunk"
             ></Select>
           </Form.Item>
           {state?.data?.vngId && (
@@ -234,7 +243,7 @@ const ModalTrunk = (props, ref) => {
                 },
               ]}
             >
-              <Select data={STATUS} />
+              <Select data={STATUS} placeholder="Chọn trạng thái" />
             </Form.Item>
           )}
         </Form>

@@ -97,7 +97,7 @@ const ModalVirtual = (props, ref) => {
           onFinish={onHandleSubmit}
         >
           <Form.Item
-            label="Tên Khách hàng"
+            label="Tên khách hàng"
             name="customerId"
             rules={[
               {
@@ -109,6 +109,7 @@ const ModalVirtual = (props, ref) => {
             <Select
               disabled={state?.data?.vngId}
               data={state?.listDataCustomer}
+              placeholder="Chọn khách hàng"
             />
           </Form.Item>
           <Form.Item
@@ -129,7 +130,7 @@ const ModalVirtual = (props, ref) => {
               },
             ]}
           >
-            <Input />
+            <Input placeholder="Nhập tên nhóm virutalz" />
           </Form.Item>
           <Form.Item
             label="Số Virtual"
@@ -145,7 +146,7 @@ const ModalVirtual = (props, ref) => {
               },
             ]}
           >
-            <SelectAntd mode="tags">
+            <SelectAntd mode="tags" placeholder="Nhập số virtual">
               {(dataVirtualNumbers || []).map((item) => {
                 return <Option value={item.label} key={item.value}></Option>;
               })}
@@ -162,7 +163,7 @@ const ModalVirtual = (props, ref) => {
                 },
               ]}
             >
-              <Select data={STATUS} />
+              <Select data={STATUS} placeholder="Chọn trạng thái" />
             </Form.Item>
           )}
         </Form>

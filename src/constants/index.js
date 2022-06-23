@@ -14,5 +14,11 @@ export const STATUS = [
   { ten: "Vô hiệu", id: 0 },
 ];
 
+export const STATUS_ID = {
+  HOAT_DONG: 1,
+  VO_HIEU: 2,
+
+}
+
 export const COLOR_GREEN_LIGHT = "#35d500";
 export const COLOR_EDIT = "#FF9D22";

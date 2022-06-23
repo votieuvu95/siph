@@ -59,7 +59,7 @@ const SideBar = (props) => {
   const onPageHome = () => {
     history.push("/admin/home");
   };
- 
+
   const getTitlePage = () => {
     const url = window.location.pathname;
     switch (true) {
@@ -98,10 +98,18 @@ const SideBar = (props) => {
         </div>
         <Menu>
           {(dataMenu || []).map((item) => {
+            let menuItem = (item.menu || []).map((x) => x.title).join(", ");
             return (
               <Menu.ItemGroup
                 key={item.key}
                 title={collapsed ? item.title : ""}
+                className={
+                  menuItem.toLowerCase().includes(
+                    getTitlePage().toLowerCase()
+                  )
+                    ? "group-item"
+                    : ""
+                }
               >
                 {(item.menu || []).map((item2) => {
                   return (

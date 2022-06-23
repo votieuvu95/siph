@@ -52,6 +52,8 @@ export const Main = styled.div`
     background: linear-gradient(270deg, #2f80ed, #a1e1f7);
     color: #fff;
     font-size: 20px;
+    margin-top: 20px;
+
   }
   .button-update {
     min-height: 48px;
@@ -60,6 +62,8 @@ export const Main = styled.div`
     background: linear-gradient(270deg, #f0f797, #ff9d22);
     color: #fff;
     font-size: 20px;
+    margin-top: 20px;
+
   }
   .ant-btn {
     border: 1px solid #fff !important;

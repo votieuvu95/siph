@@ -4,21 +4,33 @@ import React, { useEffect, useRef, useState } from "react";
 import { Search } from "@mui/icons-material";
 import { Main } from "./styled";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import { useSelector } from "react-redux";
-import { STATUS } from "constants/index";
+import { useDispatch, useSelector } from "react-redux";
+import { STATUS, STATUS_ID } from "constants/index";
 import CellACtion from "components/CellAction";
 import Pagination from "components/Pagination";
 import ModalVirtual from "./ModalVirtual";
 const Virtual = () => {
   const { listVirtualNumber } = useSelector((state) => state.virtualNumber);
+  const { getVirtualNumber } = useDispatch().virtualNumber;
   const modalVirtualkRef = useRef(null);
-  const [state, _setState] = useState({ page: 0, size: 10 });
+  const [state, _setState] = useState({ page: 0, size: 10, totalElements: 0 });
   const setState = (data = {}) => {
     _setState((_state) => ({
       ..._state,
       ...data,
     }));
   };
+  useEffect(() => {
+    let listVirtualNumber = localStorage.getItem("DATA_ALL_VITURALNUMBER");
+    if (!listVirtualNumber) {
+      getVirtualNumber();
+    } else {
+      setState({
+        listVirtualNumber: JSON.parse(listVirtualNumber),
+      });
+    }
+  }, []);
+
   useEffect(() => {
     let listVirtualNumber = localStorage.getItem("DATA_ALL_VITURALNUMBER");
     setState({
@@ -43,19 +55,19 @@ const Virtual = () => {
       title: "Tên khách hàng",
       dataIndex: "customerName",
       key: "customerName",
-      width: 400,
+      width: 300,
     },
     {
       title: "Tên nhóm Virtual",
       dataIndex: "vngName",
       key: "vngName",
-      width: 400,
+      width: 300,
     },
     {
       title: "Số Virtual",
       dataIndex: "virtualNumbers",
       key: "virtualNumbers",
-      width: 400,
+      width: 300,
       render: (item) => {
         return (item || [])
           .filter((x) => x.status === 1)
@@ -96,6 +108,7 @@ const Virtual = () => {
           state.page * state?.size,
           (state.page + 1) * state?.size
         ),
+        totalElements: state?.listVirtualNumber?.length,
       });
   }, [state?.listVirtualNumber, state?.page, state?.size]);
   const onPageChange = (page) => {
@@ -107,15 +120,21 @@ const Virtual = () => {
 
   const onChange = (e) => {
     let value = e?.target?.value;
-    let data = state?.listVirtualNumber.filter((item) =>
-      item.customerName.toLowerCase().includes(value.trim().toLowerCase()) ||
-      item.vngName.toLowerCase().includes(value.trim().toLowerCase())
+    let data = state?.listVirtualNumber.filter(
+      (item) =>
+        item.customerName.toLowerCase().includes(value.trim().toLowerCase()) ||
+        (item?.virtualNumbers || [])
+          .filter((x) => x.status === STATUS_ID.HOAT_DONG)
+          .map((x1) => x1.isdn)
+          .join(", ")
+          .includes(value.trim())
     );
     setState({
       listData: data.slice(
         state.page * state?.size,
         (state.page + 1) * state?.size
       ),
+      totalElements: data.length,
     });
   };
   return (
@@ -146,20 +165,22 @@ const Virtual = () => {
           </Button>
         </div>
       </div>
-        <div className="main-table">
-          <TableWrapper columns={columns} dataSource={state?.listData} />
-        </div>
-        {!!state?.listData?.length && (
-          <Pagination
-            onChange={onPageChange}
-            current={state?.page + 1}
-            pageSize={state?.size}
-            total={state?.listVirtualNumber?.length}
-            listData={state?.listData}
-            onShowSizeChange={onSizeChange}
-            style={{ flex: 1, justifyContent: "flex-end" }}
-          />
-        )}
+      <div className="main-table">
+        <TableWrapper
+          columns={columns}
+          dataSource={state?.listData}
+          rowKey={(row) => row.vngId}
+        />
+      </div>
+      <Pagination
+        onChange={onPageChange}
+        current={state?.page + 1}
+        pageSize={state?.size}
+        total={state?.totalElements}
+        listData={state?.listData}
+        onShowSizeChange={onSizeChange}
+        style={{ flex: 1, justifyContent: "flex-end" }}
+      />
       <ModalVirtual ref={modalVirtualkRef} />
     </Main>
   );

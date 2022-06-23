@@ -1,4 +1,4 @@
-import { Button, Form, Input, InputNumber } from "antd";
+import { Button, Form, Input } from "antd";
 import ModalTemplate from "components/ModalTemplate";
 import Select from "components/Select";
 import { Main } from "./styled";
@@ -85,24 +85,24 @@ const ModalTrunk = (props, ref) => {
           onFinish={onHandleSubmit}
         >
           <Form.Item
-            label="Tên Trunk"
+            label="Tên trunk"
             name="trunkName"
             rules={[
               {
                 required: true,
-                message: "Tên Trunk không được để trống",
+                message: "Tên trunk không được để trống",
               },
               {
                 whitespace: true,
-                message: "Tên Trunk không được để trống",
+                message: "Tên trunk không được để trống",
               },
               {
                 max:20,
-                message: "Tên Trunk nhỏ hơn 20 kí tự",
+                message: "Tên trunk nhỏ hơn 20 kí tự",
               }
             ]}
           >
-            <Input></Input>
+            <Input placeholder="Nhập tên trunk"></Input>
           </Form.Item>
           <Form.Item
             label="Nhà mạng"
@@ -118,7 +118,7 @@ const ModalTrunk = (props, ref) => {
               },
             ]}
           >
-            <Select disabled={state?.data?.id} data={dataGroup} />
+            <Select disabled={state?.data?.id} data={dataGroup} placeholder="Chọn nhà mạng"/>
           </Form.Item>
           <Form.Item
             label="Địa chỉ IP"
@@ -136,7 +136,7 @@ const ModalTrunk = (props, ref) => {
               },
             ]}
           >
-            <Input></Input>
+            <Input placeholder="Nhập địa chỉ IP"></Input>
           </Form.Item>
           <Form.Item
             label="Port"
@@ -148,7 +148,7 @@ const ModalTrunk = (props, ref) => {
               },
             ]}
           >
-            <Input type={"number"}></Input>
+            <Input type={"number"} placeholder="Nhập port"></Input>
           </Form.Item>
           {state?.data?.id && (
             <Form.Item
@@ -161,7 +161,7 @@ const ModalTrunk = (props, ref) => {
                 },
               ]}
             >
-              <Select data={STATUS} />
+              <Select data={STATUS} placeholder="Chọn trạng thái" /> 
             </Form.Item>
           )}
         </Form>

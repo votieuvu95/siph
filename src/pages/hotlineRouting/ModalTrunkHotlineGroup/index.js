@@ -118,12 +118,12 @@ const ModalTrunkHotlineGroup = (props, ref) => {
           onFinish={onHandleSubmit}
         >
           <Form.Item
-            label="Tên Khách hàng"
+            label="Tên khách hàng"
             name="customerId"
             rules={[
               {
                 required: true,
-                message: "Tên Khách hàng không được để trông",
+                message: "Tên khách hàng không được để trông",
               },
             ]}
           >
@@ -131,25 +131,27 @@ const ModalTrunkHotlineGroup = (props, ref) => {
               data={state?.listCustomer}
               onChange={onChange}
               disabled={state?.data?.hotlineGroupId}
+              placeholder="Chọn khách hàng"
             ></Select>
           </Form.Item>
           <Form.Item
-            label="Tên nhóm Hotline"
+            label="Tên nhóm hotline"
             name="hotlineGroupId"
             rules={[
               {
                 required: true,
-                message: "Tên nhóm Hotline không được để trống",
+                message: "Tên nhóm hotline không được để trống",
               },
             ]}
           >
             <Select
               data={state?.listHotlines}
               disabled={state?.data?.hotlineGroupId}
+              placeholder="Chọn tên nhóm hotline"
             />
           </Form.Item>
           <Form.Item
-            label="Tên Trunk"
+            label="Tên trunk"
             name="trunkId"
             rules={[
               {
@@ -158,7 +160,7 @@ const ModalTrunkHotlineGroup = (props, ref) => {
               },
             ]}
           >
-            <Select data={state?.listTrunkManagement}></Select>
+            <Select data={state?.listTrunkManagement} placeholder="Chọn trunk"></Select>
           </Form.Item>
           {state?.data?.hotlineGroupId && (
             <Form.Item
@@ -171,7 +173,7 @@ const ModalTrunkHotlineGroup = (props, ref) => {
                 },
               ]}
             >
-              <Select data={STATUS} />
+              <Select data={STATUS} placeholder="Chọn trạng thái" /> 
             </Form.Item>
           )}
         </Form>

@@ -118,18 +118,19 @@ const ModalHotline = (props, ref) => {
           onFinish={onHandleSubmit}
         >
           <Form.Item
-            label="Tên Khách hàng"
+            label="Tên khách hàng"
             name="customerId"
             rules={[
               {
                 required: true,
-                message: "Tên Khách hàng không được để trống",
+                message: "Tên khách hàng không được để trống",
               },
             ]}
           >
             <Select
               disabled={state?.data?.hotlineGroupId}
               data={state?.listDataCustomer}
+              placeholder="Chọn khách hàng"
             />
           </Form.Item>
           <Form.Item
@@ -142,7 +143,7 @@ const ModalHotline = (props, ref) => {
               },
             ]}
           >
-            <Input></Input>
+            <Input placeholder="Nhập tên nhóm hotline"></Input>
           </Form.Item>
           <Form.Item
             label="Số Hotline"
@@ -152,14 +153,10 @@ const ModalHotline = (props, ref) => {
                 required: true,
                 message: "Số Hotline không được để trống",
               },
-              // {
-              //   pattern: new RegExp(/^(\+?84|0|\(\+?84\))[1-9]\d{8,9}$/g),
-              //   message: "Vui lòng nhập đúng định dạng số hotline",
-              // },
               { validator: validator },
             ]}
           >
-            <SelectAntd mode="tags">
+            <SelectAntd mode="tags" placeholder="Nhập sô hotline">
               {(dataHotlines || []).map((item) => {
                 return <Option value={item.label} key={item.value}></Option>;
               })}
@@ -176,7 +173,7 @@ const ModalHotline = (props, ref) => {
                 },
               ]}
             >
-              <Select data={STATUS} />
+              <Select data={STATUS} placeholder="Chọn trạng thái" />
             </Form.Item>
           )}
         </Form>

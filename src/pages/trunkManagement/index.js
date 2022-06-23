@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Search } from "@mui/icons-material";
 import { Main } from "./styled";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { STATUS } from "constants/index";
 import CellACtion from "components/CellAction";
 import ModalTrunk from "./ModalTrunk";
@@ -13,6 +13,7 @@ import Pagination from "components/Pagination";
 const TrunkManagement = () => {
   const modalTrunkRef = useRef(null);
   const { listTrunkManagement } = useSelector((state) => state.trunkManagement);
+  const { getTrunkManagement } = useDispatch().trunkManagement;
   const [state, _setState] = useState({ page: 0, size: 10, totalElements: 0 });
   const setState = (data = {}) => {
     _setState((_state) => ({
@@ -20,6 +21,17 @@ const TrunkManagement = () => {
       ...data,
     }));
   };
+  useEffect(() => {
+    let listTrunkManagement = localStorage.getItem("DATA_ALL_TRUNK_MANAGEMENT");
+    if (!listTrunkManagement) {
+      getTrunkManagement();
+    } else {
+      setState({
+        listTrunkManagement: JSON.parse(listTrunkManagement),
+      });
+    }
+  }, []);
+
   useEffect(() => {
     let listTrunkManagement = localStorage.getItem("DATA_ALL_TRUNK_MANAGEMENT");
     setState({
@@ -41,22 +53,22 @@ const TrunkManagement = () => {
       },
     },
     {
-      title: "Tên Trunk",
+      title: "Tên trunk",
       dataIndex: "trunkName",
       key: "trunkName",
-      width: 400,
+      width: 300,
     },
     {
       title: "Nhà mạng",
       dataIndex: "groupName",
       key: "groupName",
-      width: 400,
+      width: 200,
     },
     {
       title: "IP:PORT",
       dataIndex: "ip",
       key: "ip",
-      width: 400,
+      width: 100,
     },
     {
       title: "Trạng thái",
@@ -69,7 +81,7 @@ const TrunkManagement = () => {
       title: "Chức năng",
       dataIndex: "action",
       key: "action",
-      width: 100,
+      width: 50,
       render: (item, data) => {
         return (
           <CellACtion
@@ -144,7 +156,11 @@ const TrunkManagement = () => {
         </div>
       </div>
       <div className="main-table">
-        <TableWrapper columns={columns} dataSource={state?.listData} />
+        <TableWrapper
+          columns={columns}
+          dataSource={state?.listData}
+          rowKey={(row) => row.id}
+        />
       </div>
       <Pagination
         onChange={onPageChange}

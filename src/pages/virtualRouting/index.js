@@ -10,15 +10,17 @@ import ModalTrunk from "../trunkManagement/ModalTrunk";
 import Pagination from "components/Pagination";
 import ModalVirtual from "pages/customerManagement/Virtual/ModalVirtual";
 import ModalTrunkGroupVirtual from "./ModalTrunkGroupVirtual";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 const VirtualRouting = () => {
   const modalTrunkRef = useRef(null);
   const modalVirtualRef = useRef(null);
   const modalTrunkGroupVirtualRef = useRef(null);
-  const [state, _setState] = useState({ page: 0, size: 10 });
+  const [state, _setState] = useState({ page: 0, size: 10, totalElements: 0 });
 
   const { listTrunkManagement } = useSelector((state) => state.trunkManagement);
   const { listVirtualNumber } = useSelector((state) => state.virtualNumber);
+  const { getTrunkManagement } = useDispatch().trunkManagement;
+  const { getVirtualNumber } = useDispatch().virtualNumber;
 
   const setState = (data = {}) => {
     _setState((_state) => ({
@@ -26,6 +28,24 @@ const VirtualRouting = () => {
       ...data,
     }));
   };
+
+  useEffect(() => {
+    let listVirtualNumber = localStorage.getItem("DATA_ALL_VITURALNUMBER");
+    let listTrunkManagement = localStorage.getItem("DATA_ALL_TRUNK_MANAGEMENT");
+    if (!listTrunkManagement) {
+      getTrunkManagement();
+    }
+    if (!listVirtualNumber) {
+      getVirtualNumber();
+    }
+    setState({
+      listVirtualNumber: (JSON.parse(listVirtualNumber) || []).filter(
+        (item) => item.vngTrunks.length
+      ),
+      listTrunkManagement: JSON.parse(listTrunkManagement),
+    });
+  }, []);
+
   useEffect(() => {
     let listVirtualNumber = localStorage.getItem("DATA_ALL_VITURALNUMBER");
     let listTrunkManagement = localStorage.getItem("DATA_ALL_TRUNK_MANAGEMENT");
@@ -150,6 +170,7 @@ const VirtualRouting = () => {
           state.page * state?.size,
           (state.page + 1) * state?.size
         ),
+        totalElements: state?.listVirtualNumber?.length,
       });
   }, [state?.listVirtualNumber, state?.page, state?.size]);
   const onPageChange = (page) => {
@@ -161,16 +182,21 @@ const VirtualRouting = () => {
 
   const onChange = (e) => {
     let value = e?.target?.value;
-      let data = state?.listVirtualNumber.filter((item) =>
+    let data = state?.listVirtualNumber.filter(
+      (item) =>
         item.customerName.toLowerCase().includes(value.trim().toLowerCase()) ||
-        item.vngName.toLowerCase().includes(value.trim().toLowerCase()) 
-      );
-      setState({
-        listData: data.slice(
-          state.page * state?.size,
-          (state.page + 1) * state?.size
-        ),
-      });
+        item.vngName.toLowerCase().includes(value.trim().toLowerCase()) ||
+        !!item.vngTrunks.find((trunk) =>
+          trunk.trunkName.toLowerCase().includes(value.trim().toLowerCase())
+        )
+    );
+    setState({
+      listData: data.slice(
+        state.page * state?.size,
+        (state.page + 1) * state?.size
+      ),
+      totalElements: data.length,
+    });
   };
   return (
     <Main>
@@ -201,20 +227,22 @@ const VirtualRouting = () => {
           </Button>
         </div>
       </div>
-        <div className="main-table">
-          <TableWrapper columns={columns} dataSource={state?.listData} />
-        </div>
-        {!!state?.listData?.length && (
-          <Pagination
-            onChange={onPageChange}
-            current={state?.page + 1}
-            pageSize={state?.size}
-            total={state?.listVirtualNumber.length}
-            listData={state?.listData}
-            onShowSizeChange={onSizeChange}
-            style={{ flex: 1, justifyContent: "flex-end" }}
-          />
-        )}
+      <div className="main-table">
+        <TableWrapper
+          columns={columns}
+          dataSource={state?.listData}
+          rowKey={(row) => row.vngId}
+        />
+      </div>
+      <Pagination
+        onChange={onPageChange}
+        current={state?.page + 1}
+        pageSize={state?.size}
+        total={state?.totalElements}
+        listData={state?.listData}
+        onShowSizeChange={onSizeChange}
+        style={{ flex: 1, justifyContent: "flex-end" }}
+      />
       <ModalTrunk ref={modalTrunkRef} />
       <ModalVirtual ref={modalVirtualRef} />
       <ModalTrunkGroupVirtual ref={modalTrunkGroupVirtualRef} />
