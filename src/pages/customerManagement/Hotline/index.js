@@ -147,7 +147,6 @@ const Hotline = () => {
           </Button>
         </div>
       </div>
-      <div className="table">
         <div className="main-table">
           <TableWrapper
             columns={columns}
@@ -166,7 +165,6 @@ const Hotline = () => {
             style={{ flex: 1, justifyContent: "flex-end" }}
           />
         )}
-      </div>
       <ModalHotline ref={modalHotlineRef} />
     </Main>
   );

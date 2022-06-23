@@ -146,7 +146,6 @@ const Virtual = () => {
           </Button>
         </div>
       </div>
-      <div className="table">
         <div className="main-table">
           <TableWrapper columns={columns} dataSource={state?.listData} />
         </div>
@@ -161,7 +160,6 @@ const Virtual = () => {
             style={{ flex: 1, justifyContent: "flex-end" }}
           />
         )}
-      </div>
       <ModalVirtual ref={modalVirtualkRef} />
     </Main>
   );

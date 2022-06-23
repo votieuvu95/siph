@@ -201,7 +201,6 @@ const VirtualRouting = () => {
           </Button>
         </div>
       </div>
-      <div className="table">
         <div className="main-table">
           <TableWrapper columns={columns} dataSource={state?.listData} />
         </div>
@@ -216,7 +215,6 @@ const VirtualRouting = () => {
             style={{ flex: 1, justifyContent: "flex-end" }}
           />
         )}
-      </div>
       <ModalTrunk ref={modalTrunkRef} />
       <ModalVirtual ref={modalVirtualRef} />
       <ModalTrunkGroupVirtual ref={modalTrunkGroupVirtualRef} />

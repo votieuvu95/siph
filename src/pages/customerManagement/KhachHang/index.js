@@ -149,7 +149,6 @@ const KhachHang = () => {
           </Button>
         </div>
       </div>
-      <div className="table">
         <div className="main-table">
           <TableWrapper
             columns={columns}
@@ -168,7 +167,6 @@ const KhachHang = () => {
             style={{ flex: 1, justifyContent: "flex-end" }}
           />
         )}
-      </div>
       <ModalKhachHang ref={modalKhachHangRef} />
     </Main>
   );

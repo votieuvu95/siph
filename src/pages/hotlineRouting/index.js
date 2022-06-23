@@ -175,7 +175,6 @@ const HotlineRouting = () => {
           </Button>
         </div>
       </div>
-      <div className="table">
         <div className="main-table">
           <TableWrapper
             columns={columns}
@@ -194,7 +193,6 @@ const HotlineRouting = () => {
             style={{ flex: 1, justifyContent: "flex-end" }}
           />
         )}
-      </div>
       <ModalTrunkHotlineGroup ref={modalTrunkHotlineRef} />
       <ModalHotline ref={modalHotlineRef} />
       <ModalTrunk ref={modalTrunkRef} />
