@@ -122,6 +122,7 @@ const TrunkManagement = () => {
             prefix={<Search />}
             placeholder="Nhập tên Trunk"
             onChange={onChange()}
+            
           />
 
           <Button type="primary" className="button-search">
