@@ -23,7 +23,7 @@ const TrunkManagement = () => {
   useEffect(() => {
     let listTrunkManagement = localStorage.getItem("DATA_ALL_TRUNK_MANAGEMENT");
     setState({
-      listTrunkManagement : JSON.parse(listTrunkManagement),
+      listTrunkManagement: JSON.parse(listTrunkManagement),
     });
   }, [listTrunkManagement]);
 
@@ -98,19 +98,20 @@ const TrunkManagement = () => {
     setState({ size: size });
   };
 
-  const onKeyDown = (e) => {
+  const onChange = (e) => {
     let value = e?.target?.value;
-    if (e.nativeEvent.code === "Enter") {
-      let data = state?.listTrunkManagement.filter((item) =>
-        item.trunkName.toLowerCase().includes(value.trim().toLowerCase())
-      );
-      setState({
-        listData: data.slice(
-          state.page * state?.size,
-          (state.page + 1) * state?.size
-        ),
-      });
-    }
+    let data = state?.listTrunkManagement.filter(
+      (item) =>
+        item.trunkName.toLowerCase().includes(value.trim().toLowerCase()) ||
+        item.groupName.toLowerCase().includes(value.trim().toLowerCase()) ||
+        item.ip.toLowerCase().includes(value.trim().toLowerCase())
+    );
+    setState({
+      listData: data.slice(
+        state.page * state?.size,
+        (state.page + 1) * state?.size
+      ),
+    });
   };
   return (
     <Main>
@@ -120,7 +121,7 @@ const TrunkManagement = () => {
             className="searchField"
             prefix={<Search />}
             placeholder="Nhập tên Trunk"
-            onKeyDown={onKeyDown}
+            onChange={onChange()}
           />
 
           <Button type="primary" className="button-search">

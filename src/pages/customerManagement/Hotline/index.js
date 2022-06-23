@@ -108,7 +108,8 @@ const Hotline = () => {
   const onChange = () => (e) => {
     let value = e?.target?.value;
     let data = state?.listHotlines.filter((item) =>
-      item.customerName.toLowerCase().includes(value.trim().toLowerCase())
+      item.customerName.toLowerCase().includes(value.trim().toLowerCase()) ||
+      item.hotlineGroupName.toLowerCase().includes(value.trim().toLowerCase())
     );
     setState({
       listData: data.slice(

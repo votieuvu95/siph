@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Search } from "@mui/icons-material";
 import { Main } from "./styled";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import {  useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { STATUS } from "constants/index";
 import CellACtion from "components/CellAction";
 import Pagination from "components/Pagination";
@@ -22,7 +22,7 @@ const Virtual = () => {
   useEffect(() => {
     let listVirtualNumber = localStorage.getItem("DATA_ALL_VITURALNUMBER");
     setState({
-      listVirtualNumber : JSON.parse(listVirtualNumber),
+      listVirtualNumber: JSON.parse(listVirtualNumber),
     });
   }, [listVirtualNumber]);
 
@@ -56,14 +56,14 @@ const Virtual = () => {
       dataIndex: "virtualNumbers",
       key: "virtualNumbers",
       width: 400,
-      render:(item) => {
+      render: (item) => {
         return (item || [])
           .filter((x) => x.status === 1)
           .map((x1) => {
             return x1.isdn;
           })
-          .join(", ");   
-      }
+          .join(", ");
+      },
     },
     {
       title: "Trạng thái",
@@ -92,9 +92,10 @@ const Virtual = () => {
   useEffect(() => {
     if (state?.listVirtualNumber?.length)
       setState({
-        listData: state?.listVirtualNumber
-          
-          .slice(state.page * state?.size, (state.page + 1) * state?.size),
+        listData: state?.listVirtualNumber.slice(
+          state.page * state?.size,
+          (state.page + 1) * state?.size
+        ),
       });
   }, [state?.listVirtualNumber, state?.page, state?.size]);
   const onPageChange = (page) => {
@@ -104,21 +105,18 @@ const Virtual = () => {
     setState({ size: size });
   };
 
-  const onKeyDown = (e) => {
+  const onChange = (e) => {
     let value = e?.target?.value;
-    if (e.nativeEvent.code === "Enter") {
-      let data = state?.listVirtualNumber
-        
-        .filter((item) =>
-          item.trunkName.toLowerCase().includes(value.trim().toLowerCase())
-        );
-      setState({
-        listData: data.slice(
-          state.page * state?.size,
-          (state.page + 1) * state?.size
-        ),
-      });
-    }
+    let data = state?.listVirtualNumber.filter((item) =>
+      item.customerName.toLowerCase().includes(value.trim().toLowerCase()) ||
+      item.vngName.toLowerCase().includes(value.trim().toLowerCase())
+    );
+    setState({
+      listData: data.slice(
+        state.page * state?.size,
+        (state.page + 1) * state?.size
+      ),
+    });
   };
   return (
     <Main>
@@ -128,7 +126,7 @@ const Virtual = () => {
             className="searchField"
             prefix={<Search />}
             placeholder="Nhập tên Trunk"
-            onKeyDown={onKeyDown}
+            onChange={onChange()}
           />
 
           <Button type="primary" className="button-search">
@@ -149,7 +147,9 @@ const Virtual = () => {
         </div>
       </div>
       <div className="table">
-        <div className="main-table"><TableWrapper columns={columns} dataSource={state?.listData} /></div>
+        <div className="main-table">
+          <TableWrapper columns={columns} dataSource={state?.listData} />
+        </div>
         {!!state?.listData?.length && (
           <Pagination
             onChange={onPageChange}
@@ -162,7 +162,7 @@ const Virtual = () => {
           />
         )}
       </div>
-      <ModalVirtual ref={modalVirtualkRef}/> 
+      <ModalVirtual ref={modalVirtualkRef} />
     </Main>
   );
 };

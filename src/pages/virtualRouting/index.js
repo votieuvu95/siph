@@ -159,11 +159,11 @@ const VirtualRouting = () => {
     setState({ size: size });
   };
 
-  const onKeyDown = (e) => {
+  const onChange = (e) => {
     let value = e?.target?.value;
-    if (e.nativeEvent.code === "Enter") {
       let data = state?.listVirtualNumber.filter((item) =>
-        item.trunkName.toLowerCase().includes(value.trim().toLowerCase())
+        item.customerName.toLowerCase().includes(value.trim().toLowerCase()) ||
+        item.vngName.toLowerCase().includes(value.trim().toLowerCase()) 
       );
       setState({
         listData: data.slice(
@@ -171,7 +171,6 @@ const VirtualRouting = () => {
           (state.page + 1) * state?.size
         ),
       });
-    }
   };
   return (
     <Main>
@@ -181,7 +180,7 @@ const VirtualRouting = () => {
             className="searchField"
             prefix={<Search />}
             placeholder="Nhập tên Trunk"
-            onKeyDown={onKeyDown}
+            onChange={onChange()}
           />
 
           <Button type="primary" className="button-search">

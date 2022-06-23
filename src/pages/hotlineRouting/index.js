@@ -123,7 +123,6 @@ const HotlineRouting = () => {
         ),
       });
     }
-    console.log("s", state?.listHotlines);
   }, [state?.listHotlines, state?.page, state?.size]);
   const onPageChange = (page) => {
     setState({ page: page - 1 });
@@ -131,19 +130,22 @@ const HotlineRouting = () => {
   const onSizeChange = (size) => {
     setState({ size: size });
   };
-  const onKeyDown = (e) => {
+  const onChange = (e) => {
     let value = e?.target?.value;
-    if (e.nativeEvent.code === "Enter") {
-      let data = state?.listHotlines.filter((item) =>
+    let data = state?.listHotlines.filter(
+      (item) =>
+        item.customerName.toLowerCase().includes(value.trim().toLowerCase()) ||
+        item.hotlineGroupName
+          .toLowerCase()
+          .includes(value.trim().toLowerCase()) ||
         item.trunkName.toLowerCase().includes(value.trim().toLowerCase())
-      );
-      setState({
-        listData: data.slice(
-          state.page * state?.size,
-          (state.page + 1) * state?.size
-        ),
-      });
-    }
+    );
+    setState({
+      listData: data.slice(
+        state.page * state?.size,
+        (state.page + 1) * state?.size
+      ),
+    });
   };
   return (
     <Main>
@@ -153,7 +155,7 @@ const HotlineRouting = () => {
             className="searchField"
             prefix={<Search />}
             placeholder="Nhập tên Trunk"
-            onKeyDown={onKeyDown}
+            onChange={onChange()}
           />
 
           <Button type="primary" className="button-search">
