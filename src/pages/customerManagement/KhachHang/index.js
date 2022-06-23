@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Search } from "@mui/icons-material";
 import { Main } from "./styled";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import {  useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { STATUS } from "constants/index";
 import CellACtion from "components/CellAction";
 import Pagination from "components/Pagination";
@@ -120,6 +120,7 @@ const KhachHang = () => {
       ),
     });
   };
+  console.log("first", state?.listData);
   return (
     <Main>
       <div className="search">
@@ -150,7 +151,11 @@ const KhachHang = () => {
       </div>
       <div className="table">
         <div className="main-table">
-          <TableWrapper columns={columns} dataSource={state?.listData} />
+          <TableWrapper
+            columns={columns}
+            dataSource={state?.listData}
+            rowKey={(row) => row.id}
+          />
         </div>
         {!!state?.listData?.length && (
           <Pagination

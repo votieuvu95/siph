@@ -1,4 +1,4 @@
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, InputNumber } from "antd";
 import ModalTemplate from "components/ModalTemplate";
 import Select from "components/Select";
 import { Main } from "./styled";
@@ -92,6 +92,14 @@ const ModalTrunk = (props, ref) => {
                 required: true,
                 message: "Tên Trunk không được để trống",
               },
+              {
+                whitespace: true,
+                message: "Tên Trunk không được để trống",
+              },
+              {
+                max:20,
+                message: "Tên Trunk nhỏ hơn 20 kí tự",
+              }
             ]}
           >
             <Input></Input>
@@ -102,6 +110,10 @@ const ModalTrunk = (props, ref) => {
             rules={[
               {
                 required: true,
+                message: "Nhà mạng không được để trống",
+              },
+              {
+                whitespace: true,
                 message: "Nhà mạng không được để trống",
               },
             ]}
@@ -115,6 +127,12 @@ const ModalTrunk = (props, ref) => {
               {
                 required: true,
                 message: "Địa chỉ IP không được để trống",
+              },
+              {
+                pattern: new RegExp(
+                  /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/g
+                ),
+                message: "Vui lòng nhập đúng định dạng IP",
               },
             ]}
           >
@@ -130,7 +148,7 @@ const ModalTrunk = (props, ref) => {
               },
             ]}
           >
-            <Input></Input>
+            <Input type={"number"}></Input>
           </Form.Item>
           {state?.data?.id && (
             <Form.Item

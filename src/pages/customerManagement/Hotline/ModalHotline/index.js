@@ -54,7 +54,7 @@ const ModalHotline = (props, ref) => {
       }),
     });
   }, []);
-  
+
   const onCancel = () => {
     refModal.current && refModal.current.hide();
     form.resetFields();
@@ -79,6 +79,26 @@ const ModalHotline = (props, ref) => {
   const onSave = () => {
     form.submit();
   };
+
+  const validator = (rule, value, callback) => {
+    let regex = /^(\+?84|0|\(\+?84\))[1-9]\d{8,9}$/g;
+    if (value.length) {
+      let datareg = value.filter((x) => {
+        return (
+          (!regex.test(String(x)) && x.charAt(0) === 0) ||
+          (x.length !== 4 && x.charAt(0) != 0)
+        );
+      });
+      if (datareg.length) {
+        callback(new Error("Vui lòng nhập đúng định dạng số hotline"));
+      } else {
+        callback();
+      }
+    } else {
+      callback();
+    }
+  };
+
   return (
     <ModalTemplate
       ref={refModal}
@@ -130,8 +150,13 @@ const ModalHotline = (props, ref) => {
             rules={[
               {
                 required: true,
-                message: "Số Hotlineg không được để trống",
+                message: "Số Hotline không được để trống",
               },
+              // {
+              //   pattern: new RegExp(/^(\+?84|0|\(\+?84\))[1-9]\d{8,9}$/g),
+              //   message: "Vui lòng nhập đúng định dạng số hotline",
+              // },
+              { validator: validator },
             ]}
           >
             <SelectAntd mode="tags">

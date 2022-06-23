@@ -9,7 +9,7 @@ const TableWrapper = (props) => {
       <Table
         {...rest}
         bordered
-        scroll={{ y: scroll.y || 370, x: scroll.x || 500 }}
+        scroll={{  x: scroll.x || 500 }}
         pagination={false}
       />
     </Main>

@@ -179,7 +179,7 @@ const VirtualRouting = () => {
           <Input
             className="searchField"
             prefix={<Search />}
-            placeholder="Nhập tên Trunk"
+            placeholder="Nhập tên Khách hàng, Trunk, Virtual"
             onChange={onChange}
           />
 

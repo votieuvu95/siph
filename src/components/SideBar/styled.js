@@ -1,6 +1,7 @@
 import styled from "styled-components";
 export const Main = styled.div`
   background: #151529;
+  min-height: 100vh;
   .logo {
     display: flex;
     justify-content: center;
@@ -28,7 +29,8 @@ export const Main = styled.div`
     color: #fff;
     .ant-menu-item-group-title {
       color: #6d7080;
-      font-size: 11px;
+      font-size: 13px;
+      color: #fff;
     }
     .ant-menu-item {
       font-size: 16px;

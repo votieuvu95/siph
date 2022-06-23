@@ -78,7 +78,6 @@ const HotlineRouting = () => {
         let payload = (state?.listTrunkManagement || []).find(
           (x) => x.id == data?.trunkId
         );
-        debugger;
         return (
           <a
             onClick={() =>
@@ -154,7 +153,7 @@ const HotlineRouting = () => {
           <Input
             className="searchField"
             prefix={<Search />}
-            placeholder="Nhập tên Trunk"
+            placeholder="Nhập tên Khách hàng, Trunk, Hotline"
             onChange={onChange}
           />
 

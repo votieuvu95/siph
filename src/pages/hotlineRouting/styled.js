@@ -27,7 +27,7 @@ export const Main = styled.div`
         }
       }
       .button-search {
-        height: 48px;
+        min-height: 48px;
         border-radius: 0px 15px 15px 0px;
         background-color: rgb(25, 118, 210);
       }

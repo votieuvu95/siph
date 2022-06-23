@@ -13,7 +13,7 @@ import Pagination from "components/Pagination";
 const TrunkManagement = () => {
   const modalTrunkRef = useRef(null);
   const { listTrunkManagement } = useSelector((state) => state.trunkManagement);
-  const [state, _setState] = useState({ page: 0, size: 10 });
+  const [state, _setState] = useState({ page: 0, size: 10, totalElements: 0 });
   const setState = (data = {}) => {
     _setState((_state) => ({
       ..._state,
@@ -37,7 +37,7 @@ const TrunkManagement = () => {
       key: "index",
       width: 70,
       render: (item, data, index) => {
-        return index + 1;
+        return index + 1 + state?.page * state?.size;
       },
     },
     {
@@ -89,6 +89,7 @@ const TrunkManagement = () => {
           state.page * state?.size,
           (state.page + 1) * state?.size
         ),
+        totalElements: state?.listTrunkManagement?.length,
       });
   }, [state?.listTrunkManagement, state?.page, state?.size]);
   const onPageChange = (page) => {
@@ -111,6 +112,7 @@ const TrunkManagement = () => {
         state.page * state?.size,
         (state.page + 1) * state?.size
       ),
+      totalElements: data.length,
     });
   };
   return (
@@ -141,22 +143,18 @@ const TrunkManagement = () => {
           </Button>
         </div>
       </div>
-      <div className="table">
-        <div className="main-table">
-          <TableWrapper columns={columns} dataSource={state?.listData} />
-        </div>
-        {!!state?.listData?.length && (
-          <Pagination
-            onChange={onPageChange}
-            current={state?.page + 1}
-            pageSize={state?.size}
-            total={state?.listTrunkManagement?.length}
-            listData={state?.listData}
-            onShowSizeChange={onSizeChange}
-            style={{ flex: 1, justifyContent: "flex-end" }}
-          />
-        )}
+      <div className="main-table">
+        <TableWrapper columns={columns} dataSource={state?.listData} />
       </div>
+      <Pagination
+        onChange={onPageChange}
+        current={state?.page + 1}
+        pageSize={state?.size}
+        total={state?.totalElements}
+        listData={state?.listData}
+        onShowSizeChange={onSizeChange}
+        style={{ flex: 1, justifyContent: "flex-end" }}
+      />
       <ModalTrunk ref={modalTrunkRef} />
     </Main>
   );

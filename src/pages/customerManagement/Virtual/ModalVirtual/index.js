@@ -119,6 +119,14 @@ const ModalVirtual = (props, ref) => {
                 required: true,
                 message: "Tên nhóm Virtual không được để trống",
               },
+              {
+                whitespace: true,
+                message: "Tên nhóm Virtual không được để trống",
+              },
+              {
+                max: 20,
+                message: "Tên nhóm Virtual nhỏ hơn 20 kí tự",
+              },
             ]}
           >
             <Input />
@@ -130,6 +138,10 @@ const ModalVirtual = (props, ref) => {
               {
                 required: true,
                 message: "Số Virtual không được để trống",
+              },
+              {
+                pattern: new RegExp(/^((?!(0))[0-9]{1,6})$/g),
+                message: "Vui lòng nhập đúng định dạng số Virtual",
               },
             ]}
           >

@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Search } from "@mui/icons-material";
 import { Main } from "./styled";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import {  useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { STATUS } from "constants/index";
 import CellACtion from "components/CellAction";
 import Pagination from "components/Pagination";
@@ -23,7 +23,7 @@ const Hotline = () => {
   useEffect(() => {
     let listHotlines = localStorage.getItem("DATA_ALL_HOTLINE");
     setState({
-      listHotlines : JSON.parse(listHotlines),
+      listHotlines: JSON.parse(listHotlines),
     });
   }, [listHotlines]);
   const handleEdit = (data) => {
@@ -107,9 +107,10 @@ const Hotline = () => {
 
   const onChange = () => (e) => {
     let value = e?.target?.value;
-    let data = state?.listHotlines.filter((item) =>
-      item.customerName.toLowerCase().includes(value.trim().toLowerCase()) ||
-      item.hotlineGroupName.toLowerCase().includes(value.trim().toLowerCase())
+    let data = state?.listHotlines.filter(
+      (item) =>
+        item.customerName.toLowerCase().includes(value.trim().toLowerCase()) ||
+        item.hotlineGroupName.toLowerCase().includes(value.trim().toLowerCase())
     );
     setState({
       listData: data.slice(
@@ -148,7 +149,11 @@ const Hotline = () => {
       </div>
       <div className="table">
         <div className="main-table">
-          <TableWrapper columns={columns} dataSource={state?.listData} />
+          <TableWrapper
+            columns={columns}
+            dataSource={state?.listData}
+            rowKey={(row) => row.hotlineGroupId}
+          />
         </div>
         {!!state?.listData?.length && (
           <Pagination

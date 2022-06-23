@@ -27,7 +27,7 @@ export const Main = styled.div`
         }
       }
       .button-search {
-        height: 48px;
+        min-height: 48px;
         border-radius: 0px 15px 15px 0px;
         background-color: rgb(25, 118, 210);
       }
@@ -52,7 +52,6 @@ export const Main = styled.div`
   }
   .table {
     border: 1px solid rgb(224, 224, 224);
-    height: 100%;
     display: flex;
     flex-direction: column;
     overflow: hidden;

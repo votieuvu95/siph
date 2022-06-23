@@ -74,7 +74,7 @@ export const Main = styled("div")`
 `;
 
 export const MainPage = styled("div")`
-  height: 100vh;
+  background: #f0f2f5;
   .gx-layout-content {
     height: 100%;
     display: flex;

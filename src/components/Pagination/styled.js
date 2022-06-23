@@ -10,8 +10,13 @@ export const Main = styled.div`
     display: flex;
     align-items: center;
   }
-  .patient-paging{
+  .patient-paging {
     margin-left: 20px;
+    .ant-pagination-item-link {
+      border: none !important;
+    }
+    .ant-pagination-item {
+      display: none;
+    }
   }
- 
 `;

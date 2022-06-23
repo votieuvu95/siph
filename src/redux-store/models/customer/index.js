@@ -15,8 +15,14 @@ export default {
     getCustomer: () => {
       customerProvider
         .search()
-        .then( (s) => {
-          localStorage.setItem("DATA_ALL_CUSTOMER", JSON.stringify(s?.customers));
+        .then((s) => {
+          localStorage.setItem(
+            "DATA_ALL_CUSTOMER",
+            JSON.stringify(s?.customers)
+          );
+          dispatch.customer.updateData({
+            listCustomer: s?.customers,
+          });
         })
         .catch((e) => {
           message.error(e?.message || "Đăng nhập không thành công");
