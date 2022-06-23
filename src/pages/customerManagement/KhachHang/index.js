@@ -128,7 +128,7 @@ const KhachHang = () => {
             className="searchField"
             prefix={<Search />}
             placeholder="Nhập tên khách hàng"
-            onChange={onChange()}
+            onChange={onChange}
           />
 
           <Button type="primary" className="button-search">

@@ -100,14 +100,14 @@ const TrunkManagement = () => {
 
   const onChange = (e) => {
     let value = e?.target?.value;
-    let data = state?.listTrunkManagement.filter(
+    let data = state?.listTrunkManagement?.filter(
       (item) =>
         item.trunkName.toLowerCase().includes(value.trim().toLowerCase()) ||
         item.groupName.toLowerCase().includes(value.trim().toLowerCase()) ||
         item.ip.toLowerCase().includes(value.trim().toLowerCase())
     );
     setState({
-      listData: data.slice(
+      listData: data?.slice(
         state.page * state?.size,
         (state.page + 1) * state?.size
       ),
@@ -121,8 +121,7 @@ const TrunkManagement = () => {
             className="searchField"
             prefix={<Search />}
             placeholder="Nhập tên Trunk"
-            onChange={onChange()}
-            
+            onChange={onChange}
           />
 
           <Button type="primary" className="button-search">

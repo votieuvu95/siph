@@ -126,7 +126,7 @@ const Virtual = () => {
             className="searchField"
             prefix={<Search />}
             placeholder="Nhập tên Trunk"
-            onChange={onChange()}
+            onChange={onChange}
           />
 
           <Button type="primary" className="button-search">
