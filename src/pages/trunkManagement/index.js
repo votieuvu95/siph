@@ -47,41 +47,49 @@ const TrunkManagement = () => {
       title: "STT",
       dataIndex: "index",
       key: "index",
-      width: 50,
+      width: "3%",
       render: (item, data, index) => {
-        return index + 1 + state?.page * state?.size; 
+        return (
+          <div className="item__center">
+            {index + 1 + state?.page * state?.size}
+          </div>
+        );
       },
     },
     {
       title: "Tên trunk",
       dataIndex: "trunkName",
       key: "trunkName",
-      width: 300,
+      width: "30%",
     },
     {
       title: "Nhà mạng",
       dataIndex: "groupName",
       key: "groupName",
-      width: 200,
+      width: "28%",
     },
     {
       title: "IP:PORT",
       dataIndex: "ip",
       key: "ip",
-      width: 100,
+      width: "18%",
     },
     {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
-      width: 100,
-      render: (item) => STATUS.find((x) => x.id === item)?.ten,
+      width: "7%",
+      render: (item) => (
+        <div className="item__center">
+          {STATUS.find((x) => x.id === item)?.ten}
+        </div>
+      ),
     },
     {
       title: "Chức năng",
       dataIndex: "action",
       key: "action",
-      width: 50,
+      width: "7%",
       render: (item, data) => {
         return (
           <CellACtion
@@ -155,13 +163,11 @@ const TrunkManagement = () => {
           </Button>
         </div>
       </div>
-      <div className="main-table">
-        <TableWrapper
-          columns={columns}
-          dataSource={state?.listData}
-          rowKey={(row) => row.id}
-        />
-      </div>
+      <TableWrapper
+        columns={columns}
+        dataSource={state?.listData}
+        rowKey={(row) => row.id}
+      />
       <Pagination
         onChange={onPageChange}
         current={state?.page + 1}

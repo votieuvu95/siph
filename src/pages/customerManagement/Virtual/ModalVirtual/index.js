@@ -19,7 +19,7 @@ const ModalVirtual = (props, ref) => {
 
   const [form] = Form.useForm();
   const refModal = useRef(null);
-  const [state, _setState] = useState({});
+  const [state, _setState] = useState({ isError: false });
   const setState = (data = {}) => {
     _setState((_state) => ({
       ..._state,
@@ -81,17 +81,26 @@ const ModalVirtual = (props, ref) => {
   }, [state?.data?.virtualNumbers]);
 
   const validator = (rule, value, callback) => {
-    let regex = /^((?!(0))[0-9]{1,6})$/;
-    if (value.length) {
-      let datareg = value.filter((x) => !regex.test(String(x)));
+    let regex = /^((?!(0))[0-9]{6})$/;
+    let dataArray = [];
+    value.map((item) => {
+      let data = item.split(",");
+      data.map((x) => x.length && dataArray.push(x));
+    });
+    form.setFieldsValue({ isdns: dataArray });
+    if (dataArray.length) {
+      let datareg = dataArray.filter((x) => !regex.test(String(x)));
       debugger
       if (datareg.length) {
+        setState({ isError: true });
         callback(new Error("Vui lòng nhập đúng định dạng số Virtual"));
       } else {
         callback();
+        setState({ isError: false });
       }
     } else {
       callback();
+      setState({ isError: false });
     }
   };
 
@@ -158,12 +167,19 @@ const ModalVirtual = (props, ref) => {
               { validator: validator },
             ]}
           >
-            <SelectAntd mode="tags" placeholder="Nhập số virtual">
+            <SelectAntd
+              mode="tags"
+              placeholder="Nhập số virtual"
+              className={`${state?.isError ? "select-error" : ""}`}
+            >
               {(dataVirtualNumbers || []).map((item) => {
                 return <Option value={item.label} key={item.value}></Option>;
               })}
             </SelectAntd>
           </Form.Item>
+          {state?.isError && (
+            <div className="error">Vui lòng nhập đúng định dạng số Virtual</div>
+          )}
           {state?.data?.vngId && (
             <Form.Item
               label="Trạng thái"

@@ -63,4 +63,14 @@ export const Main = styled.div`
       overflow: hidden;
     }
   }
+  .item {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    &__center {
+      justify-content: center;
+      align-items: center;
+      display: flex;
+    }
+  }
 `;

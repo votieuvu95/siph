@@ -34,10 +34,19 @@ export default {
           if (payload.vngId) {
             virtualNumberProvider
               .put(payload)
-              .then((s) => {
-                dispatch.virtualNumber.updatevirtualNumber(payload);
-                message.success("Cập nhật thành công dữ liệu");
+              .then(async(s) => {
                 resolve(s?.data);
+                await dispatch.virtualNumber.updatevirtualNumber(payload).then((s) => {
+                  if (s[0]?.vnNotAdded?.length) {
+                    message.error(
+                      `Các số ${s[0]?.vnNotAdded.join(
+                        ", "
+                      )} không được tạo do đã được tạo trước đó`
+                    );
+                  } else {
+                    message.success("Cập nhật thành công dữ liệu");
+                  }
+                });
               })
               .catch((e) => {
                 message.error(e?.message || "Xảy ra lỗi, vui lòng thử lại sau");
@@ -239,15 +248,25 @@ export default {
             })
             .includes(x)
       );
-      const dataIp = new Promise(() => {
+      const dataIp = new Promise((resolve, reject) => {
         let data = {
           vngId: payload.vngId,
           isdns: Array.isArray(dataHotline) ? dataHotline : [dataHotline],
           customerId: payload.customerId,
         };
-        dispatch.virtualNumber.createVirtualToGroup(data);
+        virtualNumberProvider
+          .postVirtual(data)
+          .then((s) => {
+            resolve(s);
+          })
+          .catch((e) => {
+            message.error(e?.message || "Xảy ra lỗi, vui lòng thử lại sau");
+            reject(e);
+          });
       });
-      Promise.all([body, dataIp]).then(() => {});
+      return Promise.all([body, dataIp]).then((response) => {
+        return (response || []).filter((x) => x.vnNotAdded);
+      });
     },
   }),
 };

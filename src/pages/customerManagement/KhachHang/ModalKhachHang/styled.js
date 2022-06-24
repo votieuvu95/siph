@@ -26,20 +26,34 @@ export const Main = styled.div`
         }
       }
     }
+    .ant-form-item {
+      padding: 0 0 24px !important;
+      margin: 0px !important;
+    }
     .ant-input {
       min-height: 48px;
       font-size: 16px;
     }
     .ant-select-selector {
       min-height: 48px;
+      & .ant-select-selection-item {
+        font-size: 16px;
+        line-height: 50px;
+      }
       .ant-select-selection-search {
         input {
           min-height: 48px;
-          font-size: 18px;
+          font-size: 16px;
+          display: flex;
+          align-items: center;
         }
       }
-      .ant-select-selection-item {
-        font-size: 18px;
+      & .ant-select-selection-overflow {
+        & .ant-select-selection-overflow-item {
+          & .ant-select-selection-item {
+            line-height: 24px !important;
+          }
+        }
       }
     }
   }
@@ -51,7 +65,6 @@ export const Main = styled.div`
     color: #fff;
     font-size: 20px;
     margin-top: 20px;
-
   }
   .button-update {
     min-height: 48px;
@@ -61,9 +74,18 @@ export const Main = styled.div`
     color: #fff;
     font-size: 20px;
     margin-top: 20px;
-
   }
   .ant-btn {
     border: 1px solid #fff !important;
+  }
+
+  .error {
+    color: #ff4d4f;
+    margin-top: -24px;
+  }
+  .select-error {
+    .ant-select-selector {
+      border-color: #ff4d4f !important;
+    }
   }
 `;

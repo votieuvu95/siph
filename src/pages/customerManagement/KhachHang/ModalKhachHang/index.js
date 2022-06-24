@@ -16,7 +16,7 @@ const ModalKhachHang = (props, ref) => {
 
   const [form] = Form.useForm();
   const refModal = useRef(null);
-  const [state, _setState] = useState({});
+  const [state, _setState] = useState({ isError: false });
   const setState = (data = {}) => {
     _setState((_state) => ({
       ..._state,
@@ -71,15 +71,25 @@ const ModalKhachHang = (props, ref) => {
   const validator = (rule, value, callback) => {
     let regex =
       /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-    if (value.length) {
-      let datareg = value.filter((x) => !regex.test(String(x)));
+
+    let dataArray = [];
+    value.map((item) => {
+      let data = item.split(",");
+      data.map((x) => x.length && dataArray.push(x));
+    });
+    form.setFieldsValue({ ips: dataArray });
+    if (dataArray.length) {
+      let datareg = dataArray.filter((x) => !regex.test(String(x)));
       if (datareg.length) {
+        setState({ isError: true });
         callback(new Error("Vui lòng nhập đúng định dạng IP"));
       } else {
         callback();
+        setState({ isError: false });
       }
     } else {
       callback();
+      setState({ isError: false });
     }
   };
 
@@ -132,6 +142,7 @@ const ModalKhachHang = (props, ref) => {
           <Form.Item
             label="Địa chỉ IP"
             name="ips"
+            className={`${state?.isError ? "select-error" : ""}`}
             rules={[
               {
                 required: true,
@@ -148,6 +159,9 @@ const ModalKhachHang = (props, ref) => {
               })}
             </SelectAntd>
           </Form.Item>
+          {state?.isError && (
+            <div className="error">Vui lòng nhập đúng định dạng IP</div>
+          )}
         </Form>
         <Button
           className={`${!state?.data?.id ? "button-create" : "button-update"}`}

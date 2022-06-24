@@ -1,9 +1,11 @@
 import styled from "styled-components";
-export const Main = styled.div`
+import { Row } from "antd";
+export const Main = styled(Row)`
   display: flex;
   flex-direction: column;
   overflow: hidden;
   height: 100%;
+  max-width: 100%;
   .ant-table-wrapper {
     height: 100%;
     & .ant-spin-nested-loading {

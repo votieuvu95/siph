@@ -50,18 +50,11 @@ export const Main = styled.div`
       }
     }
   }
-  .table {
-    border: 1px solid rgb(224, 224, 224);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    .main-table {
-      height: 100%;
+  .item {
+    &__center {
+      justify-content: center;
+      align-items: center;
       display: flex;
-      flex-direction: column;
-      flex: 1;
-      overflow: hidden;
     }
   }
 `;

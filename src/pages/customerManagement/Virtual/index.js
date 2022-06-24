@@ -46,49 +46,61 @@ const Virtual = () => {
       title: "STT",
       dataIndex: "index",
       key: "index",
-      width: 50,
+      width: "3%",
       render: (item, data, index) => {
-        return index + 1 + state?.page * state?.size;;
+        return (
+          <div className="item__center">
+            {index + 1 + state?.page * state?.size}
+          </div>
+        );
       },
     },
     {
       title: "Tên khách hàng",
       dataIndex: "customerName",
       key: "customerName",
-      width: 300,
+      width: "20%",
     },
     {
       title: "Tên nhóm Virtual",
       dataIndex: "vngName",
       key: "vngName",
-      width: 300,
+      width: "20%",
     },
     {
       title: "Số Virtual",
       dataIndex: "virtualNumbers",
       key: "virtualNumbers",
-      width: 300,
+      width: "40%",
       render: (item) => {
-        return (item || [])
-          .filter((x) => x.status === 1)
-          .map((x1) => {
-            return x1.isdn;
-          })
-          .join(", ");
+        return (
+          <div className="item">
+            {(item || [])
+              .filter((x) => x.status === 1)
+              .map((x1) => {
+                return x1.isdn;
+              })
+              .join(", ")}
+          </div>
+        );
       },
     },
     {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
-      width: 100,
-      render: (item) => STATUS.find((x) => x.id === item)?.ten,
+      width: "7%",
+      render: (item) => (
+        <div className="item__center">
+          {STATUS.find((x) => x.id === item)?.ten}
+        </div>
+      ),
     },
     {
       title: "Chức năng",
       dataIndex: "action",
       key: "action",
-      width: 100,
+      width: "7%",
       render: (item, data) => {
         return (
           <CellACtion
@@ -165,13 +177,11 @@ const Virtual = () => {
           </Button>
         </div>
       </div>
-      <div className="main-table">
-        <TableWrapper
-          columns={columns}
-          dataSource={state?.listData}
-          rowKey={(row) => row.vngId}
-        />
-      </div>
+      <TableWrapper
+        columns={columns}
+        dataSource={state?.listData}
+        rowKey={(row) => row.vngId}
+      />
       <Pagination
         onChange={onPageChange}
         current={state?.page + 1}

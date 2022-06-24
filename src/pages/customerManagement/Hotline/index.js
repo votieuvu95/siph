@@ -59,24 +59,20 @@ const Hotline = () => {
       dataIndex: "customerName",
       key: "customerName",
       width: "20%",
-      render: (item, data, index) => {
-        return <div className="item">{item}</div>;
-      },
+     
     },
     {
       title: "Tên nhóm Hotline",
       dataIndex: "hotlineGroupName",
       key: "hotlineGroupName",
-      width: "25%",
-      render: (item, data, index) => {
-        return <div className="item">{item}</div>;
-      },
+      width: "20%",
+     
     },
     {
       title: "Số Hotline",
       dataIndex: "hotlines",
       key: "hotlines",
-      width: "35%",
+      width: "40%",
       render: (item) => {
         return (
           <div className="item">
@@ -181,13 +177,11 @@ const Hotline = () => {
           </Button>
         </div>
       </div>
-      <div className="main-table">
         <TableWrapper
           columns={columns}
           dataSource={state?.listData}
           rowKey={(row) => row.hotlineGroupId}
         />
-      </div>
       <Pagination
         onChange={onPageChange}
         current={state?.page + 1}

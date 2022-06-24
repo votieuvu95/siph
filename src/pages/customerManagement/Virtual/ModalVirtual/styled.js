@@ -26,6 +26,10 @@ export const Main = styled.div`
         }
       }
     }
+    .ant-form-item {
+      padding: 0 0 24px !important;
+      margin: 0px !important;
+    }
     .ant-input {
       min-height: 48px;
       font-size: 16px;
@@ -42,7 +46,7 @@ export const Main = styled.div`
           min-height: 48px;
           font-size: 16px;
           display: flex;
-    align-items: center;
+          align-items: center;
         }
       }
       & .ant-select-selection-overflow {
@@ -62,7 +66,6 @@ export const Main = styled.div`
     color: #fff;
     font-size: 20px;
     margin-top: 20px;
-
   }
   .button-update {
     min-height: 48px;
@@ -72,9 +75,17 @@ export const Main = styled.div`
     color: #fff;
     font-size: 20px;
     margin-top: 20px;
-
   }
   .ant-btn {
     border: 1px solid #fff !important;
+  }
+  .error {
+    color: #ff4d4f;
+    margin-top: -24px;
+  }
+  .select-error {
+    .ant-select-selector {
+      border-color: #ff4d4f !important;
+    }
   }
 `;

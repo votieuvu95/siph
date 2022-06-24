@@ -26,6 +26,10 @@ export const Main = styled.div`
         }
       }
     }
+    .ant-form-item {
+      padding: 0 0 24px !important;
+      margin: 0px !important;
+    }
     .ant-input {
       min-height: 48px;
       font-size: 16px;
@@ -51,6 +55,15 @@ export const Main = styled.div`
           }
         }
       }
+    }
+  }
+  .error {
+    color: #ff4d4f;
+    margin-top: -24px;
+  }
+  .select-error {
+    .ant-select-selector {
+      border-color: #ff4d4f !important;
     }
   }
   .button-create {

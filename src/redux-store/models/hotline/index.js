@@ -37,11 +37,20 @@ export default {
         try {
           if (payload.hotlineGroupId) {
             hotlineProvider
-              .put(payload)
-              .then((s) => {
-                dispatch.hotline.updateHotline(payload);
-                message.success("Cập nhật thành công dữ liệu");
+              .put({ ...payload, hotlineGroupName: payload.groupHotlineName })
+              .then(async (s) => {
                 resolve(s?.data);
+                await dispatch.hotline.updateHotline(payload).then((s) => {
+                  if (s[0]?.hotlineNotAdded?.length) {
+                    message.error(
+                      `Các số ${s[0]?.hotlineNotAdded.join(
+                        ", "
+                      )} không được tạo do đã được tạo trước đó`
+                    );
+                  } else {
+                    message.success("Cập nhật thành công dữ liệu");
+                  }
+                });
               })
               .catch((e) => {
                 message.error(e?.message || "Xảy ra lỗi, vui lòng thử lại sau");
@@ -116,7 +125,8 @@ export default {
         hotlineProvider
           .postHotlineGroup(payload)
           .then((s) => {
-            resolve(s?.data);
+            debugger;
+            resolve(s);
           })
           .catch((e) => {
             message.error(e?.message || "Xảy ra lỗi, vui lòng thử lại sau");
@@ -163,15 +173,25 @@ export default {
             })
             .includes(x)
       );
-      const dataIp = new Promise(() => {
+      const dataIp = new Promise((resolve, reject) => {
         let data = {
           customerId: payload.customerId,
           isdns: Array.isArray(dataHotline) ? dataHotline : [dataHotline],
           hotlineGroupId: payload.hotlineGroupId,
         };
-        dispatch.hotline.createHotlineGroup(data);
+        hotlineProvider
+          .postHotlineGroup(data)
+          .then((s) => {
+            resolve(s);
+          })
+          .catch((e) => {
+            message.error(e?.message || "Xảy ra lỗi, vui lòng thử lại sau");
+            reject(e);
+          });
       });
-      Promise.all([body, dataIp]).then(() => {});
+      return Promise.all([body, dataIp]).then((response) => {
+        return (response || []).filter((x) => x.hotlineNotAdded);
+      });
     },
   }),
 };

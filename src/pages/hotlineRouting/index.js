@@ -64,22 +64,24 @@ const HotlineRouting = () => {
       title: "STT",
       dataIndex: "index",
       key: "index",
-      width: 50,
-      render: (item, data, index) => {
-        return index + 1 + state?.page * state?.size;;
+      width: "3%",
+       render: (item, data, index) => {
+        return (
+          <div className="item__center">{index + 1 + state?.page * state?.size}</div>
+        );
       },
     },
     {
       title: "Tên khách hàng",
       dataIndex: "customerName",
       key: "customerName",
-      width: 300,
+      width: "25%",
     },
     {
       title: "Tên nhóm hotline",
       dataIndex: "hotlineGroupName",
       key: "hotlineGroupName",
-      width: 300,
+      width: "25%",
       render: (item, data) => (
         <a
           onClick={() =>
@@ -94,7 +96,7 @@ const HotlineRouting = () => {
       title: "Tên trunk",
       dataIndex: "trunkName",
       key: "trunkName",
-      width: 300,
+      width: "25%",
       render: (item, data) => {
         let payload = (state?.listTrunkManagement || []).find(
           (x) => x.id == data?.trunkId
@@ -114,14 +116,16 @@ const HotlineRouting = () => {
       title: "Trạng thái",
       dataIndex: "groupStatus",
       key: "groupStatus",
-      width: 100,
-      render: (item) => STATUS.find((x) => x.id === item)?.ten,
+      width: "7%",
+      render: (item) => (
+        <div className="item__center">{STATUS.find((x) => x.id === item)?.ten}</div>
+      ),
     },
     {
       title: "Chức năng",
       dataIndex: "action",
       key: "action",
-      width: 100,
+      width: "7%",
       render: (item, data) => {
         return (
           <CellACtion
@@ -198,13 +202,11 @@ const HotlineRouting = () => {
           </Button>
         </div>
       </div>
-      <div className="main-table">
         <TableWrapper
           columns={columns}
           dataSource={state?.listData}
           rowKey={(row) => row.hotlineGroupId}
         />
-      </div>
       <Pagination
         onChange={onPageChange}
         current={state?.page + 1}

@@ -19,7 +19,7 @@ const ModalHotline = (props, ref) => {
 
   const [form] = Form.useForm();
   const refModal = useRef(null);
-  const [state, _setState] = useState({});
+  const [state, _setState] = useState({ isError: false });
   const setState = (data = {}) => {
     _setState((_state) => ({
       ..._state,
@@ -56,6 +56,7 @@ const ModalHotline = (props, ref) => {
   }, []);
 
   const onCancel = () => {
+    setState({ isError: false });
     refModal.current && refModal.current.hide();
     form.resetFields();
   };
@@ -65,6 +66,7 @@ const ModalHotline = (props, ref) => {
     });
   }, [state?.data?.hotlines]);
   const onHandleSubmit = (values) => {
+    if (state?.isError) return null;
     const payload = {
       ...values,
       hotlineGroupId: state?.data?.hotlineGroupId,
@@ -82,15 +84,25 @@ const ModalHotline = (props, ref) => {
 
   const validator = (rule, value, callback) => {
     let regex = /^(\+?84|0|\(\+?84\))[1-9]\d{8,9}$/;
-    if (value.length) {
-      let datareg = value.filter((x) => !regex.test(String(x)));
+
+    let dataArray = [];
+    value.map((item) => {
+      let data = item.split(",");
+      data.map((x) => x.length &&  dataArray.push(x));
+    });
+    form.setFieldsValue({ isdns: dataArray });
+    if (dataArray.length) {
+      let datareg = dataArray.filter((x) => !regex.test(String(x)));
       if (datareg.length) {
+        setState({ isError: true });
         callback(new Error("Vui lòng nhập đúng định dạng số hotline"));
       } else {
         callback();
+        setState({ isError: false });
       }
     } else {
       callback();
+      setState({ isError: false });
     }
   };
 
@@ -136,6 +148,10 @@ const ModalHotline = (props, ref) => {
                 required: true,
                 message: "Tên nhóm Hotline không được để trống",
               },
+              {
+                max: 20,
+                message: "Tên nhóm Hotline nhỏ hơn 20 kí tự",
+              },
             ]}
           >
             <Input placeholder="Nhập tên nhóm hotline"></Input>
@@ -151,12 +167,19 @@ const ModalHotline = (props, ref) => {
               { validator: validator },
             ]}
           >
-            <SelectAntd mode="tags" placeholder="Nhập sô hotline">
+            <SelectAntd
+              mode="tags"
+              placeholder="Nhập sô hotline"
+              className={`${state?.isError ? "select-error" : ""}`}
+            >
               {(dataHotlines || []).map((item) => {
                 return <Option value={item.label} key={item.value}></Option>;
               })}
             </SelectAntd>
           </Form.Item>
+          {state?.isError && (
+            <div className="error">Vui lòng nhập đúng định dạng số hotline</div>
+          )}
           {state?.data?.hotlineGroupId && (
             <Form.Item
               label="Trạng thái"
