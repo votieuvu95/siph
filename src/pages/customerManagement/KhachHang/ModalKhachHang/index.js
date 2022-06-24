@@ -67,6 +67,22 @@ const ModalKhachHang = (props, ref) => {
   const onSave = () => {
     form.submit();
   };
+
+  const validator = (rule, value, callback) => {
+    let regex =
+      /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+    if (value.length) {
+      let datareg = value.filter((x) => !regex.test(String(x)));
+      if (datareg.length) {
+        callback(new Error("Vui lòng nhập đúng định dạng IP"));
+      } else {
+        callback();
+      }
+    } else {
+      callback();
+    }
+  };
+
   return (
     <ModalTemplate
       ref={refModal}
@@ -89,6 +105,10 @@ const ModalKhachHang = (props, ref) => {
                 required: true,
                 message: "Tên khách hàng không được để trống",
               },
+              {
+                max: 50,
+                message: "Tên khách hàng nhỏ hơn 50 kí tự",
+              },
             ]}
           >
             <Input placeholder="Nhập tên khách hàng"></Input>
@@ -101,6 +121,10 @@ const ModalKhachHang = (props, ref) => {
                 required: true,
                 message: "Vui lòng chọn nhà mạng!",
               },
+              {
+                max: 150,
+                message: "Mô tả nhỏ hơn 150 kí tự",
+              },
             ]}
           >
             <Input placeholder="Nhập mô tả" />
@@ -112,6 +136,9 @@ const ModalKhachHang = (props, ref) => {
               {
                 required: true,
                 message: "Địa chỉ IP không được để trống",
+              },
+              {
+                validator: validator,
               },
             ]}
           >

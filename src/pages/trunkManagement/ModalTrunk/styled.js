@@ -36,12 +36,14 @@ export const Main = styled.div`
         input {
           min-height: 48px;
           font-size: 16px;
-          line-height: 40px;
+          display: flex;
+    align-items: center;
         }
       }
       .ant-select-selection-item {
         font-size: 16px;
-          line-height: 40px;
+        display: flex;
+    align-items: center;
       }
     }
   }

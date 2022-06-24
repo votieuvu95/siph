@@ -46,9 +46,9 @@ const Virtual = () => {
       title: "STT",
       dataIndex: "index",
       key: "index",
-      width: 70,
+      width: 50,
       render: (item, data, index) => {
-        return index + 1;
+        return index + 1 + state?.page * state?.size;;
       },
     },
     {

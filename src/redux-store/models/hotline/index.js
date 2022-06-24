@@ -22,7 +22,10 @@ export default {
               listHotlines: s?.hotlineGroups,
             });
             resolve(s?.hotlineGroups);
-            localStorage.setItem("DATA_ALL_HOTLINE", JSON.stringify(s?.hotlineGroups));
+            localStorage.setItem(
+              "DATA_ALL_HOTLINE",
+              JSON.stringify(s?.hotlineGroups)
+            );
           })
           .catch((e) => {
             message.error(e?.message || "Đăng nhập không thành công");
@@ -70,6 +73,19 @@ export default {
               .putTrunkToHotline(payload)
               .then((s) => {
                 message.success("Cập nhật thành công dữ liệu");
+                resolve(s?.data);
+              })
+              .catch((e) => {
+                message.error(e?.message || "Xảy ra lỗi, vui lòng thử lại sau");
+                reject(e);
+              });
+            hotlineProvider
+              .createTrunkToHotline({
+                trunkId: payload.trunkId,
+                customerId: payload.customerId,
+                hotlineGroupId: payload.hotlineGroupId,
+              })
+              .then((s) => {
                 resolve(s?.data);
               })
               .catch((e) => {
@@ -139,12 +155,13 @@ export default {
             });
         });
       });
-      let dataHotline = (payload.isdns || []).filter((x) =>
-        !payload?.dataHotlines
-          .map((item) => {
-            return item.label;
-          })
-          .includes(x)
+      let dataHotline = (payload.isdns || []).filter(
+        (x) =>
+          !payload?.dataHotlines
+            .map((item) => {
+              return item.label;
+            })
+            .includes(x)
       );
       const dataIp = new Promise(() => {
         let data = {

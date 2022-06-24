@@ -81,14 +81,9 @@ const ModalHotline = (props, ref) => {
   };
 
   const validator = (rule, value, callback) => {
-    let regex = /^(\+?84|0|\(\+?84\))[1-9]\d{8,9}$/g;
+    let regex = /^(\+?84|0|\(\+?84\))[1-9]\d{8,9}$/;
     if (value.length) {
-      let datareg = value.filter((x) => {
-        return (
-          (!regex.test(String(x)) && x.charAt(0) === 0) ||
-          (x.length !== 4 && x.charAt(0) != 0)
-        );
-      });
+      let datareg = value.filter((x) => !regex.test(String(x)));
       if (datareg.length) {
         callback(new Error("Vui lòng nhập đúng định dạng số hotline"));
       } else {

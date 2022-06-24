@@ -75,6 +75,7 @@ const ModalTrunk = (props, ref) => {
         return {
           id: item.vngId,
           ten: item.vngName,
+          customerId: item.customerId
         };
       }),
     });
@@ -90,8 +91,8 @@ const ModalTrunk = (props, ref) => {
         .filter((x) => x.customerId === e)
         .map((item) => {
           return {
-            id: item.vngId,
-            ten: item.vngName,
+            id: item.id,
+            ten: item.ten,
           };
         }),
     });
@@ -113,7 +114,7 @@ const ModalTrunk = (props, ref) => {
   const onSave = () => {
     form.submit();
   };
-
+  console.log("first",state?.listVirtualNumber)
   return (
     <ModalTemplate
       ref={modalTrunkRef}

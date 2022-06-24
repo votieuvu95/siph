@@ -46,19 +46,18 @@ const ModalTrunk = (props, ref) => {
 
   const dataGroup = useMemo(() => {
     return (state?.listGroup || []).map((item) => {
-      return { id: item.id, ten: item.groupName };
+      return { id: item.groupCode, ten: item.groupName };
     });
   }, [state?.listGroup]);
 
   const onHandleSubmit = (values) => {
-    const { trunkName, port, ip, groupName } = values;
+    const { trunkName, port, ip, groupCode } = values;
     const payload = {
       trunkName: trunkName,
       port: port,
       ip: ip,
       id: state?.data?.id,
-      groupCode: (state?.listGroup || []).find((x) => x.groupName === groupName)
-        ?.groupCode,
+      groupCode: groupCode,
     };
     createOrEdit(payload).then(() => {
       getTrunkManagement();
@@ -106,7 +105,7 @@ const ModalTrunk = (props, ref) => {
           </Form.Item>
           <Form.Item
             label="Nhà mạng"
-            name="groupName"
+            name="groupCode"
             rules={[
               {
                 required: true,

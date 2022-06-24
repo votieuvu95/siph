@@ -40,7 +40,8 @@ export const Main = styled.div`
         input {
           min-height: 48px;
           font-size: 16px;
-          line-height: 40px;
+          display: flex;
+          align-items: center;
         }
       }
       & .ant-select-selection-overflow {
@@ -60,7 +61,6 @@ export const Main = styled.div`
     color: #fff;
     font-size: 20px;
     margin-top: 20px;
-
   }
   .button-update {
     min-height: 48px;
@@ -70,7 +70,6 @@ export const Main = styled.div`
     color: #fff;
     font-size: 20px;
     margin-top: 20px;
-
   }
   .ant-btn {
     border: 1px solid #fff !important;

@@ -25,11 +25,10 @@ export const Main = styled.div`
           }
         }
       }
-      
     }
     .ant-form-item {
-        margin-bottom: 14px;
-      }
+      margin-bottom: 14px;
+    }
     .ant-input {
       min-height: 48px;
       font-size: 16px;
@@ -40,12 +39,14 @@ export const Main = styled.div`
         input {
           min-height: 48px;
           font-size: 16px;
-          line-height: 40px;
+          display: flex;
+          align-items: center;
         }
       }
       .ant-select-selection-item {
         font-size: 16px;
-          line-height: 40px;
+        display: flex;
+        align-items: center;
       }
     }
   }
@@ -66,7 +67,6 @@ export const Main = styled.div`
     color: #fff;
     font-size: 20px;
     margin-top: 20px;
-
   }
   .ant-btn {
     border: 1px solid #fff !important;

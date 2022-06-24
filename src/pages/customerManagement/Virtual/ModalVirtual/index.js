@@ -80,6 +80,21 @@ const ModalVirtual = (props, ref) => {
     });
   }, [state?.data?.virtualNumbers]);
 
+  const validator = (rule, value, callback) => {
+    let regex = /^((?!(0))[0-9]{1,6})$/;
+    if (value.length) {
+      let datareg = value.filter((x) => !regex.test(String(x)));
+      debugger
+      if (datareg.length) {
+        callback(new Error("Vui lòng nhập đúng định dạng số Virtual"));
+      } else {
+        callback();
+      }
+    } else {
+      callback();
+    }
+  };
+
   return (
     <ModalTemplate
       ref={refModal}
@@ -130,7 +145,7 @@ const ModalVirtual = (props, ref) => {
               },
             ]}
           >
-            <Input placeholder="Nhập tên nhóm virutalz" />
+            <Input placeholder="Nhập tên nhóm virutal" />
           </Form.Item>
           <Form.Item
             label="Số Virtual"
@@ -140,10 +155,7 @@ const ModalVirtual = (props, ref) => {
                 required: true,
                 message: "Số Virtual không được để trống",
               },
-              {
-                pattern: new RegExp(/^((?!(0))[0-9]{1,6})$/g),
-                message: "Vui lòng nhập đúng định dạng số Virtual",
-              },
+              { validator: validator },
             ]}
           >
             <SelectAntd mode="tags" placeholder="Nhập số virtual">

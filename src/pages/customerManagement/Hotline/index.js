@@ -47,49 +47,63 @@ const Hotline = () => {
       title: "STT",
       dataIndex: "index",
       key: "index",
-      width: 70,
+      width: "3%",
       render: (item, data, index) => {
-        return index + 1;
+        return (
+          <div className="item__center">{index + 1 + state?.page * state?.size}</div>
+        );
       },
     },
     {
       title: "Tên khách hàng",
       dataIndex: "customerName",
       key: "customerName",
-      width: 300,
+      width: "20%",
+      render: (item, data, index) => {
+        return <div className="item">{item}</div>;
+      },
     },
     {
       title: "Tên nhóm Hotline",
       dataIndex: "hotlineGroupName",
       key: "hotlineGroupName",
-      width: 300,
+      width: "25%",
+      render: (item, data, index) => {
+        return <div className="item">{item}</div>;
+      },
     },
     {
       title: "Số Hotline",
       dataIndex: "hotlines",
       key: "hotlines",
-      width: 300,
+      width: "35%",
       render: (item) => {
-        return (item || [])
-          .filter((x) => x.status === 1)
-          .map((x1) => {
-            return x1.isdn;
-          })
-          .join(", ");
+        return (
+          <div className="item">
+            {(item || [])
+              .filter((x) => x.status === 1)
+              .map((x1) => {
+                return x1.isdn;
+              })
+              .join(", ")}
+          </div>
+        );
       },
     },
     {
       title: "Trạng thái",
       dataIndex: "groupStatus",
       key: "groupStatus",
-      width: 100,
-      render: (item) => STATUS.find((x) => x.id === item)?.ten,
+      width: "7%",
+      render: (item) => (
+        <div className="item__center">{STATUS.find((x) => x.id === item)?.ten}</div>
+      ),
     },
     {
       title: "Chức năng",
       dataIndex: "action",
       key: "action",
-      width: 100,
+      width: "7%",
       render: (item, data) => {
         return (
           <CellACtion
