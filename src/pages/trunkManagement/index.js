@@ -70,6 +70,7 @@ const TrunkManagement = () => {
       dataIndex: "ip",
       key: "ip",
       width: "20%",
+      render: (item, data) => `${data.ip}:${data.port}` 
     },
     {
       title: "Trạng thái",

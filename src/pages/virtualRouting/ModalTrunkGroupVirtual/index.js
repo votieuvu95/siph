@@ -1,7 +1,7 @@
 import { Button, Form } from "antd";
 import ModalTemplate from "components/ModalTemplate";
 import Select from "components/Select";
-import { Main } from "./styled";
+import { Main, MainHeader } from "./styled";
 import React, {
   useState,
   useImperativeHandle,
@@ -11,6 +11,8 @@ import React, {
 } from "react";
 import { STATUS } from "constants/index";
 import { useDispatch } from "react-redux";
+import { CloseOutlined } from "@ant-design/icons";
+
 const ModalTrunk = (props, ref) => {
   const { createOrEditToTrunk, getVirtualNumber } = useDispatch().virtualNumber;
 
@@ -75,7 +77,7 @@ const ModalTrunk = (props, ref) => {
         return {
           id: item.vngId,
           ten: item.vngName,
-          customerId: item.customerId
+          customerId: item.customerId,
         };
       }),
     });
@@ -114,16 +116,22 @@ const ModalTrunk = (props, ref) => {
   const onSave = () => {
     form.submit();
   };
-  console.log("first",state?.listVirtualNumber)
   return (
     <ModalTemplate
       ref={modalTrunkRef}
-      onCancel={onCancel}
       title={
-        state?.data?.vngId
-          ? "Cập nhật Trunk cho nhóm Virtual"
-          : "Tạo Trunk cho nhóm Virtual"
+        <MainHeader>
+          <div className="left">
+            {state?.data?.vngId
+              ? "Cập nhật Trunk cho nhóm Virtual"
+              : "Tạo Trunk cho nhóm Virtual"}
+          </div>
+          <div className="right" onClick={() => onCancel()}>
+            <CloseOutlined />
+          </div>
+        </MainHeader>
       }
+      closable={false}
       width={600}
     >
       <Main>
@@ -147,6 +155,7 @@ const ModalTrunk = (props, ref) => {
               data={state?.listCustomer}
               onChange={onChange}
               placeholder="Chọn khách hàng"
+              disabled={state?.data}
             ></Select>
           </Form.Item>
           <Form.Item
@@ -160,9 +169,9 @@ const ModalTrunk = (props, ref) => {
             ]}
           >
             <Select
-              disabled={state?.data?.id}
+              disabled={state?.data}
               data={state?.listVirtualNumber}
-              placeholder="Chọn nhóm virtuali"
+              placeholder="Chọn nhóm virtual"
             />
           </Form.Item>
           <Form.Item

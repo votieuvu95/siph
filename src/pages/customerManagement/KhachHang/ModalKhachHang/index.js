@@ -1,6 +1,6 @@
 import { Button, Form, Input, Select as SelectAntd } from "antd";
 import ModalTemplate from "components/ModalTemplate";
-import { Main } from "./styled";
+import { Main, MainHeader } from "./styled";
 import React, {
   useState,
   useImperativeHandle,
@@ -9,6 +9,7 @@ import React, {
   useMemo,
 } from "react";
 import { useDispatch } from "react-redux";
+import { CloseOutlined } from "@ant-design/icons";
 
 const { Option } = SelectAntd;
 const ModalKhachHang = (props, ref) => {
@@ -96,8 +97,17 @@ const ModalKhachHang = (props, ref) => {
   return (
     <ModalTemplate
       ref={refModal}
-      onCancel={onCancel}
-      title={state?.data?.id ? "Cập nhật khách hàng" : "Tạo mới khách hàng"}
+      title={
+        <MainHeader >
+          <div className="left">
+            {state?.data?.id ? "Cập nhật khách hàng" : "Tạo mới khách hàng"}
+          </div>
+          <div className="right" onClick={() => onCancel()}>
+            <CloseOutlined />
+          </div>
+        </MainHeader>
+      }
+      closable={false}
       width={600}
     >
       <Main>
@@ -116,8 +126,8 @@ const ModalKhachHang = (props, ref) => {
                 message: "Tên khách hàng không được để trống",
               },
               {
-                max: 50,
-                message: "Tên khách hàng nhỏ hơn 50 kí tự",
+                max: 35,
+                message: "Tên khách hàng nhỏ hơn 35 kí tự",
               },
             ]}
           >

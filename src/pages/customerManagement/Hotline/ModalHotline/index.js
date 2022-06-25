@@ -1,7 +1,7 @@
 import { Button, Form, Input, Select as SelectAntd } from "antd";
 import ModalTemplate from "components/ModalTemplate";
 import Select from "components/Select";
-import { Main } from "./styled";
+import { Main, MainHeader } from "./styled";
 import React, {
   useState,
   useImperativeHandle,
@@ -12,6 +12,8 @@ import React, {
 } from "react";
 import { STATUS } from "constants/index";
 import { useDispatch } from "react-redux";
+import { CloseOutlined } from "@ant-design/icons";
+
 const { Option } = SelectAntd;
 
 const ModalHotline = (props, ref) => {
@@ -88,7 +90,7 @@ const ModalHotline = (props, ref) => {
     let dataArray = [];
     value.map((item) => {
       let data = item.split(",");
-      data.map((x) => x.length &&  dataArray.push(x));
+      data.map((x) => x.length && dataArray.push(x));
     });
     form.setFieldsValue({ isdns: dataArray });
     if (dataArray.length) {
@@ -109,12 +111,19 @@ const ModalHotline = (props, ref) => {
   return (
     <ModalTemplate
       ref={refModal}
-      onCancel={onCancel}
       title={
-        state?.data?.hotlineGroupId
-          ? "Cập nhập nhóm Hotline"
-          : "Tạo mới nhóm Hotline"
+        <MainHeader>
+          <div className="left">
+            {state?.data?.hotlineGroupId
+              ? "Cập nhập nhóm Hotline"
+              : "Tạo mới nhóm Hotline"}
+          </div>
+          <div className="right" onClick={() => onCancel()}>
+            <CloseOutlined />
+          </div>
+        </MainHeader>
       }
+      closable={false}
       width={600}
     >
       <Main>
@@ -149,8 +158,8 @@ const ModalHotline = (props, ref) => {
                 message: "Tên nhóm Hotline không được để trống",
               },
               {
-                max: 50,
-                message: "Tên nhóm Hotline nhỏ hơn 50 kí tự",
+                max: 35,
+                message: "Tên nhóm Hotline nhỏ hơn 35 kí tự",
               },
             ]}
           >

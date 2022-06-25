@@ -35,6 +35,7 @@ export default {
       client
         .put(`${CUSTOMER}/${customerId}/virtual-number-group/${vngId}`, rest)
         .then((s) => {
+          debugger  
           if (s) {
             resolve(s?.data);
           } else reject(s?.data);

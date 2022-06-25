@@ -1,7 +1,7 @@
 import { Button, Form } from "antd";
 import ModalTemplate from "components/ModalTemplate";
 import Select from "components/Select";
-import { Main } from "./styled";
+import { Main, MainHeader } from "./styled";
 import React, {
   useState,
   useImperativeHandle,
@@ -12,6 +12,8 @@ import React, {
 import { STATUS } from "constants/index";
 import { useDispatch } from "react-redux";
 import cacheUtils from "utils/cache-utils";
+import { CloseOutlined } from "@ant-design/icons";
+
 const ModalTrunkHotlineGroup = (props, ref) => {
   const { createOrEditTrunkToHotline, getHotline } = useDispatch().hotline;
 
@@ -102,12 +104,19 @@ const ModalTrunkHotlineGroup = (props, ref) => {
   return (
     <ModalTemplate
       ref={modalTrunkRef}
-      onCancel={onCancel}
       title={
-        state?.data?.hotlineGroupId
-          ? "Cập nhật Trunk cho nhóm Hotline"
-          : "Tạo Trunk cho nhóm Hotline"
+        <MainHeader>
+          <div className="left">
+            {state?.data?.hotlineGroupId
+              ? "Cập nhật Trunk cho nhóm Hotline"
+              : "Tạo Trunk cho nhóm Hotline"}
+          </div>
+          <div className="right" onClick={() => onCancel()}>
+            <CloseOutlined />
+          </div>
+        </MainHeader>
       }
+      closable={false}
       width={600}
     >
       <Main>
@@ -160,7 +169,10 @@ const ModalTrunkHotlineGroup = (props, ref) => {
               },
             ]}
           >
-            <Select data={state?.listTrunkManagement} placeholder="Chọn trunk"></Select>
+            <Select
+              data={state?.listTrunkManagement}
+              placeholder="Chọn trunk"
+            ></Select>
           </Form.Item>
           {state?.data?.hotlineGroupId && (
             <Form.Item
@@ -173,7 +185,7 @@ const ModalTrunkHotlineGroup = (props, ref) => {
                 },
               ]}
             >
-              <Select data={STATUS} placeholder="Chọn trạng thái" /> 
+              <Select data={STATUS} placeholder="Chọn trạng thái" />
             </Form.Item>
           )}
         </Form>

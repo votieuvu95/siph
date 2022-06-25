@@ -1,7 +1,7 @@
 import { Button, Form, Input, Select as SelectAntd } from "antd";
 import ModalTemplate from "components/ModalTemplate";
 import Select from "components/Select";
-import { Main } from "./styled";
+import { Main, MainHeader } from "./styled";
 import React, {
   useState,
   useImperativeHandle,
@@ -12,6 +12,8 @@ import React, {
 } from "react";
 import { STATUS } from "constants/index";
 import { useDispatch } from "react-redux";
+import { CloseOutlined } from "@ant-design/icons";
+
 const { Option } = SelectAntd;
 
 const ModalVirtual = (props, ref) => {
@@ -90,7 +92,7 @@ const ModalVirtual = (props, ref) => {
     form.setFieldsValue({ isdns: dataArray });
     if (dataArray.length) {
       let datareg = dataArray.filter((x) => !regex.test(String(x)));
-      debugger
+      debugger;
       if (datareg.length) {
         setState({ isError: true });
         callback(new Error("Vui lòng nhập đúng định dạng số Virtual"));
@@ -107,10 +109,19 @@ const ModalVirtual = (props, ref) => {
   return (
     <ModalTemplate
       ref={refModal}
-      onCancel={onCancel}
       title={
-        state?.data?.vngId ? "Cập nhập nhóm Virtual" : "Tạo mới nhóm Virtual"
+        <MainHeader>
+          <div className="left">
+            {state?.data?.vngId
+              ? "Cập nhập nhóm Virtual"
+              : "Tạo mới nhóm Virtual"}
+          </div>
+          <div className="right" onClick={() => onCancel()}>
+            <CloseOutlined />
+          </div>
+        </MainHeader>
       }
+      closable={false}
       width={600}
     >
       <Main>
@@ -149,8 +160,8 @@ const ModalVirtual = (props, ref) => {
                 message: "Tên nhóm Virtual không được để trống",
               },
               {
-                max: 50,
-                message: "Tên nhóm Virtual nhỏ hơn 50 kí tự",
+                max: 35,
+                message: "Tên nhóm Virtual nhỏ hơn 35 kí tự",
               },
             ]}
           >

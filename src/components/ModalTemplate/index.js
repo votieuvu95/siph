@@ -32,7 +32,7 @@ const ModalTemplate = (
   return (
     <Modal
       visible={state.show}
-      onCancel={closable && onCancel}
+      // onCancel={closable && onCancel}
       footer={null}
       closable={closable}
       width={width}

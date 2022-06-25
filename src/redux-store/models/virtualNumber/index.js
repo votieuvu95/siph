@@ -34,19 +34,21 @@ export default {
           if (payload.vngId) {
             virtualNumberProvider
               .put(payload)
-              .then(async(s) => {
+              .then(async (s) => {
                 resolve(s?.data);
-                await dispatch.virtualNumber.updatevirtualNumber(payload).then((s) => {
-                  if (s[0]?.vnNotAdded?.length) {
-                    message.error(
-                      `Các số ${s[0]?.vnNotAdded.join(
-                        ", "
-                      )} không được tạo do đã được tạo trước đó`
-                    );
-                  } else {
-                    message.success("Cập nhật thành công dữ liệu");
-                  }
-                });
+                await dispatch.virtualNumber
+                  .updatevirtualNumber(payload)
+                  .then((s) => {
+                    if (s[0]?.vnNotAdded?.length) {
+                      message.error(
+                        `Các số ${s[0]?.vnNotAdded.join(
+                          ", "
+                        )} không được tạo do đã được tạo trước đó`
+                      );
+                    } else {
+                      message.success("Cập nhật thành công dữ liệu");
+                    }
+                  });
               })
               .catch((e) => {
                 message.error(e?.message || "Xảy ra lỗi, vui lòng thử lại sau");
@@ -162,15 +164,36 @@ export default {
                   });
               });
             });
-
-            Promise.all([dataViettel, dataMobi, dataVina, dataDefault]).then(
-              (response) => {
-                resolve({
-                  response,
+            debugger
+            const data = new Promise((resolve, reject) => {
+              return virtualNumberProvider
+                .put({
+                  customerId,
+                  vngId: payload?.vngId,
+                  status: payload.status,
+                })
+                .then((s) => {
+                  resolve(s?.data);
+                })
+                .catch((e) => {
+                  message.error(
+                    e?.message || "Xảy ra lỗi, vui lòng thử lại sau"
+                  );
+                  reject(e);
                 });
-                message.success("Cập nhật thành công dữ liệu");
-              }
-            );
+            });
+            Promise.all([
+              dataViettel,
+              dataMobi,
+              dataVina,
+              dataDefault,
+              data,
+            ]).then((response) => {
+              resolve({
+                response,
+              });
+              message.success("Cập nhật thành công dữ liệu");
+            });
           } else {
             const {
               customerId,

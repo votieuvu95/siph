@@ -89,3 +89,12 @@ export const Main = styled.div`
     }
   }
 `;
+
+export const MainHeader = styled.div`
+  display: flex;
+  width: 100%;
+  .right {
+    margin-left: auto;
+    cursor: pointer;
+  }
+`;

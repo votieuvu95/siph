@@ -1,7 +1,7 @@
 import { Button, Form, Input } from "antd";
 import ModalTemplate from "components/ModalTemplate";
 import Select from "components/Select";
-import { Main } from "./styled";
+import { Main, MainHeader } from "./styled";
 import React, {
   useState,
   useImperativeHandle,
@@ -12,6 +12,8 @@ import React, {
 } from "react";
 import { STATUS } from "constants/index";
 import { useDispatch, useSelector } from "react-redux";
+import { CloseOutlined } from "@ant-design/icons";
+
 const ModalTrunk = (props, ref) => {
   const { listGroup } = useSelector((state) => state.trunkManagement);
   const { createOrEdit, getTrunkManagement } = useDispatch().trunkManagement;
@@ -72,8 +74,17 @@ const ModalTrunk = (props, ref) => {
   return (
     <ModalTemplate
       ref={modalTrunkRef}
-      onCancel={onCancel}
-      title={state?.data?.id ? "Cập nhật Trunk" : "Tạo mới Trunk"}
+      title={
+        <MainHeader>
+          <div className="left">
+            {state?.data?.id ? "Cập nhật Trunk" : "Tạo mới Trunk"}
+          </div>
+          <div className="right" onClick={() => onCancel()}>
+            <CloseOutlined />
+          </div>
+        </MainHeader>
+      }
+      closable={false}
       width={600}
     >
       <Main>
@@ -96,9 +107,9 @@ const ModalTrunk = (props, ref) => {
                 message: "Tên trunk không được để trống",
               },
               {
-                max:20,
+                max: 20,
                 message: "Tên trunk nhỏ hơn 20 kí tự",
-              }
+              },
             ]}
           >
             <Input placeholder="Nhập tên trunk"></Input>
@@ -117,7 +128,11 @@ const ModalTrunk = (props, ref) => {
               },
             ]}
           >
-            <Select disabled={state?.data?.id} data={dataGroup} placeholder="Chọn nhà mạng"/>
+            <Select
+              disabled={state?.data?.id}
+              data={dataGroup}
+              placeholder="Chọn nhà mạng"
+            />
           </Form.Item>
           <Form.Item
             label="Địa chỉ IP"
@@ -160,7 +175,7 @@ const ModalTrunk = (props, ref) => {
                 },
               ]}
             >
-              <Select data={STATUS} placeholder="Chọn trạng thái" /> 
+              <Select data={STATUS} placeholder="Chọn trạng thái" />
             </Form.Item>
           )}
         </Form>

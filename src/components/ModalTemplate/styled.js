@@ -49,6 +49,7 @@ export const Modal = styled(MD)`
       font-style: normal;
       font-weight: bold;
       font-size: 20px;
+      width: 100%;
       h2 {
         margin-bottom: 0;
       }

@@ -71,3 +71,12 @@ export const Main = styled.div`
     border: 1px solid #fff !important;
   }
 `;
+
+export const MainHeader = styled.div`
+  display: flex;
+  width: 100%;
+  .right {
+    margin-left: auto;
+    cursor: pointer;
+  }
+`;
