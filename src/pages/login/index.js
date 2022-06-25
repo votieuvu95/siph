@@ -52,7 +52,7 @@ const Login = (props) => {
                     <div className="text-center">
                       <h5 className="text-primary">Welcome Back !</h5>
                       <p className="text-muted">
-                        Sign in to continue to Web MNP.
+                        Sign in to continue to MNP System
                       </p>
                     </div>
                     <Form

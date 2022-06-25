@@ -50,12 +50,9 @@ const KhachHang = () => {
       dataIndex: "index",
       key: "index",
       width: "3%",
+      align: "center",
       render: (item, data, index) => {
-        return (
-          <div className="item__center">
-            {index + 1 + state?.page * state?.size}
-          </div>
-        );
+        return index + 1 + state?.page * state?.size;
       },
     },
     {
@@ -86,7 +83,7 @@ const KhachHang = () => {
       title: "Mô tả",
       dataIndex: "description",
       key: "description",
-      width: "25%",
+      width: "28%",
       render: (item) => <div className="item">{item} </div>,
     },
     {
@@ -94,15 +91,15 @@ const KhachHang = () => {
       dataIndex: "status",
       key: "status",
       width: "7%",
-      render: (item) => (
-        <div className="item__center">{STATUS.find((x) => x.id === item)?.ten}</div>
-      ),
+      align: "center",
+      render: (item) => STATUS.find((x) => x.id === item)?.ten,
     },
     {
       title: "Chức năng",
       dataIndex: "action",
       key: "action",
       width: "7%",
+      align: "center",
       render: (item, data) => {
         return (
           <CellACtion

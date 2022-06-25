@@ -74,10 +74,9 @@ const VirtualRouting = () => {
       dataIndex: "index",
       key: "index",
       width: "3%",
-       render: (item, data, index) => {
-        return (
-          <div className="item__center">{index + 1 + state?.page * state?.size}</div>
-        );
+      align: "center",
+      render: (item, data, index) => {
+        return index + 1 + state?.page * state?.size;
       },
     },
     {
@@ -115,7 +114,7 @@ const VirtualRouting = () => {
       title: "Mobiphone Trunk",
       dataIndex: "vngTrunks",
       key: "vngTrunks",
-      width: "10%",
+      width: "11%",
       render: (item) => {
         let data = (item || []).find((x) => x.groupCode === "22");
         return <a onClick={() => onShowModal(data)}>{data?.trunkName} </a>;
@@ -125,7 +124,7 @@ const VirtualRouting = () => {
       title: "Vinaphone Trunk",
       dataIndex: "vngTrunks",
       key: "vngTrunks",
-      width: "10%",
+      width: "11%",
       render: (item) => {
         let data = (item || []).find((x) => x.groupCode === "33");
         return <a onClick={() => onShowModal(data)}>{data?.trunkName} </a>;
@@ -135,7 +134,7 @@ const VirtualRouting = () => {
       title: "Default Trunk",
       dataIndex: "vngTrunks",
       key: "vngTrunks",
-      width: "10%",
+      width: "11%",
       render: (item) => {
         let data = (item || []).find((x) => x.groupCode === "44");
         return <a onClick={() => onShowModal(data)}>{data?.trunkName} </a>;
@@ -146,15 +145,15 @@ const VirtualRouting = () => {
       dataIndex: "status",
       key: "status",
       width: "7%",
-      render: (item) => (
-        <div className="item__center">{STATUS.find((x) => x.id === item)?.ten}</div>
-      ),
+      align: "center",
+      render: (item) => STATUS.find((x) => x.id === item)?.ten,
     },
     {
       title: "Chức năng",
       dataIndex: "action",
       key: "action",
       width: "7%",
+      align: "center",
       render: (item, data) => {
         return (
           <CellACtion
@@ -231,11 +230,11 @@ const VirtualRouting = () => {
           </Button>
         </div>
       </div>
-        <TableWrapper
-          columns={columns}
-          dataSource={state?.listData}
-          rowKey={(row) => row.vngId}
-        />
+      <TableWrapper
+        columns={columns}
+        dataSource={state?.listData}
+        rowKey={(row) => row.vngId}
+      />
       <Pagination
         onChange={onPageChange}
         current={state?.page + 1}

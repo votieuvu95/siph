@@ -48,48 +48,43 @@ const TrunkManagement = () => {
       dataIndex: "index",
       key: "index",
       width: "3%",
+      align: "center",
       render: (item, data, index) => {
-        return (
-          <div className="item__center">
-            {index + 1 + state?.page * state?.size}
-          </div>
-        );
+        return index + 1 + state?.page * state?.size;
       },
     },
     {
       title: "Tên trunk",
       dataIndex: "trunkName",
       key: "trunkName",
-      width: "30%",
+      width: "32%",
     },
     {
       title: "Nhà mạng",
       dataIndex: "groupName",
       key: "groupName",
-      width: "28%",
+      width: "30%",
     },
     {
       title: "IP:PORT",
       dataIndex: "ip",
       key: "ip",
-      width: "18%",
+      width: "20%",
     },
     {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
       width: "7%",
-      render: (item) => (
-        <div className="item__center">
-          {STATUS.find((x) => x.id === item)?.ten}
-        </div>
-      ),
+      align: "center",
+      render: (item) => STATUS.find((x) => x.id === item)?.ten,
     },
     {
       title: "Chức năng",
       dataIndex: "action",
       key: "action",
       width: "7%",
+      align: "center",
       render: (item, data) => {
         return (
           <CellACtion

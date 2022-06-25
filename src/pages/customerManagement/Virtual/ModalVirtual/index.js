@@ -149,8 +149,8 @@ const ModalVirtual = (props, ref) => {
                 message: "Tên nhóm Virtual không được để trống",
               },
               {
-                max: 20,
-                message: "Tên nhóm Virtual nhỏ hơn 20 kí tự",
+                max: 50,
+                message: "Tên nhóm Virtual nhỏ hơn 50 kí tự",
               },
             ]}
           >

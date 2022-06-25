@@ -65,9 +65,10 @@ const HotlineRouting = () => {
       dataIndex: "index",
       key: "index",
       width: "3%",
+      align: "center",
        render: (item, data, index) => {
         return (
-          <div className="item__center">{index + 1 + state?.page * state?.size}</div>
+          index + 1 + state?.page * state?.size
         );
       },
     },
@@ -75,13 +76,13 @@ const HotlineRouting = () => {
       title: "Tên khách hàng",
       dataIndex: "customerName",
       key: "customerName",
-      width: "25%",
+      width: "27%",
     },
     {
       title: "Tên nhóm hotline",
       dataIndex: "hotlineGroupName",
       key: "hotlineGroupName",
-      width: "25%",
+      width: "29%",
       render: (item, data) => (
         <a
           onClick={() =>
@@ -96,7 +97,7 @@ const HotlineRouting = () => {
       title: "Tên trunk",
       dataIndex: "trunkName",
       key: "trunkName",
-      width: "25%",
+      width: "27%",
       render: (item, data) => {
         let payload = (state?.listTrunkManagement || []).find(
           (x) => x.id == data?.trunkId
@@ -117,8 +118,9 @@ const HotlineRouting = () => {
       dataIndex: "groupStatus",
       key: "groupStatus",
       width: "7%",
+      align: "center",
       render: (item) => (
-        <div className="item__center">{STATUS.find((x) => x.id === item)?.ten}</div>
+        STATUS.find((x) => x.id === item)?.ten
       ),
     },
     {
@@ -126,6 +128,7 @@ const HotlineRouting = () => {
       dataIndex: "action",
       key: "action",
       width: "7%",
+      align: "center",
       render: (item, data) => {
         return (
           <CellACtion

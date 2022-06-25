@@ -48,9 +48,10 @@ const Hotline = () => {
       dataIndex: "index",
       key: "index",
       width: "3%",
+      align: "center",
       render: (item, data, index) => {
         return (
-          <div className="item__center">{index + 1 + state?.page * state?.size}</div>
+          index + 1 + state?.page * state?.size
         );
       },
     },
@@ -65,7 +66,7 @@ const Hotline = () => {
       title: "Tên nhóm Hotline",
       dataIndex: "hotlineGroupName",
       key: "hotlineGroupName",
-      width: "20%",
+      width: "23%",
      
     },
     {
@@ -91,8 +92,9 @@ const Hotline = () => {
       dataIndex: "groupStatus",
       key: "groupStatus",
       width: "7%",
+      align: "center",
       render: (item) => (
-        <div className="item__center">{STATUS.find((x) => x.id === item)?.ten}</div>
+        STATUS.find((x) => x.id === item)?.ten
       ),
     },
     {
@@ -100,6 +102,7 @@ const Hotline = () => {
       dataIndex: "action",
       key: "action",
       width: "7%",
+      align: "center",
       render: (item, data) => {
         return (
           <CellACtion
