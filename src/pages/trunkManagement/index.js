@@ -57,13 +57,13 @@ const TrunkManagement = () => {
       title: "Tên trunk",
       dataIndex: "trunkName",
       key: "trunkName",
-      width: "32%",
+      width: "25%",
     },
     {
       title: "Nhà mạng",
       dataIndex: "groupName",
       key: "groupName",
-      width: "30%",
+      width: "25%",
     },
     {
       title: "IP:PORT",
@@ -75,7 +75,7 @@ const TrunkManagement = () => {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
-      width: "7%",
+      width: "9%",
       align: "center",
       render: (item) => STATUS.find((x) => x.id === item)?.ten,
     },
@@ -83,7 +83,7 @@ const TrunkManagement = () => {
       title: "Chức năng",
       dataIndex: "action",
       key: "action",
-      width: "7%",
+      width: "10%",
       align: "center",
       render: (item, data) => {
         return (
@@ -111,9 +111,8 @@ const TrunkManagement = () => {
     setState({ page: page - 1 });
   };
   const onSizeChange = (size) => {
-    setState({ size: size });
+    setState({ size: size, page: 0 });
   };
-
   const onChange = (e) => {
     let value = e?.target?.value;
     let data = state?.listTrunkManagement?.filter(

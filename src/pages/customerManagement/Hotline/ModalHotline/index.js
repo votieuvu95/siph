@@ -149,8 +149,8 @@ const ModalHotline = (props, ref) => {
                 message: "Tên nhóm Hotline không được để trống",
               },
               {
-                max: 20,
-                message: "Tên nhóm Hotline nhỏ hơn 20 kí tự",
+                max: 50,
+                message: "Tên nhóm Hotline nhỏ hơn 50 kí tự",
               },
             ]}
           >

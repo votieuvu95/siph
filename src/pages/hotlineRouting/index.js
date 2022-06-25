@@ -156,7 +156,7 @@ const HotlineRouting = () => {
     setState({ page: page - 1 });
   };
   const onSizeChange = (size) => {
-    setState({ size: size });
+    setState({ size: size, page : 0 });
   };
   const onChange = (e) => {
     let value = e?.target?.value;
