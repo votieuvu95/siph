@@ -10,12 +10,14 @@ import React, {
   useEffect,
 } from "react";
 import { STATUS } from "constants/index";
-import { useDispatch } from "react-redux";
-import cacheUtils from "utils/cache-utils";
+import { useDispatch, useSelector } from "react-redux";
 import { CloseOutlined } from "@ant-design/icons";
 
 const ModalTrunkHotlineGroup = (props, ref) => {
   const { createOrEditTrunkToHotline, getHotline } = useDispatch().hotline;
+  const { listHotlines } = useSelector((state) => state.hotline);
+  const { listCustomer } = useSelector((state) => state.customer);
+  const { listTrunkManagement } = useSelector((state) => state.trunkManagement);
 
   const [form] = Form.useForm();
   const modalTrunkRef = useRef(null);
@@ -57,7 +59,7 @@ const ModalTrunkHotlineGroup = (props, ref) => {
         };
       }),
     });
-  }, []);
+  }, [listHotlines, listCustomer, listTrunkManagement]);
   const onCancel = () => {
     modalTrunkRef.current && modalTrunkRef.current.hide();
     form.resetFields();
@@ -69,10 +71,8 @@ const ModalTrunkHotlineGroup = (props, ref) => {
       id: state?.data?.hotlineGroupId,
     };
     createOrEditTrunkToHotline(payload).then(() => {
-      getHotline().then(async (s) => {
-        await cacheUtils.save("", "DATA_ALL_HOTLINE", s, false);
-        onCancel();
-      });
+      getHotline();
+      onCancel();
     });
   };
 
@@ -81,25 +81,17 @@ const ModalTrunkHotlineGroup = (props, ref) => {
   };
 
   const onChange = (e) => {
-    async function fetchData() {
-      let listHotlines = await cacheUtils.read(
-        "",
-        "DATA_ALL_HOTLINE",
-        [],
-        false
-      );
-      setState({
-        listHotlines: (listHotlines || [])
-          .filter((x) => x.customerId === e)
-          .map((item) => {
-            return {
-              id: Number(item.hotlineGroupId),
-              ten: item.hotlineGroupName,
-            };
-          }),
-      });
-    }
-    fetchData();
+    let listHotlines = localStorage.getItem("DATA_ALL_HOTLINE");
+    let listData = (JSON.parse(listHotlines) || []).map((item) => {
+      return {
+        id: Number(item.hotlineGroupId),
+        ten: item.hotlineGroupName,
+        customerId: item.customerId,
+      };
+    });
+    setState({
+      listHotlines: (listData || []).filter((x) => x.customerId === e),
+    });
   };
   return (
     <ModalTemplate

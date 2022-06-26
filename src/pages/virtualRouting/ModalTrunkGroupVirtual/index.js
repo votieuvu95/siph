@@ -10,11 +10,15 @@ import React, {
   useEffect,
 } from "react";
 import { STATUS } from "constants/index";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { CloseOutlined } from "@ant-design/icons";
 
 const ModalTrunk = (props, ref) => {
   const { createOrEditToTrunk, getVirtualNumber } = useDispatch().virtualNumber;
+  const { listHotlines } = useSelector((state) => state.hotline);
+  const { listCustomer } = useSelector((state) => state.customer);
+  const { listTrunkManagement } = useSelector((state) => state.trunkManagement);
+  const { listVirtualNumber } = useSelector((state) => state.virtualNumber);
 
   const [form] = Form.useForm();
   const modalTrunkRef = useRef(null);
@@ -81,22 +85,23 @@ const ModalTrunk = (props, ref) => {
         };
       }),
     });
-  }, []);
+  }, [listHotlines, listCustomer, listTrunkManagement, listVirtualNumber]);
   const onCancel = () => {
     modalTrunkRef.current && modalTrunkRef.current.hide();
     form.resetFields();
   };
 
   const onChange = (e) => {
+    let listVirtualNumber = localStorage.getItem("DATA_ALL_VITURALNUMBER");
+    let listData = (JSON.parse(listVirtualNumber) || []).map((item) => {
+      return {
+        id: item.vngId,
+        ten: item.vngName,
+        customerId: item.customerId,
+      };
+    });
     setState({
-      listVirtualNumber: (state?.listVirtualNumber || [])
-        .filter((x) => x.customerId === e)
-        .map((item) => {
-          return {
-            id: item.id,
-            ten: item.ten,
-          };
-        }),
+      listVirtualNumber: (listData || []).filter((x) => x.customerId === e),
     });
     form.setFieldsValue({ virtualGroupId: null });
   };

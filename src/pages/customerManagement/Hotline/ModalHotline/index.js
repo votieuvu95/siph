@@ -11,13 +11,14 @@ import React, {
   useMemo,
 } from "react";
 import { STATUS } from "constants/index";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { CloseOutlined } from "@ant-design/icons";
 
 const { Option } = SelectAntd;
 
 const ModalHotline = (props, ref) => {
   const { createOrEdit, getHotline } = useDispatch().hotline;
+  const { listCustomer } = useSelector((state) => state.customer);
 
   const [form] = Form.useForm();
   const refModal = useRef(null);
@@ -55,7 +56,7 @@ const ModalHotline = (props, ref) => {
         return { id: Number(item.id), ten: item.customerName };
       }),
     });
-  }, []);
+  }, [listCustomer]);
 
   const onCancel = () => {
     setState({ isError: false });

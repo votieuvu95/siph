@@ -11,13 +11,14 @@ import React, {
   useMemo,
 } from "react";
 import { STATUS } from "constants/index";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { CloseOutlined } from "@ant-design/icons";
 
 const { Option } = SelectAntd;
 
 const ModalVirtual = (props, ref) => {
   const { createOrEdit, getVirtualNumber } = useDispatch().virtualNumber;
+  const { listCustomer } = useSelector((state) => state.customer);
 
   const [form] = Form.useForm();
   const refModal = useRef(null);
@@ -58,7 +59,7 @@ const ModalVirtual = (props, ref) => {
         return { id: Number(item.id), ten: item.customerName };
       }),
     });
-  }, []);
+  }, [listCustomer]);
 
   const onHandleSubmit = (values) => {
     const payload = {
