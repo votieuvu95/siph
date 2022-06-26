@@ -88,7 +88,7 @@ const Virtual = () => {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
-      width: "100px",
+      width: "120px",
       align: "center",
       render: (item) => STATUS.find((x) => x.id === item)?.ten,
     },

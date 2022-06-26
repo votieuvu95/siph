@@ -74,7 +74,7 @@ const HotlineRouting = () => {
       title: "Tên khách hàng",
       dataIndex: "customerName",
       key: "customerName",
-      width: "300px",
+      width: "290px",
       render: (item) => <div className="customer">{item}</div>,
     },
     {
@@ -118,7 +118,7 @@ const HotlineRouting = () => {
       title: "Trạng thái",
       dataIndex: "groupStatus",
       key: "groupStatus",
-      width: "130px",
+      width: "132px",
       align: "center",
       render: (item) => STATUS.find((x) => x.id === item)?.ten,
     },
@@ -126,7 +126,7 @@ const HotlineRouting = () => {
       title: "Chức năng",
       dataIndex: "action",
       key: "action",
-      width: "140px",
+      width: "132px",
       align: "center",
       render: (item, data) => {
         return (

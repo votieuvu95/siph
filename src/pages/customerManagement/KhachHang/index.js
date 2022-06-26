@@ -84,14 +84,14 @@ const KhachHang = () => {
       title: "Mô tả",
       dataIndex: "description",
       key: "description",
-      width: "320px",
+      width: "340px",
       render: (item) => <div className="item">{item} </div>,
     },
     {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
-      width: "130px",
+      width: "160px",
       align: "center",
       render: (item) => STATUS.find((x) => x.id === item)?.ten,
     },
@@ -99,7 +99,7 @@ const KhachHang = () => {
       title: "Chức năng",
       dataIndex: "action",
       key: "action",
-      width: "150px",
+      width: "160px",
       align: "center",
       render: (item, data) => {
         return (

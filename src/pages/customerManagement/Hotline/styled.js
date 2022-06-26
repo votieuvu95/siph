@@ -55,10 +55,10 @@ export const Main = styled.div`
     white-space: nowrap;
     text-overflow: ellipsis;
     @media (min-width: 1368px) {
-      width: 320px;
+      width: 341px;
     }
     @media (min-width: 1600px) {
-      width: 400px;
+      width: 410px;
     }
     @media (min-width: 1920px) {
       width: 520px;
@@ -66,18 +66,17 @@ export const Main = styled.div`
   }
 
   .customer {
-    width: 200px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     @media (min-width: 1368px) {
-      width: 150px;
+      width: 160px;
     }
     @media (min-width: 1600px) {
-      width: 230px;
+      width: 256px;
     }
     @media (min-width: 1920px) {
-      width: 350px;
+      width: 367px;
     }
   }
 `;

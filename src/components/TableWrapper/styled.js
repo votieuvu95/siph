@@ -27,7 +27,11 @@ export const Main = styled.div`
                 }
                 th.ant-table-cell {
                   border-right: 1px solid #e0e0e0;
+                  padding: 8px !important;
                 }
+              }
+              .ant-table-cell {
+                padding: 12px !important;
               }
             }
           }

@@ -55,28 +55,27 @@ export const Main = styled.div`
     white-space: nowrap;
     text-overflow: ellipsis;
     @media (min-width: 1368px) {
-      width: 260px;
+      width: 250px;
     }
     @media (min-width: 1600px) {
-      width: 350px;
+      width: 360px;
     }
     @media (min-width: 1920px) {
-      width: 450px;
+      width: 460px;
     }
   }
   .customer {
-    width: 200px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     @media (min-width: 1368px) {
-      width: 100px;
+      width: 140px;
     }
     @media (min-width: 1600px) {
-      width: 200px;
+      width: 202px;
     }
     @media (min-width: 1920px) {
-      width: 300px;
+      width: 333px;
     }
   }
 `;

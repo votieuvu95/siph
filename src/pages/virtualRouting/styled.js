@@ -61,7 +61,7 @@ export const Main = styled.div`
       width: 400px;
     }
     @media (min-width: 1920px) {
-      width: 520px;
+      width: 560px;
     }
   }
 
@@ -74,10 +74,10 @@ export const Main = styled.div`
       width: 120px;
     }
     @media (min-width: 1600px) {
-      width: 170px;
+      width: 180px;
     }
     @media (min-width: 1920px) {
-      width: 300px;
+      width: 370px;
     }
   }
 `;

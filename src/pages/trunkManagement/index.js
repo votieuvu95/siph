@@ -47,7 +47,7 @@ const TrunkManagement = () => {
       title: "STT",
       dataIndex: "index",
       key: "index",
-      width: "3%",
+      width: "40px",
       align: "center",
       render: (item, data, index) => {
         return index + 1 + state?.page * state?.size;
@@ -57,26 +57,28 @@ const TrunkManagement = () => {
       title: "Tên trunk",
       dataIndex: "trunkName",
       key: "trunkName",
-      width: "25%",
+      width: "300px",
+      render:(item) => <div className="item">{item}</div>
     },
     {
       title: "Nhà mạng",
       dataIndex: "groupName",
       key: "groupName",
-      width: "25%",
+      width: "300px",
+      render:(item) => <div className="item">{item}</div>
     },
     {
       title: "IP:PORT",
       dataIndex: "ip",
       key: "ip",
-      width: "20%",
+      width: "200px",
       render: (item, data) => `${data.ip}:${data.port}` 
     },
     {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
-      width: "9%",
+      width: "120px",
       align: "center",
       render: (item) => STATUS.find((x) => x.id === item)?.ten,
     },
@@ -84,7 +86,7 @@ const TrunkManagement = () => {
       title: "Chức năng",
       dataIndex: "action",
       key: "action",
-      width: "10%",
+      width: "120px",
       align: "center",
       render: (item, data) => {
         return (

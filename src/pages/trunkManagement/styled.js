@@ -67,10 +67,14 @@ export const Main = styled.div`
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    &__center {
-      justify-content: center;
-      align-items: center;
-      display: flex;
+    @media (min-width: 1368px) {
+      width: 250px;
+    }
+    @media (min-width: 1600px) {
+      width: 370px;
+    }
+    @media (min-width: 1920px) {
+      width: 540px;
     }
   }
 `;

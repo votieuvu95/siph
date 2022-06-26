@@ -51,18 +51,17 @@ export const Main = styled.div`
     }
   }
   .customer {
-    width: 200px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     @media (min-width: 1368px) {
-      width: 200px;
+      width: 220px;
     }
     @media (min-width: 1600px) {
       width: 350px;
     }
     @media (min-width: 1920px) {
-      width: 480px;
+      width: 530px;
     }
   }
 `;
