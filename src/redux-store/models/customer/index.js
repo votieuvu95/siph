@@ -16,10 +16,6 @@ export default {
       customerProvider
         .search()
         .then((s) => {
-          localStorage.setItem(
-            "DATA_ALL_CUSTOMER",
-            JSON.stringify(s?.customers)
-          );
           dispatch.customer.updateData({
             listCustomer: s?.customers,
           });

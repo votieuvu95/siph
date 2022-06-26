@@ -21,22 +21,8 @@ const Virtual = () => {
     }));
   };
   useEffect(() => {
-    let listVirtualNumber = localStorage.getItem("DATA_ALL_VITURALNUMBER");
-    if (!listVirtualNumber) {
-      getVirtualNumber();
-    } else {
-      setState({
-        listVirtualNumber: JSON.parse(listVirtualNumber),
-      });
-    }
+    getVirtualNumber();
   }, []);
-
-  useEffect(() => {
-    let listVirtualNumber = localStorage.getItem("DATA_ALL_VITURALNUMBER");
-    setState({
-      listVirtualNumber: JSON.parse(listVirtualNumber),
-    });
-  }, [listVirtualNumber]);
 
   const handleEdit = (data) => {
     modalVirtualkRef.current && modalVirtualkRef.current.show(data);
@@ -111,15 +97,15 @@ const Virtual = () => {
   ];
 
   useEffect(() => {
-    if (state?.listVirtualNumber?.length)
+    if (listVirtualNumber?.length)
       setState({
-        listData: state?.listVirtualNumber.slice(
+        listData: listVirtualNumber.slice(
           state.page * state?.size,
           (state.page + 1) * state?.size
         ),
-        totalElements: state?.listVirtualNumber?.length,
+        totalElements: listVirtualNumber?.length,
       });
-  }, [state?.listVirtualNumber, state?.page, state?.size]);
+  }, [listVirtualNumber, state?.page, state?.size]);
   const onPageChange = (page) => {
     setState({ page: page - 1 });
   };
@@ -129,7 +115,7 @@ const Virtual = () => {
 
   const onChange = (e) => {
     let value = e?.target?.value;
-    let data = state?.listVirtualNumber.filter(
+    let data = listVirtualNumber.filter(
       (item) =>
         item.customerName.toLowerCase().includes(value.trim().toLowerCase()) ||
         (item?.virtualNumbers || [])

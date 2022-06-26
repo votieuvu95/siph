@@ -15,6 +15,10 @@ import { CloseOutlined } from "@ant-design/icons";
 
 const ModalTrunk = (props, ref) => {
   const { createOrEditToTrunk, getVirtualNumber } = useDispatch().virtualNumber;
+  const { getHotline } = useDispatch().hotline;
+  const { getCustomer } = useDispatch().customer;
+  const { getTrunkManagement } = useDispatch().trunkManagement;
+
   const { listHotlines } = useSelector((state) => state.hotline);
   const { listCustomer } = useSelector((state) => state.customer);
   const { listTrunkManagement } = useSelector((state) => state.trunkManagement);
@@ -52,32 +56,31 @@ const ModalTrunk = (props, ref) => {
       modalTrunkRef.current && modalTrunkRef.current.show();
     },
   }));
-
   useEffect(() => {
-    let listCustomer = localStorage.getItem("DATA_ALL_CUSTOMER");
-    let listTrunkManagement = localStorage.getItem("DATA_ALL_TRUNK_MANAGEMENT");
-    let listHotlines = localStorage.getItem("DATA_ALL_HOTLINE");
-    let listVirtualNumber = localStorage.getItem("DATA_ALL_VITURALNUMBER");
+    getCustomer();
+    getHotline();
+    getTrunkManagement();
+    getVirtualNumber();
+  }, []);
+  useEffect(() => {
     setState({
-      listCustomer: (JSON.parse(listCustomer) || []).map((item) => {
+      listCustomer: (listCustomer || []).map((item) => {
         return { id: Number(item.id), ten: item.customerName };
       }),
-      listTrunkManagement: (JSON.parse(listTrunkManagement) || []).map(
-        (item) => {
-          return {
-            id: Number(item.id),
-            ten: item.trunkName,
-            groupCode: item.groupCode,
-          };
-        }
-      ),
-      listHotlines: (JSON.parse(listHotlines) || []).map((item) => {
+      listTrunkManagement: (listTrunkManagement || []).map((item) => {
+        return {
+          id: Number(item.id),
+          ten: item.trunkName,
+          groupCode: item.groupCode,
+        };
+      }),
+      listHotlines: (listHotlines || []).map((item) => {
         return {
           id: item.hotlineGroupId,
           ten: item.hotlineGroupName,
         };
       }),
-      listVirtualNumber: (JSON.parse(listVirtualNumber) || []).map((item) => {
+      listVirtualNumber: (listVirtualNumber || []).map((item) => {
         return {
           id: item.vngId,
           ten: item.vngName,
@@ -92,8 +95,7 @@ const ModalTrunk = (props, ref) => {
   };
 
   const onChange = (e) => {
-    let listVirtualNumber = localStorage.getItem("DATA_ALL_VITURALNUMBER");
-    let listData = (JSON.parse(listVirtualNumber) || []).map((item) => {
+    let listData = (listVirtualNumber|| []).map((item) => {
       return {
         id: item.vngId,
         ten: item.vngName,

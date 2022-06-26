@@ -22,10 +22,6 @@ export default {
               listHotlines: s?.hotlineGroups,
             });
             resolve(s?.hotlineGroups);
-            localStorage.setItem(
-              "DATA_ALL_HOTLINE",
-              JSON.stringify(s?.hotlineGroups)
-            );
           })
           .catch((e) => {
             message.error(e?.message || "Đăng nhập không thành công");

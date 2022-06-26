@@ -18,6 +18,8 @@ const ModalTrunkHotlineGroup = (props, ref) => {
   const { listHotlines } = useSelector((state) => state.hotline);
   const { listCustomer } = useSelector((state) => state.customer);
   const { listTrunkManagement } = useSelector((state) => state.trunkManagement);
+  const { getTrunkManagement } = useDispatch().trunkManagement;
+  const { getCustomer } = useDispatch().customer;
 
   const [form] = Form.useForm();
   const modalTrunkRef = useRef(null);
@@ -40,19 +42,20 @@ const ModalTrunkHotlineGroup = (props, ref) => {
   }));
 
   useEffect(() => {
-    let listCustomer = localStorage.getItem("DATA_ALL_CUSTOMER");
-    let listTrunkManagement = localStorage.getItem("DATA_ALL_TRUNK_MANAGEMENT");
-    let listHotlines = localStorage.getItem("DATA_ALL_HOTLINE");
+    getHotline();
+    getTrunkManagement();
+    getCustomer();
+  }, []);
+
+  useEffect(() => {
     setState({
-      listCustomer: (JSON.parse(listCustomer) || []).map((item) => {
+      listCustomer: (listCustomer || []).map((item) => {
         return { id: Number(item.id), ten: item.customerName };
       }),
-      listTrunkManagement: (JSON.parse(listTrunkManagement) || []).map(
-        (item) => {
-          return { id: Number(item.id), ten: item.trunkName };
-        }
-      ),
-      listHotlines: (JSON.parse(listHotlines) || []).map((item) => {
+      listTrunkManagement: (listTrunkManagement || []).map((item) => {
+        return { id: Number(item.id), ten: item.trunkName };
+      }),
+      listHotlines: (listHotlines || []).map((item) => {
         return {
           id: item.hotlineGroupId,
           ten: item.hotlineGroupName,
@@ -81,8 +84,7 @@ const ModalTrunkHotlineGroup = (props, ref) => {
   };
 
   const onChange = (e) => {
-    let listHotlines = localStorage.getItem("DATA_ALL_HOTLINE");
-    let listData = (JSON.parse(listHotlines) || []).map((item) => {
+    let listData = (listHotlines || []).map((item) => {
       return {
         id: Number(item.hotlineGroupId),
         ten: item.hotlineGroupName,

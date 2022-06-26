@@ -16,7 +16,8 @@ import { CloseOutlined } from "@ant-design/icons";
 
 const ModalTrunk = (props, ref) => {
   const { listGroup } = useSelector((state) => state.trunkManagement);
-  const { createOrEdit, getTrunkManagement } = useDispatch().trunkManagement;
+  const { createOrEdit, getTrunkManagement, searchGroup } =
+    useDispatch().trunkManagement;
 
   const [form] = Form.useForm();
   const modalTrunkRef = useRef(null);
@@ -38,19 +39,18 @@ const ModalTrunk = (props, ref) => {
     },
   }));
   useEffect(() => {
-    let listGroup = localStorage.getItem("DATA_ALL_GROUPS");
-    setState({ listGroup: JSON.parse(listGroup) });
-  }, [listGroup]);
+    searchGroup();
+  }, []);
   const onCancel = () => {
     modalTrunkRef.current && modalTrunkRef.current.hide();
     form.resetFields();
   };
 
   const dataGroup = useMemo(() => {
-    return (state?.listGroup || []).map((item) => {
+    return (listGroup || []).map((item) => {
       return { id: item.groupCode, ten: item.groupName };
     });
-  }, [state?.listGroup]);
+  }, [listGroup]);
 
   const onHandleSubmit = (values) => {
     const { trunkName, port, ip, groupCode } = values;

@@ -14,6 +14,7 @@ const TrunkManagement = () => {
   const modalTrunkRef = useRef(null);
   const { listTrunkManagement } = useSelector((state) => state.trunkManagement);
   const { getTrunkManagement } = useDispatch().trunkManagement;
+
   const [state, _setState] = useState({ page: 0, size: 10, totalElements: 0 });
   const setState = (data = {}) => {
     _setState((_state) => ({
@@ -22,22 +23,8 @@ const TrunkManagement = () => {
     }));
   };
   useEffect(() => {
-    let listTrunkManagement = localStorage.getItem("DATA_ALL_TRUNK_MANAGEMENT");
-    if (!listTrunkManagement) {
-      getTrunkManagement();
-    } else {
-      setState({
-        listTrunkManagement: JSON.parse(listTrunkManagement),
-      });
-    }
+    getTrunkManagement();
   }, []);
-
-  useEffect(() => {
-    let listTrunkManagement = localStorage.getItem("DATA_ALL_TRUNK_MANAGEMENT");
-    setState({
-      listTrunkManagement: JSON.parse(listTrunkManagement),
-    });
-  }, [listTrunkManagement]);
 
   const handleEdit = (data) => {
     modalTrunkRef.current && modalTrunkRef.current.show(data);
@@ -101,15 +88,15 @@ const TrunkManagement = () => {
   ];
 
   useEffect(() => {
-    if (state?.listTrunkManagement?.length)
+    if (listTrunkManagement?.length)
       setState({
-        listData: state?.listTrunkManagement.slice(
+        listData: listTrunkManagement.slice(
           state.page * state?.size,
           (state.page + 1) * state?.size
         ),
-        totalElements: state?.listTrunkManagement?.length,
+        totalElements: listTrunkManagement?.length,
       });
-  }, [state?.listTrunkManagement, state?.page, state?.size]);
+  }, [listTrunkManagement, state?.page, state?.size]);
   const onPageChange = (page) => {
     setState({ page: page - 1 });
   };
@@ -118,7 +105,7 @@ const TrunkManagement = () => {
   };
   const onChange = (e) => {
     let value = e?.target?.value;
-    let data = state?.listTrunkManagement?.filter(
+    let data = listTrunkManagement?.filter(
       (item) =>
         item.trunkName.toLowerCase().includes(value.trim().toLowerCase()) ||
         item.groupName.toLowerCase().includes(value.trim().toLowerCase()) ||

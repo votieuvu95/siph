@@ -19,10 +19,6 @@ export default {
           dispatch.virtualNumber.updateData({
             listVirtualNumber: s?.virtualNumberGroups,
           });
-          localStorage.setItem(
-            "DATA_ALL_VITURALNUMBER",
-            JSON.stringify(s?.virtualNumberGroups)
-          );
         })
         .catch((e) => {
           message.error(e?.message || "Đăng nhập không thành công");

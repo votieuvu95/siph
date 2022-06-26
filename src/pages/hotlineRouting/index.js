@@ -28,33 +28,15 @@ const HotlineRouting = () => {
   };
 
   useEffect(() => {
-    let listHotlines = localStorage.getItem("DATA_ALL_HOTLINE");
-    let listTrunkManagement = localStorage.getItem("DATA_ALL_TRUNK_MANAGEMENT");
-    if (!listHotlines) {
-      getHotline();
-    }
-    if (!listTrunkManagement) {
-      getTrunkManagement();
-    }
-    setState({
-      listHotlines: (JSON.parse(listHotlines) || []).filter(
-        (item) => item.trunkName
-      ),
-      listTrunkManagement: JSON.parse(listTrunkManagement),
-    });
+    getTrunkManagement();
+    getHotline();
   }, []);
 
   useEffect(() => {
-    let listHotlines = localStorage.getItem("DATA_ALL_HOTLINE");
-    let listTrunkManagement = localStorage.getItem("DATA_ALL_TRUNK_MANAGEMENT");
-
     setState({
-      listHotlines: (JSON.parse(listHotlines) || []).filter(
-        (item) => item.trunkName
-      ),
-      listTrunkManagement: JSON.parse(listTrunkManagement),
+      listHotlines: (listHotlines || []).filter((item) => item.trunkName),
     });
-  }, [listHotlines, listTrunkManagement]);
+  }, [listHotlines]);
 
   const handleEdit = (data) => {
     modalTrunkHotlineRef.current && modalTrunkHotlineRef.current.show(data);
@@ -100,7 +82,7 @@ const HotlineRouting = () => {
       key: "trunkName",
       width: "300px",
       render: (item, data) => {
-        let payload = (state?.listTrunkManagement || []).find(
+        let payload = (listTrunkManagement || []).find(
           (x) => x.id == data?.trunkId
         );
         return (

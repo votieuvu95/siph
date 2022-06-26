@@ -19,6 +19,7 @@ const { Option } = SelectAntd;
 const ModalVirtual = (props, ref) => {
   const { createOrEdit, getVirtualNumber } = useDispatch().virtualNumber;
   const { listCustomer } = useSelector((state) => state.customer);
+  const { getCustomer } = useDispatch().customer;
 
   const [form] = Form.useForm();
   const refModal = useRef(null);
@@ -53,9 +54,11 @@ const ModalVirtual = (props, ref) => {
   };
 
   useEffect(() => {
-    let listDataCustomer = localStorage.getItem("DATA_ALL_CUSTOMER");
+    getCustomer();
+  }, []);
+  useEffect(() => {
     setState({
-      listDataCustomer: (JSON.parse(listDataCustomer) || []).map((item) => {
+      listDataCustomer: (listCustomer || []).map((item) => {
         return { id: Number(item.id), ten: item.customerName };
       }),
     });

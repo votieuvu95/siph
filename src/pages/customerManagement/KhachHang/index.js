@@ -24,22 +24,8 @@ const KhachHang = () => {
   };
 
   useEffect(() => {
-    let listCustomer = localStorage.getItem("DATA_ALL_CUSTOMER");
-    if (!listCustomer) {
-      getCustomer();
-    } else {
-      setState({
-        listCustomer: JSON.parse(listCustomer),
-      });
-    }
+    getCustomer();
   }, []);
-
-  useEffect(() => {
-    let listCustomer = localStorage.getItem("DATA_ALL_CUSTOMER");
-    setState({
-      listCustomer: JSON.parse(listCustomer),
-    });
-  }, [listCustomer]);
 
   const handleEdit = (data) => {
     modalKhachHangRef.current && modalKhachHangRef.current.show(data);
@@ -114,15 +100,15 @@ const KhachHang = () => {
   ];
 
   useEffect(() => {
-    if (state?.listCustomer?.length)
+    if (listCustomer?.length)
       setState({
-        listData: state?.listCustomer.slice(
+        listData: listCustomer.slice(
           state.page * state?.size,
           (state.page + 1) * state?.size
         ),
-        totalElements: state?.listCustomer?.length,
+        totalElements: listCustomer?.length,
       });
-  }, [state?.listCustomer, state?.page, state?.size]);
+  }, [listCustomer, state?.page, state?.size]);
   const onPageChange = (page) => {
     setState({ page: page - 1 });
   };
@@ -132,7 +118,7 @@ const KhachHang = () => {
 
   const onChange = (e) => {
     let value = e?.target?.value;
-    let data = state?.listCustomer.filter((item) =>
+    let data = listCustomer.filter((item) =>
       item.customerName.toLowerCase().includes(value.trim().toLowerCase())
     );
     setState({

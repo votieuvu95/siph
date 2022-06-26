@@ -22,22 +22,9 @@ const Hotline = () => {
     }));
   };
   useEffect(() => {
-    let listHotlines = localStorage.getItem("DATA_ALL_HOTLINE");
-    if (!listHotlines) {
-      getHotline();
-    } else {
-      setState({
-        listHotlines: JSON.parse(listHotlines),
-      });
-    }
+    getHotline();
   }, []);
 
-  useEffect(() => {
-    let listHotlines = localStorage.getItem("DATA_ALL_HOTLINE");
-    setState({
-      listHotlines: JSON.parse(listHotlines),
-    });
-  }, [listHotlines]);
 
   const handleEdit = (data) => {
     modalHotlineRef.current && modalHotlineRef.current.show(data);
@@ -117,15 +104,15 @@ const Hotline = () => {
   ];
 
   useEffect(() => {
-    if (state?.listHotlines?.length)
+    if (listHotlines?.length)
       setState({
-        listData: state?.listHotlines.slice(
+        listData: listHotlines.slice(
           state.page * state?.size,
           (state.page + 1) * state?.size
         ),
-        totalElements: state?.listHotlines?.length,
+        totalElements: listHotlines?.length,
       });
-  }, [state?.listHotlines, state?.page, state?.size]);
+  }, [listHotlines, state?.page, state?.size]);
   const onPageChange = (page) => {
     setState({ page: page - 1 });
   };
@@ -135,7 +122,7 @@ const Hotline = () => {
 
   const onChange = (e) => {
     let value = e?.target?.value;
-    let data = state?.listHotlines.filter(
+    let data = listHotlines.filter(
       (item) =>
         item.customerName.toLowerCase().includes(value.trim().toLowerCase()) ||
         (item?.hotlines || [])

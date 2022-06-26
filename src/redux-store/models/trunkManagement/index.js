@@ -19,7 +19,6 @@ export default {
           dispatch.trunkManagement.updateData({
             listTrunkManagement: s?.groupIps,
           });
-          localStorage.setItem("DATA_ALL_TRUNK_MANAGEMENT", JSON.stringify(s?.groupIps));
         })
         .catch((e) => {
           message.error(e?.message || "Đăng nhập không thành công");
@@ -32,8 +31,6 @@ export default {
           dispatch.trunkManagement.updateData({
             listGroup: s?.groups,
           });
-          localStorage.setItem("DATA_ALL_GROUPS", JSON.stringify(s?.groups));
-
         })
         .catch((e) => {
           message.error(e?.message || "Đăng nhập không thành công");

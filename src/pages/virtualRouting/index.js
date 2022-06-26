@@ -30,32 +30,17 @@ const VirtualRouting = () => {
   };
 
   useEffect(() => {
-    let listVirtualNumber = localStorage.getItem("DATA_ALL_VITURALNUMBER");
-    let listTrunkManagement = localStorage.getItem("DATA_ALL_TRUNK_MANAGEMENT");
-    if (!listTrunkManagement) {
-      getTrunkManagement();
-    }
-    if (!listVirtualNumber) {
-      getVirtualNumber();
-    }
-    setState({
-      listVirtualNumber: (JSON.parse(listVirtualNumber) || []).filter(
-        (item) => item.vngTrunks.length
-      ),
-      listTrunkManagement: JSON.parse(listTrunkManagement),
-    });
+    getVirtualNumber();
+    getTrunkManagement();
   }, []);
 
   useEffect(() => {
-    let listVirtualNumber = localStorage.getItem("DATA_ALL_VITURALNUMBER");
-    let listTrunkManagement = localStorage.getItem("DATA_ALL_TRUNK_MANAGEMENT");
     setState({
-      listVirtualNumber: (JSON.parse(listVirtualNumber) || []).filter(
+      listVirtualNumber: (listVirtualNumber || []).filter(
         (item) => item.vngTrunks.length
       ),
-      listTrunkManagement: JSON.parse(listTrunkManagement),
     });
-  }, [listTrunkManagement, listVirtualNumber]);
+  }, [listVirtualNumber]);
 
   const handleEdit = (data) => {
     modalTrunkGroupVirtualRef.current &&
@@ -63,9 +48,7 @@ const VirtualRouting = () => {
   };
 
   const onShowModal = (item) => {
-    let data = (state?.listTrunkManagement || []).find(
-      (x) => x.id == item?.trunkId
-    );
+    let data = (listTrunkManagement || []).find((x) => x.id == item?.trunkId);
     modalTrunkRef.current && modalTrunkRef.current.show(data);
   };
   const columns = [
