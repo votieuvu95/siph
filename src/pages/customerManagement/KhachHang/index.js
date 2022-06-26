@@ -49,7 +49,7 @@ const KhachHang = () => {
       title: "STT",
       dataIndex: "index",
       key: "index",
-      width: "3%",
+      width: "40px",
       align: "center",
       render: (item, data, index) => {
         return index + 1 + state?.page * state?.size;
@@ -59,13 +59,14 @@ const KhachHang = () => {
       title: "Tên khách hàng",
       dataIndex: "customerName",
       key: "customerName",
-      width: "20%",
+      width: "200px",
+      render: (item) => <div className="customer">{item}</div>,
     },
     {
       title: "IP",
       dataIndex: "wlIps",
       key: "wlIps",
-      width: "35%",
+      width: "330px",
       render: (item) => {
         return (
           <div className="item">
@@ -83,14 +84,14 @@ const KhachHang = () => {
       title: "Mô tả",
       dataIndex: "description",
       key: "description",
-      width: "28%",
+      width: "320px",
       render: (item) => <div className="item">{item} </div>,
     },
     {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
-      width: "7%",
+      width: "130px",
       align: "center",
       render: (item) => STATUS.find((x) => x.id === item)?.ten,
     },
@@ -98,7 +99,7 @@ const KhachHang = () => {
       title: "Chức năng",
       dataIndex: "action",
       key: "action",
-      width: "7%",
+      width: "150px",
       align: "center",
       render: (item, data) => {
         return (
@@ -126,7 +127,7 @@ const KhachHang = () => {
     setState({ page: page - 1 });
   };
   const onSizeChange = (size) => {
-    setState({ size: size, page : 0 });
+    setState({ size: size, page: 0 });
   };
 
   const onChange = (e) => {

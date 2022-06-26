@@ -51,10 +51,33 @@ export const Main = styled.div`
     }
   }
   .item {
-    &__center {
-      justify-content: center;
-      align-items: center;
-      display: flex;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    @media (min-width: 1368px) {
+      width: 320px;
+    }
+    @media (min-width: 1600px) {
+      width: 400px;
+    }
+    @media (min-width: 1920px) {
+      width: 520px;
+    }
+  }
+
+  .customer {
+    width: 200px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    @media (min-width: 1368px) {
+      width: 120px;
+    }
+    @media (min-width: 1600px) {
+      width: 170px;
+    }
+    @media (min-width: 1920px) {
+      width: 300px;
     }
   }
 `;

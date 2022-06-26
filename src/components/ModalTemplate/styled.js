@@ -1,6 +1,5 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { Modal as MD } from "antd";
-
 export const Main = styled.div`
   background: #ffffff;
   border-radius: 16px;
@@ -25,7 +24,14 @@ export const Modal = styled(MD)`
   margin-top: -60px;
   .ant-modal-content {
     /* shadow-khung */
-
+    ${(props) =>
+      props.virtual
+        ? css`
+            @media (max-width: 1600px) {
+              margin-top: -35px;
+            }
+          `
+        : css``}
     box-shadow: 0px 0px 15px rgba(9, 30, 66, 0.07);
     border-radius: 8px;
     overflow: hidden;
@@ -41,7 +47,7 @@ export const Modal = styled(MD)`
     display: flex;
     align-items: center;
     padding: 0 16px;
-    height: 80px;
+    height: 70px;
     display: flex;
     align-items: center;
     .title {
@@ -61,6 +67,6 @@ export const Modal = styled(MD)`
     display: flex;
   }
   .ant-modal-body {
-    padding: 48px !important;
+    padding: 10px 48px 20px 48px !important;
   }
 `;

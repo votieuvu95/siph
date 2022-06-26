@@ -119,6 +119,7 @@ const ModalTrunk = (props, ref) => {
   return (
     <ModalTemplate
       ref={modalTrunkRef}
+      virtual={state.data?.vngTrunks ? true : false}
       title={
         <MainHeader>
           <div className="left">
@@ -155,7 +156,7 @@ const ModalTrunk = (props, ref) => {
               data={state?.listCustomer}
               onChange={onChange}
               placeholder="Chọn khách hàng"
-              disabled={state?.data}
+              disabled={state?.data?.vngTrunks}
             ></Select>
           </Form.Item>
           <Form.Item
@@ -169,7 +170,7 @@ const ModalTrunk = (props, ref) => {
             ]}
           >
             <Select
-              disabled={state?.data}
+              disabled={state?.data?.vngTrunks}
               data={state?.listVirtualNumber}
               placeholder="Chọn nhóm virtual"
             />

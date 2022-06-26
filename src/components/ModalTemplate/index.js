@@ -1,7 +1,7 @@
 import React, { forwardRef, useImperativeHandle, useState } from "react";
 import { Main, Modal } from "./styled";
 const ModalTemplate = (
-  { children, title, width = 12000, closable = true, ...props },
+  { children, title, width = 12000, closable = true, virtual = false, ...props },
   ref
 ) => {
   const [state, _setState] = useState({});
@@ -36,6 +36,7 @@ const ModalTemplate = (
       footer={null}
       closable={closable}
       width={width}
+      virtual={virtual}
       title={
         <div className="title">
           <h2>

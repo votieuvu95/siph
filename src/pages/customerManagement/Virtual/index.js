@@ -46,7 +46,7 @@ const Virtual = () => {
       title: "STT",
       dataIndex: "index",
       key: "index",
-      width: "3%",
+      width: "40px",
       align: "center",
       render: (item, data, index) => {
         return index + 1 + state?.page * state?.size;
@@ -56,19 +56,21 @@ const Virtual = () => {
       title: "Tên khách hàng",
       dataIndex: "customerName",
       key: "customerName",
-      width: "20%",
+      width: "200px",
+      render:(item) => <div className="customer">{item}</div>
     },
     {
       title: "Tên nhóm Virtual",
       dataIndex: "vngName",
       key: "vngName",
-      width: "23%",
+      width: "200px",
+      render:(item) => <div className="customer">{item}</div>
     },
     {
       title: "Số Virtual",
       dataIndex: "virtualNumbers",
       key: "virtualNumbers",
-      width: "40%",
+      width: "350px",
       render: (item) => {
         return (
           <div className="item">
@@ -86,7 +88,7 @@ const Virtual = () => {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
-      width: "7%",
+      width: "100px",
       align: "center",
       render: (item) => STATUS.find((x) => x.id === item)?.ten,
     },
@@ -94,7 +96,7 @@ const Virtual = () => {
       title: "Chức năng",
       dataIndex: "action",
       key: "action",
-      width: "7%",
+      width: "120px",
       align: "center",
       render: (item, data) => {
         return (

@@ -26,15 +26,18 @@ export const Main = styled.div`
         }
       }
     }
+    .ant-form-item {
+      margin-bottom: 10px;
+    }
     .ant-input {
-      min-height: 48px;
+      min-height: 46px;
       font-size: 16px;
     }
     .ant-select-selector {
-      min-height: 48px;
+      min-height: 46px;
       .ant-select-selection-search {
         input {
-          min-height: 48px;
+          min-height: 46px;
           font-size: 16px;
           display: flex;
     align-items: center;
@@ -48,7 +51,7 @@ export const Main = styled.div`
     }
   }
   .button-create {
-    min-height: 48px;
+    min-height: 46px;
     border-radius: 20px;
     width: 100%;
     background: linear-gradient(270deg, #2f80ed, #a1e1f7);
@@ -57,7 +60,7 @@ export const Main = styled.div`
     margin-top: 20px;
   }
   .button-update {
-    min-height: 48px;
+    min-height: 46px;
     border-radius: 20px;
     width: 100%;
     background: linear-gradient(270deg, #f0f797, #ff9d22);

@@ -164,7 +164,6 @@ export default {
                   });
               });
             });
-            debugger
             const data = new Promise((resolve, reject) => {
               return virtualNumberProvider
                 .put({

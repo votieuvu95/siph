@@ -27,15 +27,15 @@ export const Main = styled.div`
       }
     }
     .ant-form-item {
-      padding: 0 0 24px !important;
+      padding: 0 0 14px !important;
       margin: 0px !important;
     }
     .ant-input {
-      min-height: 48px;
+      min-height: 46px;
       font-size: 16px;
     }
     .ant-select-selector {
-      min-height: 48px;
+      min-height: 46px;
       line-height: 50px;
       & .ant-select-selection-item {
         font-size: 16px;
@@ -43,7 +43,7 @@ export const Main = styled.div`
       }
       .ant-select-selection-search {
         input {
-          min-height: 48px;
+          min-height: 46px;
           font-size: 16px;
           display: flex;
           align-items: center;
@@ -59,7 +59,7 @@ export const Main = styled.div`
     }
   }
   .button-create {
-    min-height: 48px;
+    min-height: 46px;
     border-radius: 20px;
     width: 100%;
     background: linear-gradient(270deg, #2f80ed, #a1e1f7);
@@ -68,7 +68,7 @@ export const Main = styled.div`
     margin-top: 20px;
   }
   .button-update {
-    min-height: 48px;
+    min-height: 46px;
     border-radius: 20px;
     width: 100%;
     background: linear-gradient(270deg, #f0f797, #ff9d22);
@@ -81,7 +81,7 @@ export const Main = styled.div`
   }
   .error {
     color: #ff4d4f;
-    margin-top: -24px;
+    margin-top: -14px;
   }
   .select-error {
     .ant-select-selector {

@@ -10,10 +10,12 @@ import React, {
 } from "react";
 import { useDispatch } from "react-redux";
 import { CloseOutlined } from "@ant-design/icons";
-
+const { TextArea } = Input;
 const { Option } = SelectAntd;
 const ModalKhachHang = (props, ref) => {
   const { createOrEdit, getCustomer } = useDispatch().customer;
+  const { getHotline } = useDispatch().hotline;
+  const { getVirtualNumber } = useDispatch().virtualNumber;
 
   const [form] = Form.useForm();
   const refModal = useRef(null);
@@ -56,6 +58,10 @@ const ModalKhachHang = (props, ref) => {
     createOrEdit(payload).then((s) => {
       getCustomer();
       onCancel();
+      if (state?.data?.id) {
+        getVirtualNumber();
+        getHotline();
+      }
     });
   };
 
@@ -98,7 +104,7 @@ const ModalKhachHang = (props, ref) => {
     <ModalTemplate
       ref={refModal}
       title={
-        <MainHeader >
+        <MainHeader>
           <div className="left">
             {state?.data?.id ? "Cập nhật khách hàng" : "Tạo mới khách hàng"}
           </div>
@@ -131,7 +137,7 @@ const ModalKhachHang = (props, ref) => {
               },
             ]}
           >
-            <Input placeholder="Nhập tên khách hàng"></Input>
+            <Input placeholder="Nhập tên khách hàng" ></Input>
           </Form.Item>
           <Form.Item
             label="Mô tả"
@@ -147,7 +153,7 @@ const ModalKhachHang = (props, ref) => {
               },
             ]}
           >
-            <Input placeholder="Nhập mô tả" />
+            <TextArea placeholder="Nhập mô tả" autoSize/>
           </Form.Item>
           <Form.Item
             label="Địa chỉ IP"

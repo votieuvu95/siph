@@ -51,14 +51,33 @@ export const Main = styled.div`
   }
   
   .item {
-    width: 630px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    &__center {
-      justify-content: center;
-      align-items: center;
-      display: flex;
+    @media (min-width: 1368px) {
+      width: 320px;
+    }
+    @media (min-width: 1600px) {
+      width: 400px;
+    }
+    @media (min-width: 1920px) {
+      width: 520px;
+    }
+  }
+
+  .customer {
+    width: 200px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    @media (min-width: 1368px) {
+      width: 150px;
+    }
+    @media (min-width: 1600px) {
+      width: 230px;
+    }
+    @media (min-width: 1920px) {
+      width: 350px;
     }
   }
 `;

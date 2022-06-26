@@ -64,40 +64,41 @@ const HotlineRouting = () => {
       title: "STT",
       dataIndex: "index",
       key: "index",
-      width: "3%",
+      width: "40px",
       align: "center",
-       render: (item, data, index) => {
-        return (
-          index + 1 + state?.page * state?.size
-        );
+      render: (item, data, index) => {
+        return index + 1 + state?.page * state?.size;
       },
     },
     {
       title: "Tên khách hàng",
       dataIndex: "customerName",
       key: "customerName",
-      width: "27%",
+      width: "300px",
+      render: (item) => <div className="customer">{item}</div>,
     },
     {
       title: "Tên nhóm hotline",
       dataIndex: "hotlineGroupName",
       key: "hotlineGroupName",
-      width: "29%",
+      width: "300px",
       render: (item, data) => (
-        <a
-          onClick={() =>
-            modalHotlineRef.current && modalHotlineRef.current.show(data)
-          }
-        >
-          {item}
-        </a>
+        <div className="customer">
+          <a
+            onClick={() =>
+              modalHotlineRef.current && modalHotlineRef.current.show(data)
+            }
+          >
+            {item}
+          </a>
+        </div>
       ),
     },
     {
       title: "Tên trunk",
       dataIndex: "trunkName",
       key: "trunkName",
-      width: "27%",
+      width: "300px",
       render: (item, data) => {
         let payload = (state?.listTrunkManagement || []).find(
           (x) => x.id == data?.trunkId
@@ -117,17 +118,15 @@ const HotlineRouting = () => {
       title: "Trạng thái",
       dataIndex: "groupStatus",
       key: "groupStatus",
-      width: "7%",
+      width: "130px",
       align: "center",
-      render: (item) => (
-        STATUS.find((x) => x.id === item)?.ten
-      ),
+      render: (item) => STATUS.find((x) => x.id === item)?.ten,
     },
     {
       title: "Chức năng",
       dataIndex: "action",
       key: "action",
-      width: "7%",
+      width: "140px",
       align: "center",
       render: (item, data) => {
         return (
@@ -156,7 +155,7 @@ const HotlineRouting = () => {
     setState({ page: page - 1 });
   };
   const onSizeChange = (size) => {
-    setState({ size: size, page : 0 });
+    setState({ size: size, page: 0 });
   };
   const onChange = (e) => {
     let value = e?.target?.value;
@@ -205,11 +204,11 @@ const HotlineRouting = () => {
           </Button>
         </div>
       </div>
-        <TableWrapper
-          columns={columns}
-          dataSource={state?.listData}
-          rowKey={(row) => row.hotlineGroupId}
-        />
+      <TableWrapper
+        columns={columns}
+        dataSource={state?.listData}
+        rowKey={(row) => row.hotlineGroupId}
+      />
       <Pagination
         onChange={onPageChange}
         current={state?.page + 1}

@@ -47,7 +47,7 @@ const Hotline = () => {
       title: "STT",
       dataIndex: "index",
       key: "index",
-      width: "3%",
+      width: "40px",
       align: "center",
       render: (item, data, index) => {
         return (
@@ -59,21 +59,22 @@ const Hotline = () => {
       title: "Tên khách hàng",
       dataIndex: "customerName",
       key: "customerName",
-      width: "20%",
+      width: "200px",
+      render:(item) => <div className="customer">{item}</div>
      
     },
     {
       title: "Tên nhóm Hotline",
       dataIndex: "hotlineGroupName",
       key: "hotlineGroupName",
-      width: "23%",
-     
+      width: "200px",
+      render:(item) => <div className="customer">{item}</div>
     },
     {
       title: "Số Hotline",
       dataIndex: "hotlines",
       key: "hotlines",
-      width: "40%",
+      width: "350px",
       render: (item) => {
         return (
           <div className="item">
@@ -91,7 +92,7 @@ const Hotline = () => {
       title: "Trạng thái",
       dataIndex: "groupStatus",
       key: "groupStatus",
-      width: "7%",
+      width: "100px",
       align: "center",
       render: (item) => (
         STATUS.find((x) => x.id === item)?.ten
@@ -101,7 +102,7 @@ const Hotline = () => {
       title: "Chức năng",
       dataIndex: "action",
       key: "action",
-      width: "7%",
+      width: "120px",
       align: "center",
       render: (item, data) => {
         return (

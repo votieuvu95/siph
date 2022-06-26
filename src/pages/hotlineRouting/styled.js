@@ -50,11 +50,19 @@ export const Main = styled.div`
       }
     }
   }
-  .item {
-    &__center {
-      justify-content: center;
-      align-items: center;
-      display: flex;
+  .customer {
+    width: 200px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    @media (min-width: 1368px) {
+      width: 200px;
+    }
+    @media (min-width: 1600px) {
+      width: 350px;
+    }
+    @media (min-width: 1920px) {
+      width: 480px;
     }
   }
 `;
