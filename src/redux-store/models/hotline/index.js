@@ -121,7 +121,6 @@ export default {
         hotlineProvider
           .postHotlineGroup(payload)
           .then((s) => {
-            debugger;
             resolve(s);
           })
           .catch((e) => {

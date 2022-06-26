@@ -53,13 +53,14 @@ const ModalTrunk = (props, ref) => {
   }, [listGroup]);
 
   const onHandleSubmit = (values) => {
-    const { trunkName, port, ip, groupCode } = values;
+    const { trunkName, port, ip, groupCode, status } = values;
     const payload = {
       trunkName: trunkName,
       port: port,
       ip: ip,
       id: state?.data?.id,
       groupCode: groupCode,
+      status
     };
     createOrEdit(payload).then(() => {
       getTrunkManagement();

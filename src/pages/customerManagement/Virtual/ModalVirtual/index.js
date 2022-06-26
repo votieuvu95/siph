@@ -96,7 +96,6 @@ const ModalVirtual = (props, ref) => {
     form.setFieldsValue({ isdns: dataArray });
     if (dataArray.length) {
       let datareg = dataArray.filter((x) => !regex.test(String(x)));
-      debugger;
       if (datareg.length) {
         setState({ isError: true });
         callback(new Error("Vui lòng nhập đúng định dạng số Virtual"));
