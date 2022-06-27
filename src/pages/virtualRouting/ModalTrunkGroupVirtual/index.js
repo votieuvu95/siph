@@ -17,7 +17,6 @@ const ModalTrunk = (props, ref) => {
   const { createOrEditToTrunk, getVirtualNumber } = useDispatch().virtualNumber;
   const { getHotline } = useDispatch().hotline;
   const { getCustomer } = useDispatch().customer;
-  const { getTrunkManagement } = useDispatch().trunkManagement;
 
   const { listHotlines } = useSelector((state) => state.hotline);
   const { listCustomer } = useSelector((state) => state.customer);
@@ -59,8 +58,6 @@ const ModalTrunk = (props, ref) => {
   useEffect(() => {
     getCustomer();
     getHotline();
-    getTrunkManagement();
-    getVirtualNumber();
   }, []);
   useEffect(() => {
     setState({

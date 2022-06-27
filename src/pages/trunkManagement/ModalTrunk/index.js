@@ -16,6 +16,9 @@ import { CloseOutlined } from "@ant-design/icons";
 
 const ModalTrunk = (props, ref) => {
   const { listGroup } = useSelector((state) => state.trunkManagement);
+  const { getVirtualNumber } = useDispatch().virtualNumber;
+  const { getHotline } = useDispatch().hotline;
+
   const { createOrEdit, getTrunkManagement, searchGroup } =
     useDispatch().trunkManagement;
 
@@ -60,10 +63,14 @@ const ModalTrunk = (props, ref) => {
       ip: ip,
       id: state?.data?.id,
       groupCode: groupCode,
-      status
+      status,
     };
     createOrEdit(payload).then(() => {
       getTrunkManagement();
+      if (state?.data?.id) {
+        getVirtualNumber();
+        getHotline();
+      }
       onCancel();
     });
   };

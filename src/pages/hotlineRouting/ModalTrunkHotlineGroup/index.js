@@ -18,7 +18,6 @@ const ModalTrunkHotlineGroup = (props, ref) => {
   const { listHotlines } = useSelector((state) => state.hotline);
   const { listCustomer } = useSelector((state) => state.customer);
   const { listTrunkManagement } = useSelector((state) => state.trunkManagement);
-  const { getTrunkManagement } = useDispatch().trunkManagement;
   const { getCustomer } = useDispatch().customer;
 
   const [form] = Form.useForm();
@@ -42,8 +41,6 @@ const ModalTrunkHotlineGroup = (props, ref) => {
   }));
 
   useEffect(() => {
-    getHotline();
-    getTrunkManagement();
     getCustomer();
   }, []);
 
