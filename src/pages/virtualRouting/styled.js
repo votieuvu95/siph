@@ -58,7 +58,7 @@ export const Main = styled.div`
       width: 120px;
     }
     @media (min-width: 1600px) {
-      width: 180px;
+      width: 170px;
     }
     @media (min-width: 1920px) {
       width: 327px;

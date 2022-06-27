@@ -66,14 +66,14 @@ const VirtualRouting = () => {
       title: "Tên khách hàng",
       dataIndex: "customerName",
       key: "customerName",
-      width: "220px",
+      width: "210px",
       render: (item) => <div className="customer">{item}</div>,
     },
     {
       title: "Tên nhóm Virtual",
       dataIndex: "vngName",
       key: "vngName",
-      width: "220px",
+      width: "210px",
       render: (item, data) => (
         <div className="customer">
           {" "}
@@ -91,12 +91,12 @@ const VirtualRouting = () => {
       title: "Viettel Trunk",
       dataIndex: "vngTrunks",
       key: "vngTrunks",
-      width: "130px",
+      width: "160px",
       render: (item) => {
         let data = (item || []).find((x) => x.groupCode === "11");
         return (
           <div className="trunk">
-            <a onClick={() => onShowModal(data)}>{data?.trunkName} </a>;
+            <a onClick={() => onShowModal(data)}>{data?.trunkName} </a>
           </div>
         );
       },
@@ -110,7 +110,7 @@ const VirtualRouting = () => {
         let data = (item || []).find((x) => x.groupCode === "22");
         return (
           <div className="trunk">
-            <a onClick={() => onShowModal(data)}>{data?.trunkName} </a>;
+            <a onClick={() => onShowModal(data)}>{data?.trunkName} </a>
           </div>
         );
       },
@@ -124,7 +124,7 @@ const VirtualRouting = () => {
         let data = (item || []).find((x) => x.groupCode === "33");
         return (
           <div className="trunk">
-            <a onClick={() => onShowModal(data)}>{data?.trunkName} </a>;
+            <a onClick={() => onShowModal(data)}>{data?.trunkName} </a>
           </div>
         );
       },
@@ -133,12 +133,12 @@ const VirtualRouting = () => {
       title: "Default Trunk",
       dataIndex: "vngTrunks",
       key: "vngTrunks",
-      width: "130px",
+      width: "160px",
       render: (item) => {
         let data = (item || []).find((x) => x.groupCode === "44");
         return (
           <div className="trunk">
-            <a onClick={() => onShowModal(data)}>{data?.trunkName} </a>;
+            <a onClick={() => onShowModal(data)}>{data?.trunkName} </a>
           </div>
         );
       },
@@ -204,7 +204,31 @@ const VirtualRouting = () => {
       totalElements: data.length,
     });
   };
- 
+  const data = [
+    {
+      customerName: "LEEEONTEST-123",
+      vngName: "LEEEONTEST",
+      vngTrunks: [
+        {
+          groupCode: "11",
+          trunkName: "LEEEONTEST-VITETTTTTTTTTTTTTttttttt",
+        },
+        {
+          groupCode: "22",
+          trunkName: "LEEEONTEST-VITETTTTTTTTTTTTTttttttt",
+        },
+        {
+          groupCode: "33",
+          trunkName: "LEEEONTEST-VITETTTTTTTTTTTTTttttttt",
+        },
+        {
+          groupCode: "44",
+          trunkName: "LEEEONTEST-VITETTTTTTTTTTTTTttttttt",
+        },
+      ],
+      status:1
+    },
+  ];
   return (
     <Main>
       <div className="search">
@@ -236,7 +260,7 @@ const VirtualRouting = () => {
       </div>
       <TableWrapper
         columns={columns}
-        dataSource={state?.listData}
+        dataSource={data}
         rowKey={(row) => row.vngId}
       />
       <Pagination
