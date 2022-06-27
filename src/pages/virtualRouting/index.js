@@ -94,7 +94,11 @@ const VirtualRouting = () => {
       width: "130px",
       render: (item) => {
         let data = (item || []).find((x) => x.groupCode === "11");
-        return <a onClick={() => onShowModal(data)}>{data?.trunkName} </a>;
+        return (
+          <div className="trunk">
+            <a onClick={() => onShowModal(data)}>{data?.trunkName} </a>;
+          </div>
+        );
       },
     },
     {
@@ -104,7 +108,11 @@ const VirtualRouting = () => {
       width: "160px",
       render: (item) => {
         let data = (item || []).find((x) => x.groupCode === "22");
-        return <a onClick={() => onShowModal(data)}>{data?.trunkName} </a>;
+        return (
+          <div className="trunk">
+            <a onClick={() => onShowModal(data)}>{data?.trunkName} </a>;
+          </div>
+        );
       },
     },
     {
@@ -114,7 +122,11 @@ const VirtualRouting = () => {
       width: "160px",
       render: (item) => {
         let data = (item || []).find((x) => x.groupCode === "33");
-        return <a onClick={() => onShowModal(data)}>{data?.trunkName} </a>;
+        return (
+          <div className="trunk">
+            <a onClick={() => onShowModal(data)}>{data?.trunkName} </a>;
+          </div>
+        );
       },
     },
     {
@@ -124,7 +136,11 @@ const VirtualRouting = () => {
       width: "130px",
       render: (item) => {
         let data = (item || []).find((x) => x.groupCode === "44");
-        return <a onClick={() => onShowModal(data)}>{data?.trunkName} </a>;
+        return (
+          <div className="trunk">
+            <a onClick={() => onShowModal(data)}>{data?.trunkName} </a>;
+          </div>
+        );
       },
     },
     {
@@ -188,7 +204,7 @@ const VirtualRouting = () => {
       totalElements: data.length,
     });
   };
-
+ 
   return (
     <Main>
       <div className="search">

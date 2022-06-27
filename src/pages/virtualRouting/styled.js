@@ -50,23 +50,7 @@ export const Main = styled.div`
       }
     }
   }
-  .item {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    @media (min-width: 1368px) {
-      width: 320px;
-    }
-    @media (min-width: 1600px) {
-      width: 400px;
-    }
-    @media (min-width: 1920px) {
-      width: 560px;
-    }
-  }
-
   .customer {
-    width: 200px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -77,7 +61,21 @@ export const Main = styled.div`
       width: 180px;
     }
     @media (min-width: 1920px) {
-      width: 370px;
+      width: 327px;
+    }
+  }
+  .trunk {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    @media (min-width: 1368px) {
+      width: 80px;
+    }
+    @media (min-width: 1600px) {
+      width: 100px;
+    }
+    @media (min-width: 1920px) {
+      width: 130px;
     }
   }
 `;
