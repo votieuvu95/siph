@@ -204,31 +204,7 @@ const VirtualRouting = () => {
       totalElements: data.length,
     });
   };
-  const data = [
-    {
-      customerName: "LEEEONTEST-123",
-      vngName: "LEEEONTEST",
-      vngTrunks: [
-        {
-          groupCode: "11",
-          trunkName: "LEEEONTEST-VITETTTTTTTTTTTTTttttttt",
-        },
-        {
-          groupCode: "22",
-          trunkName: "LEEEONTEST-VITETTTTTTTTTTTTTttttttt",
-        },
-        {
-          groupCode: "33",
-          trunkName: "LEEEONTEST-VITETTTTTTTTTTTTTttttttt",
-        },
-        {
-          groupCode: "44",
-          trunkName: "LEEEONTEST-VITETTTTTTTTTTTTTttttttt",
-        },
-      ],
-      status:1
-    },
-  ];
+  
   return (
     <Main>
       <div className="search">
@@ -260,7 +236,7 @@ const VirtualRouting = () => {
       </div>
       <TableWrapper
         columns={columns}
-        dataSource={data}
+        dataSource={state.listData}
         rowKey={(row) => row.vngId}
       />
       <Pagination
