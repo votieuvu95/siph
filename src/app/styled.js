@@ -1,5 +1,60 @@
-import styled from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
+export const GlobalStyle = createGlobalStyle`
 
+ 
+
+   & .ant-message {
+    display: flex;
+    height: 100%;
+    justify-content: end;
+      .ant-message-notice-content{
+        box-shadow: none;
+        background: none;
+        padding:5px 16px;
+      }
+      .ant-message-custom-content{
+        min-width: 290px;
+      }
+      & .ant-message-notice{
+        /* position: absolute; */
+        bottom: 0;
+        right: 0;
+        .ant-message-error{
+        text-align: left;
+        border-radius: 5px;
+        color: #fff;
+        padding: 15px;
+        background: #fc3b3a;
+        font-size: 16px;
+      }
+      .ant-message-success{
+        text-align: left;
+        border-radius: 5px;
+        border: 5px;
+        color: #fff;
+        padding: 15px;
+        background: #049254;
+        &:hover{
+          box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        }
+      }
+      .ant-message-warning{
+        text-align: left;
+        border-radius: 5px;
+        border: 5px;
+        color: #fff;
+        padding: 15px;
+        background: #fe8803;
+        &:hover{
+          box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        }
+      }
+        svg{
+            fill: #fff;
+          }
+        }
+    }
+`;
 export const Main = styled("div")`
   & .app-header {
     background-color: #125872;

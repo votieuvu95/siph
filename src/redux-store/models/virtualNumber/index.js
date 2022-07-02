@@ -54,8 +54,16 @@ export default {
             virtualNumberProvider
               .post(payload)
               .then((s) => {
-                message.success("Thêm mới thành công dữ liệu");
-                resolve(s?.data);
+                if(s?.vnNotAdded.length) {
+                  message.error(
+                    `Các số ${s?.vnNotAdded.join(
+                      ", "
+                    )} không được tạo do đã được tạo trước đó`
+                  );
+                } else {
+                  message.success("Thêm mới thành công dữ liệu");
+                  resolve(s?.data);
+                }
               })
               .catch((e) => {
                 message.error(e?.message || "Xảy ra lỗi, vui lòng thử lại sau");

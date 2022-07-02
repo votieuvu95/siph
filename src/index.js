@@ -5,7 +5,7 @@ import App from "./app";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import stores from "redux-store/stores";
-import 'antd/dist/antd.min.css';
+import "antd/dist/antd.min.css";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={stores}>

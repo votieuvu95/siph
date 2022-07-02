@@ -61,7 +61,7 @@ export const Main = styled.div`
       width: 170px;
     }
     @media (min-width: 1920px) {
-      width: 327px;
+      width: 280px;
     }
   }
   .trunk {
@@ -75,7 +75,7 @@ export const Main = styled.div`
       width: 100px;
     }
     @media (min-width: 1920px) {
-      width: 130px;
+      width: 150px;
     }
   }
 `;

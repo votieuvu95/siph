@@ -47,7 +47,7 @@ export default {
                 resolve(s?.data);
               })
               .catch((e) => {
-                message.error(e?.message || "Xảy ra lỗi, vui lòng thử lại sau");
+                message.error(e?.response?.data?.description || "Xảy ra lỗi, vui lòng thử lại sau");
                 reject(e);
               });
           } else {
@@ -58,7 +58,7 @@ export default {
                 resolve(s?.data);
               })
               .catch((e) => {
-                message.error(e?.message || "Xảy ra lỗi, vui lòng thử lại sau");
+                message.error(e?.response?.data?.description|| "Xảy ra lỗi, vui lòng thử lại sau");
                 reject(e);
               });
           }

@@ -8,6 +8,7 @@ import { pink } from "themes";
 import { ThemeProvider } from "styled-components";
 import Layout from "./Layout";
 import { useSelector } from "react-redux";
+import { GlobalStyle } from "./styled";
 
 const App = ({ ...props }) => {
   const { auth } = useSelector((state) => state.auth);
@@ -23,6 +24,7 @@ const App = ({ ...props }) => {
   }, []);
   return (
     <ThemeProvider theme={pink}>
+      <GlobalStyle/>
       <ConfigProvider>
         <Switch>
           {window.location.pathname.indexOf("login") >= 0 ? (
