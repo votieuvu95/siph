@@ -56,7 +56,7 @@ export default {
             hotlineProvider
               .post(payload)
               .then((s) => {
-                if(s?.hotlineNotAdded.length) {
+                if(s?.hotlineNotAdded?.length) {
                   message.error(
                     `Các số ${s?.hotlineNotAdded.join(
                       ", "

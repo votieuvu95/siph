@@ -54,7 +54,7 @@ export default {
             virtualNumberProvider
               .post(payload)
               .then((s) => {
-                if(s?.vnNotAdded.length) {
+                if(s?.vnNotAdded?.length) {
                   message.error(
                     `Các số ${s?.vnNotAdded.join(
                       ", "
