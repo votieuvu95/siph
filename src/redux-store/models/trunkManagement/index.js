@@ -21,7 +21,7 @@ export default {
           });
         })
         .catch((e) => {
-          message.error(e?.message || "Đăng nhập không thành công");
+          message.error(e?.response?.data?.description || "Đăng nhập không thành công");
         });
     },
     searchGroup: () => {
@@ -33,7 +33,7 @@ export default {
           });
         })
         .catch((e) => {
-          message.error(e?.message || "Đăng nhập không thành công");
+          message.error(e?.response?.data?.description || "Đăng nhập không thành công");
         });
     },
     createOrEdit: (payload = {}, state) => {

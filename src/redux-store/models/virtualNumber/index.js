@@ -21,7 +21,7 @@ export default {
           });
         })
         .catch((e) => {
-          message.error(e?.message || "Đăng nhập không thành công");
+          message.error(e?.response?.data?.description || "Đăng nhập không thành công");
         });
     },
     createOrEdit: (payload = {}, state) => {
@@ -47,7 +47,7 @@ export default {
                   });
               })
               .catch((e) => {
-                message.error(e?.message || "Xảy ra lỗi, vui lòng thử lại sau");
+                message.error(e?.response?.data?.description || "Xảy ra lỗi, vui lòng thử lại sau");
                 reject(e);
               });
           } else {
@@ -66,7 +66,7 @@ export default {
                 }
               })
               .catch((e) => {
-                message.error(e?.message || "Xảy ra lỗi, vui lòng thử lại sau");
+                message.error(e?.response?.data?.description || "Xảy ra lỗi, vui lòng thử lại sau");
                 reject(e);
               });
           }
@@ -180,7 +180,7 @@ export default {
                 })
                 .catch((e) => {
                   message.error(
-                    e?.message || "Xảy ra lỗi, vui lòng thử lại sau"
+                    e?.response?.data?.description || "Xảy ra lỗi, vui lòng thử lại sau"
                   );
                   reject(e);
                 });
@@ -243,7 +243,7 @@ export default {
             resolve(s?.data);
           })
           .catch((e) => {
-            message.error(e?.message || "Xảy ra lỗi, vui lòng thử lại sau");
+            message.error(e?.response?.data?.description || "Xảy ra lỗi, vui lòng thử lại sau");
             reject(e);
           });
       });
@@ -286,7 +286,7 @@ export default {
             resolve(s);
           })
           .catch((e) => {
-            message.error(e?.message || "Xảy ra lỗi, vui lòng thử lại sau");
+            message.error(e?.response?.data?.description || "Xảy ra lỗi, vui lòng thử lại sau");
             reject(e);
           });
       });

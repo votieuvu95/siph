@@ -39,7 +39,7 @@ export default {
             resolve(s);
           })
           .catch((e) => {
-            message.error(e?.message || "Đăng nhập không thành công");
+            message.error(e?.response?.data?.description || "Đăng nhập không thành công");
             reject(e);
           });
       });
